@@ -2,14 +2,22 @@ package models
 
 import (
 	"fmt"
+	"time"
+
 	"github.com/astaxie/beego/orm"
 )
 
 type User struct {
-	Id    int
-	Name  string
-	Email string
-	Phone string
+	Id       int    `orm:"pk"`
+	UserName string `orm:"null;column(UserName)"`
+	Email    string
+	Phone    string
+	AddTime  time.Time `orm:"column(AddTime)"`
+	AddUser  string    `orm:"column(AddUser)"`
+}
+
+func (user *User) SetID(id int) {
+	user.Id = id
 }
 
 func init() {
@@ -17,5 +25,5 @@ func init() {
 }
 
 func (user *User) String() string {
-	return fmt.Sprintf("{User:{Id:%d,Name:'%s',Email:'%s',Phone:'%s'}}", user.Id, user.Name, user.Email, user.Phone)
+	return fmt.Sprintf("{User:{Id:%d,UserName:'%s',Email:'%s',Phone:'%s',AddTime:'%s',AddUser:'%s'}}", user.Id, user.UserName, user.Email, user.Phone, user.AddTime, user.AddUser)
 }

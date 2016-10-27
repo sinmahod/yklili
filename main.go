@@ -1,8 +1,10 @@
 package main
 
 import (
+	"beegostudy/controllers"
 	"beegostudy/models"
 	"fmt"
+
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
@@ -19,27 +21,24 @@ type MainController struct {
 }
 
 func (this *MainController) Get() {
-	this.Ctx.WriteString("hello world")
-}
-
-func main() {
-
 	o := orm.NewOrm()
 	o.Using("default") // 默认使用 default，你可以指定为其他数据库
 
 	user := new(models.User)
-	//o.ReadOrCreate(user, user, ...)
-	user.Id = 1
+	user.SetID(1)
 	o.Read(user)
-
-	//user.Phone = "18010182345"
-	//user.Name = "gltest"
-
 	fmt.Println(user)
 
-	/*
-		    beego.Router("/", &MainController{})
-			StaticDir["/static"] = "static"
-			beego.Run()
-	*/
+	this.Data["UserName"] = user.UserName
+	this.TplName = "test.html"
+
+}
+
+func main() {
+	orm.Debug = true //ORM调试模式打开
+
+	beego.Router("/", &MainController{})
+	beego.Router("/login", &controllers.LoginController{})
+
+	beego.Run()
 }
