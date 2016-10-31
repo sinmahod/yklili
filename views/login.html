@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh_CN">
+<html lang="zh-cn">
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta charset="utf-8" />
@@ -47,7 +47,7 @@
                   <span class="red">YKlili</span>
                   <span class="white" id="id-text2">登录</span>
                 </h1>
-                <h4 class="blue" id="id-company-text">&copy; Company Name</h4>
+                <h4 class="blue" id="id-company-text">&copy; YKlili</h4>
               </div>
 
               <div class="space-6"></div>
@@ -67,14 +67,14 @@
                         <fieldset>
                           <label class="block clearfix">
                             <span class="block input-icon input-icon-right">
-                              <input type="text" class="form-control" placeholder="用户名" />
+                              <input type="text" id="username" class="form-control" placeholder="用户名" />
                               <i class="ace-icon fa fa-user"></i>
                             </span>
                           </label>
 
                           <label class="block clearfix">
                             <span class="block input-icon input-icon-right">
-                              <input type="password" class="form-control" placeholder="密码" />
+                              <input type="password" id="password" class="form-control" placeholder="密码" />
                               <i class="ace-icon fa fa-lock"></i>
                             </span>
                           </label>
@@ -87,7 +87,7 @@
                               <span class="lbl"> 记住我</span>
                             </label>
 
-                            <button type="button" class="width-35 pull-right btn btn-sm btn-primary">
+                            <button type="button" id="login" class="width-35 pull-right btn btn-sm btn-primary">
                               <i class="ace-icon fa fa-key"></i>
                               <span class="bigger-110">登录</span>
                             </button>
@@ -122,13 +122,13 @@
                       <div>
                         <a href="#" data-target="#forgot-box" class="forgot-password-link">
                           <i class="ace-icon fa fa-arrow-left"></i>
-                          I forgot my password
+                          找回密码
                         </a>
                       </div>
 
                       <div>
                         <a href="#" data-target="#signup-box" class="user-signup-link">
-                          I want to register
+                          我要注册
                           <i class="ace-icon fa fa-arrow-right"></i>
                         </a>
                       </div>
@@ -141,7 +141,7 @@
                     <div class="widget-main">
                       <h4 class="header red lighter bigger">
                         <i class="ace-icon fa fa-key"></i>
-                        Retrieve Password
+                        重置密码
                       </h4>
 
                       <div class="space-6"></div>
@@ -290,6 +290,15 @@
 
     <!-- inline scripts related to this page -->
     <script type="text/javascript">
+
+      jQuery(function($) {
+        $("#login").on('click',function(e){
+          $.get("/login", { username: $("#username").val(),password: $("#password").val()},function(d){
+            alert(d);
+          });
+        });
+      });
+
       jQuery(function($) {
        $(document).on('click', '.toolbar a[data-target]', function(e) {
         e.preventDefault();
