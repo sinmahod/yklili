@@ -35,7 +35,8 @@ func (this *MainController) Get() {
 }
 
 func main() {
-	orm.Debug = true //ORM调试模式打开
+	orm.Debug = true                                 //ORM调试模式打开
+	beego.BConfig.WebConfig.Session.SessionOn = true //启用Session
 
 	beego.Router("/", &MainController{})
 	beego.Router("/login", &controllers.LoginController{})

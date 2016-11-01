@@ -1,4 +1,13 @@
 /*! GL Style */
-.login-logo {
-	
+body {
+    font-family: "Microsoft Yahei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+@media (min-width: 768px)
+.modal-dialog {
+    margin-top: 10%;
+}
+
+.modal-dialog {
+    margin-top: 10%;
 }

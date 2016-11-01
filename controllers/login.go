@@ -1,12 +1,10 @@
 package controllers
 
 import (
+	"beegostudy/models"
+	"beegostudy/util"
 	"fmt"
-
-	//"beegostudy/models"
-
 	"github.com/astaxie/beego"
-	//"github.com/astaxie/beego/orm"
 )
 
 type LoginController struct {
@@ -26,14 +24,37 @@ type data struct {
 func (c *LoginController) Post() {
 	u := c.GetString("username")
 	p := c.GetString("password")
-	fmt.Println(u, p)
-	if u != "" {
-		jsondata := &data{201, "您的用户名或密码输入错误，请重试！", "./test"}
-		//js, _ := json.Marshal(jsondata)
 
+	var jsondata data
+
+	if u == "" {
+
+		jsondata = data{0, "请输入用户名！", ""}
 		c.Data["json"] = jsondata
 		c.ServeJSON()
-	} else {
-
+		return
 	}
+
+	if p == "" {
+		jsondata = data{0, "请输入密码！", ""}
+		c.Data["json"] = jsondata
+		c.ServeJSON()
+		return
+	}
+
+	user, err := models.GetUser(u)
+	if err != nil {
+		//用户不存在或者读取数据的错误
+		jsondata = data{0, fmt.Sprintf("%s", err), ""}
+	} else {
+		//用户存在则校验用户密码是否正确
+		if util.VerifyPWD(p, user.GetPassword()) {
+			jsondata = data{1, "", "./platform"}
+			c.SetSession("User", user)
+		} else {
+			jsondata = data{0, "密码错误请重试！", ""}
+		}
+	}
+	c.Data["json"] = jsondata
+	c.ServeJSON()
 }
