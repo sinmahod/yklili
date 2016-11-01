@@ -14,17 +14,26 @@ type LoginController struct {
 }
 
 func (c *LoginController) Get() {
+	c.TplName = "login.html"
+}
+
+type data struct {
+	Status   int    `json:"status"`
+	ErrorMsg string `json:"errormsg"`
+	Link     string `json:"link"`
+}
+
+func (c *LoginController) Post() {
 	u := c.GetString("username")
 	p := c.GetString("password")
 	fmt.Println(u, p)
 	if u != "" {
-		c.TplName = "test.html"
+		jsondata := &data{201, "您的用户名或密码输入错误，请重试！", "./test"}
+		//js, _ := json.Marshal(jsondata)
+
+		c.Data["json"] = jsondata
+		c.ServeJSON()
 	} else {
-		c.TplName = "login.html"
+
 	}
-}
-
-func (c *LoginController) Post() {
-
-	//c.Ctx.Redirect(200, "test.html")
 }

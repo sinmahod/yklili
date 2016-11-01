@@ -12,6 +12,9 @@
     <link rel="stylesheet" href="static/css/bootstrap.min.css" />
     <link rel="stylesheet" href="static/font-awesome/4.5.0/css/font-awesome.min.css" />
 
+    <!-- page specific plugin styles -->
+    <link rel="stylesheet" href="static/css/jquery-ui.min.css" />
+
     <!-- text fonts -->
     <link rel="stylesheet" href="static/css/fonts.googleapis.com.css" />
 
@@ -274,11 +277,16 @@
       </div><!-- /.main-content -->
     </div><!-- /.main-container -->
 
+<!-- dialog -->
+<div id="dialog-message" class="hide">
+  <br/>
+  <p id="errormsg"></p>
+</div>
+
     <!-- basic scripts -->
 
     <!--[if !IE]> -->
     <script src="static/js/jquery-2.1.4.min.js"></script>
-
     <!-- <![endif]-->
 
     <!--[if IE]>
@@ -288,13 +296,38 @@
       if('ontouchstart' in document.documentElement) document.write("<script src='static/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
     </script>
 
+    <!-- page specific plugin scripts -->
+    <script src="static/js/jquery-ui.min.js"></script>
+
     <!-- inline scripts related to this page -->
     <script type="text/javascript">
 
       jQuery(function($) {
         $("#login").on('click',function(e){
-          $.get("/login", { username: $("#username").val(),password: $("#password").val()},function(d){
-            alert(d);
+          $.post("/login", { username: $("#username").val(),password: $("#password").val()},function(json){
+              if ( json.status == 200){
+                
+              }else{
+                    $("#errormsg").html(json.errormsg);
+                     var dialog = $( "#dialog-message" ).removeClass('hide').dialog({
+                    modal: true,
+                    title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-exclamation-triangle red'></i> 错误提示</h4></div>",
+                    title_html: true,
+                    buttons: [ {
+                        text: "取消",
+                        "class" : "btn btn-minier",
+                        click: function() {
+                          $( this ).dialog( "close" ); 
+                        } 
+                      },{
+                        text: "确定",
+                        "class" : "btn btn-primary btn-minier",
+                        click: function() {
+                          $( this ).dialog( "close" ); 
+                        } 
+                      }]
+                  });
+              }
           });
         });
       });
@@ -335,6 +368,24 @@
        });
        
       });
+
+
+
+
+jQuery(function($) {
+        
+        //override dialog's title function to allow for HTML titles
+        $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
+          _title: function(title) {
+            var $title = this.options.title || '&nbsp;'
+            if( ("title_html" in this.options) && this.options.title_html == true )
+              title.html($title);
+            else title.text($title);
+          }
+        }));
+
+  });
+      
     </script>
   </body>
 </html>
