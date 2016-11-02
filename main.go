@@ -39,6 +39,6 @@ func main() {
 
 	beego.Router("/", &MainController{})
 	beego.Router("/login", &controllers.LoginController{})
-
+	beego.Router("/register", &controllers.RegisterController{})
 	beego.Run()
 }

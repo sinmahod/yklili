@@ -10,6 +10,7 @@ import (
 type User struct {
 	Id       int    `orm:"pk"`
 	UserName string `orm:"null;column(UserName)"`
+	Password string `orm:"null"`
 	Email    string
 	Phone    string
 	AddTime  time.Time `orm:"column(AddTime)"`
