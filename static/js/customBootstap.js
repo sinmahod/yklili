@@ -64,6 +64,7 @@
         }[key];
       });
       $('body').append(content);
+
       $('#' + modalId).modal({
         width: options.width,
         backdrop: 'static'
@@ -75,7 +76,7 @@
     }
  
     return {
-      alert: function (options) {
+      alert: function (options) {        
         if (typeof options == 'string') {
           options = {
             message: options
@@ -89,6 +90,7 @@
           id: id,
           on: function (callback) {
             if (callback && callback instanceof Function) {
+              modal.find('.ok').focus();
               modal.find('.ok').click(function () { callback(true); });
             }
           },
@@ -99,7 +101,7 @@
               });
             }
           }
-        };
+        };        
       },
       confirm: function (options) {
         var id = init(options);

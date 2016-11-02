@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/context"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -40,6 +41,16 @@ func main() {
 
 	beego.Router("/", &MainController{})
 	beego.Router("/login", &controllers.LoginController{})
+	beego.Router("/platform", &controllers.PlatformController{})
+
+	//校验用户登录：未登录则重定向到login
+	var FilterUser = func(ctx *context.Context) {
+		if ctx.Input.Session("User") == nil {
+			ctx.Redirect(302, "/login")
+		}
+	}
+
+	beego.InsertFilter("/platform/*", beego.BeforeRouter, FilterUser)
 
 	beego.Run()
 }

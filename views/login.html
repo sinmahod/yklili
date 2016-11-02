@@ -303,21 +303,39 @@
     <script type="text/javascript">
 
       jQuery(function($) {
-        $("#login").on('click',function(e){
+        //焦点在输入框时回车键执行事件
+       $(document).on('keydown','input.form-control', function(evt){
+        if(evt.keyCode==13){
+           $('#login').click();
+           evt.preventDefault();
+           evt.stopPropagation();
+        }
+      });
 
+
+        $("#login").on('click',function(e){
+          $("#username").blur();
+          $("#password").blur();
           if (!$("#username").val()){
-             Ewin.alert({message:"请输入用户名！"});
+             var a = Ewin.alert({message:"请输入用户名！"});
+             a.on(function(){
+                $("#username").focus();
+             });
+
              return;
           }
 
            if (!$("#password").val()){
-             Ewin.alert({message:"请输入密码！"});
+              var a = Ewin.alert({message:"请输入密码！"});
+              a.on(function(){
+                $("#password").focus();
+             })
              return;
           }
 
           $.post("/login", { username: $("#username").val(),password: $("#password").val()},function(json){
               if ( json.status == 1){
-                
+                   window.location.href = json.link;
               }else{
                    Ewin.alert({message:json.errormsg});
               }
