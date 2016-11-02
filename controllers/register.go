@@ -26,8 +26,8 @@ type result struct {
 }
 
 func (c *RegisterController) Post() {
-	u := c.GetString("registerusername")
-	p := c.GetString("registerpassword")
+	u := c.GetString("username")
+	p := c.GetString("password")
 	e := c.GetString("email")
 	phone := c.GetString("phone")
 
