@@ -10,7 +10,14 @@ type PlatformController struct {
 }
 
 func (c *PlatformController) Get() {
+
+	c.Layout = "platform.html"
+
+	c.LayoutSections = make(map[string]string)
+	c.LayoutSections["Include"] = "public/include.tpl"
+	c.LayoutSections["Script"] = "public/script.tpl"
+
 	user := c.GetSession("User").(models.User)
 	c.Data["UserName"] = user.GetUserName()
-	c.TplName = "platform.html"
+	c.TplName = "content.html"
 }
