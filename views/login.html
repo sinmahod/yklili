@@ -199,34 +199,39 @@
                         <fieldset>
                           <label class="block clearfix">
                             <span class="block input-icon input-icon-right">
-                              <input type="email" class="form-control" placeholder="Email" />
+                              <input type="email" id="email" class="form-control" placeholder="Email" />
                               <i class="ace-icon fa fa-envelope"></i>
                             </span>
                           </label>
 
                           <label class="block clearfix">
                             <span class="block input-icon input-icon-right">
-                              <input type="text" class="form-control" placeholder="Username" />
+                              <input type="text" class="form-control" id="registerusername" placeholder="Username" />
                               <i class="ace-icon fa fa-user"></i>
                             </span>
                           </label>
 
                           <label class="block clearfix">
                             <span class="block input-icon input-icon-right">
-                              <input type="password" class="form-control" placeholder="Password" />
+                              <input type="password" class="form-control" id="registerpassword" placeholder="Password" />
                               <i class="ace-icon fa fa-lock"></i>
                             </span>
                           </label>
 
                           <label class="block clearfix">
                             <span class="block input-icon input-icon-right">
-                              <input type="password" class="form-control" placeholder="Repeat password" />
+                              <input type="password" class="form-control" id="confirmpassword" placeholder="Repeat password" />
                               <i class="ace-icon fa fa-retweet"></i>
                             </span>
                           </label>
-
+                          <label class="block clearfix">
+                            <span class="block input-icon input-icon-right">
+                              <input type="text" class="form-control" id="phone" placeholder="Phone Number" />
+                              <i class="ace-icon fa fa-phone"></i>
+                            </span>
+                          </label>
                           <label class="block">
-                            <input type="checkbox" class="ace" />
+                            <input type="checkbox" id="agreement" class="ace" />
                             <span class="lbl">
                               I accept the
                               <a href="#">User Agreement</a>
@@ -241,7 +246,7 @@
                               <span class="bigger-110">Reset</span>
                             </button>
 
-                            <button type="button" class="width-65 pull-right btn btn-sm btn-success">
+                            <button type="button" id="register" class="width-65 pull-right btn btn-sm btn-success">
                               <span class="bigger-110">Register</span>
 
                               <i class="ace-icon fa fa-arrow-right icon-on-right"></i>
@@ -338,6 +343,55 @@
                    window.location.href = json.link;
               }else{
                    Ewin.alert({message:json.errormsg});
+              }
+          });
+        });
+
+        $("#register").on('click',function(e){
+          if(!$("#email").val()){
+              Ewin.alert({message:"邮箱不能为空！"});
+              return;
+          }
+          if(!$("#registerusername").val()){
+              Ewin.alert({message:"用户名不能为空！"});
+              return;
+          }
+          if(!$("#registerpassword").val()){
+              Ewin.alert({message:"密码不能为空！"});
+              return;
+          }
+          if($("#registerpassword").val()!=$("#confirmpassword").val()){
+              Ewin.alert({message:"两次密码不一致！"});
+              return;
+          }
+
+          if(!$("#agreement").is(":checked")){
+              Ewin.alert({message:"请同意用户协议！"});
+              return;
+          }
+          $.post("/register", { email:$("#email").val(),username: $("#registerusername").val(),password: $("#registerpassword").val(),phone:$("#phone").val()},function(json){
+              if ( json.status == 200){
+                
+              }else{
+                    $("#errormsg").html(json.errormsg);
+                     var dialog = $( "#dialog-message" ).removeClass('hide').dialog({
+                    modal: true,
+                    title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-exclamation-triangle red'></i> 错误提示</h4></div>",
+                    title_html: true,
+                    buttons: [ {
+                        text: "取消",
+                        "class" : "btn btn-minier",
+                        click: function() {
+                          $( this ).dialog( "close" ); 
+                        } 
+                      },{
+                        text: "确定",
+                        "class" : "btn btn-primary btn-minier",
+                        click: function() {
+                          $( this ).dialog( "close" ); 
+                        } 
+                      }]
+                  });
               }
           });
         });

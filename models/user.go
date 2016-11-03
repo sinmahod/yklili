@@ -11,7 +11,6 @@ type User struct {
 	Id       int    `orm:"pk"`
 	UserName string `orm:"null;column(UserName)"`
 	Password string `orm:"null;column(Password)"`
-	Email    string
 	Phone    string
 	AddTime  time.Time `orm:"column(AddTime)"`
 	AddUser  string    `orm:"column(AddUser)"`

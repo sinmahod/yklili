@@ -41,6 +41,7 @@ func main() {
 
 	beego.Router("/", &MainController{})
 	beego.Router("/login", &controllers.LoginController{})
+	beego.Router("/register", &controllers.RegisterController{})
 	beego.Router("/platform", &controllers.PlatformController{})
 
 	//校验用户登录：未登录则重定向到login
@@ -51,6 +52,5 @@ func main() {
 	}
 
 	beego.InsertFilter("/platform/*", beego.BeforeRouter, FilterUser)
-
 	beego.Run()
 }
