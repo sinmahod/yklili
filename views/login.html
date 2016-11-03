@@ -189,52 +189,52 @@
                     <div class="widget-main">
                       <h4 class="header green lighter bigger">
                         <i class="ace-icon fa fa-users blue"></i>
-                        New User Registration
+                        注册新用户
                       </h4>
 
                       <div class="space-6"></div>
-                      <p> Enter your details to begin: </p>
+                      <p> 请输入您的注册信息： </p>
 
                       <form>
                         <fieldset>
                           <label class="block clearfix">
                             <span class="block input-icon input-icon-right">
-                              <input type="email" id="email" class="form-control" placeholder="Email" />
+                              <input type="email" id="email" class="form-control" placeholder="电子邮箱" />
                               <i class="ace-icon fa fa-envelope"></i>
                             </span>
                           </label>
 
                           <label class="block clearfix">
                             <span class="block input-icon input-icon-right">
-                              <input type="text" class="form-control" id="registerusername" placeholder="Username" />
+                              <input type="text" class="form-control" id="registerusername" placeholder="用户名" />
                               <i class="ace-icon fa fa-user"></i>
                             </span>
                           </label>
 
                           <label class="block clearfix">
                             <span class="block input-icon input-icon-right">
-                              <input type="password" class="form-control" id="registerpassword" placeholder="Password" />
+                              <input type="password" class="form-control" id="registerpassword" placeholder="密码" />
                               <i class="ace-icon fa fa-lock"></i>
                             </span>
                           </label>
 
                           <label class="block clearfix">
                             <span class="block input-icon input-icon-right">
-                              <input type="password" class="form-control" id="confirmpassword" placeholder="Repeat password" />
+                              <input type="password" class="form-control" id="confirmpassword" placeholder="确认密码" />
                               <i class="ace-icon fa fa-retweet"></i>
                             </span>
                           </label>
                           <label class="block clearfix">
                             <span class="block input-icon input-icon-right">
-                              <input type="text" class="form-control" id="phone" placeholder="Phone Number" />
+                              <input type="text" class="form-control" id="phone" placeholder="联系电话" />
                               <i class="ace-icon fa fa-phone"></i>
                             </span>
                           </label>
                           <label class="block">
-                            <input type="checkbox" id="agreement" class="ace" />
+                            <input type="checkbox" id="agreement" class="ace"  checked="true" />
                             <span class="lbl">
-                              I accept the
-                              <a href="#">User Agreement</a>
+                              我已阅读并同意注册协议
+                              <a href="#">注册协议</a>
                             </span>
                           </label>
 
@@ -243,11 +243,11 @@
                           <div class="clearfix">
                             <button type="reset" class="width-30 pull-left btn btn-sm">
                               <i class="ace-icon fa fa-refresh"></i>
-                              <span class="bigger-110">Reset</span>
+                              <span class="bigger-110">重置</span>
                             </button>
 
                             <button type="button" id="register" class="width-65 pull-right btn btn-sm btn-success">
-                              <span class="bigger-110">Register</span>
+                              <span class="bigger-110">确认注册</span>
 
                               <i class="ace-icon fa fa-arrow-right icon-on-right"></i>
                             </button>
@@ -259,7 +259,7 @@
                     <div class="toolbar center">
                       <a href="#" data-target="#login-box" class="back-to-login-link">
                         <i class="ace-icon fa fa-arrow-left"></i>
-                        Back to login
+                        返回登录
                       </a>
                     </div>
                   </div><!-- /.widget-body -->
@@ -342,7 +342,7 @@
               if ( json.status == 1){
                    window.location.href = json.link;
               }else{
-                   Ewin.alert({message:json.errormsg});
+                   Ewin.alert({message:json.msg});
               }
           });
         });
@@ -370,28 +370,10 @@
               return;
           }
           $.post("/register", { email:$("#email").val(),username: $("#registerusername").val(),password: $("#registerpassword").val(),phone:$("#phone").val()},function(json){
-              if ( json.status == 200){
-                
+              if ( json.status == 1){
+                  Ewin.alert({message:json.msg});
               }else{
-                    $("#errormsg").html(json.errormsg);
-                     var dialog = $( "#dialog-message" ).removeClass('hide').dialog({
-                    modal: true,
-                    title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='ace-icon fa fa-exclamation-triangle red'></i> 错误提示</h4></div>",
-                    title_html: true,
-                    buttons: [ {
-                        text: "取消",
-                        "class" : "btn btn-minier",
-                        click: function() {
-                          $( this ).dialog( "close" ); 
-                        } 
-                      },{
-                        text: "确定",
-                        "class" : "btn btn-primary btn-minier",
-                        click: function() {
-                          $( this ).dialog( "close" ); 
-                        } 
-                      }]
-                  });
+                  Ewin.alert({message:json.msg});
               }
           });
         });

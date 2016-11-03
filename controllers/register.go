@@ -1,15 +1,10 @@
 package controllers
 
 import (
-	"fmt"
-
 	"beegostudy/models"
 	"beegostudy/util"
 
-	"time"
-
 	"github.com/astaxie/beego"
-	"github.com/astaxie/beego/orm"
 )
 
 type RegisterController struct {
@@ -20,49 +15,33 @@ func (c *RegisterController) Get() {
 	c.TplName = "login.html"
 }
 
-type result struct {
-	Status   int    `json:"status"`
-	ErrorMsg string `json:"errormsg"`
-	Link     string `json:"link"`
-}
-
 func (c *RegisterController) Post() {
 	u := c.GetString("username")
 	p := c.GetString("password")
 	e := c.GetString("email")
 	phone := c.GetString("phone")
 
-	o := orm.NewOrm()
-	o.Using("default") // 默认使用 default，你可以指定为其他数据库
+	var jsondata result
 
-	user := new(models.User)
-	user.UserName = u
-	err := o.Read(user, "UserName")
-	fmt.Println("err:", err)
-	if err == nil {
-		jsondata := &result{201, "您的用户名已存在，请更换用户名！", "./test"}
-		//js, _ := json.Marshal(jsondata)
-
+	if _, err := models.GetUser(u); err == nil {
+		jsondata = result{0, "您的用户名已存在，请更换用户名！", ""}
 		c.Data["json"] = jsondata
 		c.ServeJSON()
 		return
 	}
-	user.Email = e
-	errEmail := o.Read(user, "Email")
-	fmt.Println("errEmail:", errEmail)
-	if errEmail == nil {
-		jsondata := &result{201, "您填写的邮箱已存在，请更换邮箱！", "./test"}
-		//js, _ := json.Marshal(jsondata)
-
+	if _, err := models.GetUserByEmail(e); err == nil {
+		jsondata = result{0, "您的邮箱已存在，请更换邮箱！", ""}
 		c.Data["json"] = jsondata
 		c.ServeJSON()
 		return
 	}
-	user.Password = util.GeneratePWD(p)
-	user.Phone = phone
-	user.AddTime = time.Now()
-	user.AddUser = u
 
-	fmt.Println(o.Insert(user))
-
+	if _, err := models.InsertUser(u, util.GeneratePWD(p), e, phone); err != nil {
+		jsondata = result{0, "数据库操作失败！", ""}
+	} else {
+		jsondata = result{1, "注册成功", ""}
+	}
+	c.Data["json"] = jsondata
+	c.ServeJSON()
+	return
 }
