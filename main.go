@@ -2,8 +2,6 @@ package main
 
 import (
 	"beegostudy/controllers"
-	"beegostudy/models"
-	"fmt"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/context"
@@ -22,17 +20,8 @@ type MainController struct {
 }
 
 func (this *MainController) Get() {
-	o := orm.NewOrm()
-	o.Using("default") // 默认使用 default，你可以指定为其他数据库
-
-	user := new(models.User)
-	user.SetID(1)
-	o.Read(user)
-	fmt.Println(user)
-
-	this.Data["UserName"] = user.UserName
+	this.Data["UserName"] = "HHHHH"
 	this.TplName = "test.html"
-
 }
 
 func main() {
@@ -53,4 +42,20 @@ func main() {
 
 	beego.InsertFilter("/platform/*", beego.BeforeRouter, FilterUser)
 	beego.Run()
+
+	/**************自动建表***********/
+	// //数据库别名
+	// name := "default"
+
+	// // drop table 后再建表
+	// force := true
+
+	// // 打印执行过程
+	// verbose := true
+
+	// // 遇到错误立即返回
+	// err := orm.RunSyncdb(name, force, verbose)
+	// if err != nil {
+	// 	fmt.Println(err)
+	// }
 }
