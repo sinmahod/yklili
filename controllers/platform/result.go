@@ -1,4 +1,4 @@
-package controllers
+package platform
 
 type result struct {
 	Status   int    `json:"status"`

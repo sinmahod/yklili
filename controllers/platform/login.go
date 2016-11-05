@@ -1,4 +1,4 @@
-package controllers
+package platform
 
 import (
 	"beegostudy/models"
@@ -43,7 +43,7 @@ func (c *LoginController) Post() {
 	} else {
 		//用户存在则校验用户密码是否正确
 		if util.VerifyPWD(p, user.GetPassword()) {
-			jsondata = result{1, "", "./platform"}
+			jsondata = result{1, "", "./platform/users"}
 			c.SetSession("User", user)
 		} else {
 			jsondata = result{0, "密码错误请重试！", ""}

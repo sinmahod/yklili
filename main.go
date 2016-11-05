@@ -1,7 +1,7 @@
 package main
 
 import (
-	"beegostudy/controllers"
+	"beegostudy/controllers/platform"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/context"
@@ -29,9 +29,11 @@ func main() {
 	beego.BConfig.WebConfig.Session.SessionOn = true //启用Session
 
 	beego.Router("/", &MainController{})
-	beego.Router("/login", &controllers.LoginController{})
-	beego.Router("/register", &controllers.RegisterController{})
-	beego.Router("/platform", &controllers.PlatformController{})
+	beego.Router("/login", &platform.LoginController{})
+	beego.Router("/register", &platform.RegisterController{})
+	beego.Router("/platform/users", &platform.UsersController{})
+	beego.Router("/platform/menus", &platform.MenusController{})
+	beego.Router("/platform/test", &platform.TestController{})
 
 	//校验用户登录：未登录则重定向到login
 	var FilterUser = func(ctx *context.Context) {
@@ -42,20 +44,4 @@ func main() {
 
 	beego.InsertFilter("/platform/*", beego.BeforeRouter, FilterUser)
 	beego.Run()
-
-	/**************自动建表***********/
-	// //数据库别名
-	// name := "default"
-
-	// // drop table 后再建表
-	// force := true
-
-	// // 打印执行过程
-	// verbose := true
-
-	// // 遇到错误立即返回
-	// err := orm.RunSyncdb(name, force, verbose)
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
 }

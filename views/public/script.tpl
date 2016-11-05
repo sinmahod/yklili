@@ -1,32 +1,52 @@
         <!--[if !IE]> -->
-        <script src="static/js/jquery-2.1.4.min.js"></script>
-
+        <script src="../static/js/jquery-2.1.4.min.js"></script>
+        <!-- <![endif]-->
         <!-- <![
-        <!--[if IE]>endif]-->
-
-        <script src="static/js/jquery-1.11.3.min.js"></script>
+        <!--[if IE]>
+        <script src="../static/js/jquery-1.11.3.min.js"></script>
         <![endif]-->
         <script type="text/javascript">
-            if('ontouchstart' in document.documentElement) document.write("<script src='static/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+            if('ontouchstart' in document.documentElement) document.write("<script src='../static/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
         </script>
-        <script src="static/js/bootstrap.min.js"></script>
+        <script src="../static/js/bootstrap.min.js"></script>
 
         <!-- page specific plugin scripts -->
 
         <!--[if lte IE 8]>
-          <script src="static/js/excanvas.min.js"></script>
+          <script src="../static/js/excanvas.min.js"></script>
         <![endif]-->
-        <script src="static/js/jquery-ui.custom.min.js"></script>
-        <script src="static/js/jquery.ui.touch-punch.min.js"></script>
-        <script src="static/js/jquery.easypiechart.min.js"></script>
-        <script src="static/js/jquery.sparkline.index.min.js"></script>
-        <script src="static/js/jquery.flot.min.js"></script>
-        <script src="static/js/jquery.flot.pie.min.js"></script>
-        <script src="static/js/jquery.flot.resize.min.js"></script>
+        <script src="../static/js/jquery-ui.custom.min.js"></script>
+        <script src="../static/js/jquery.ui.touch-punch.min.js"></script>
+        <script src="../static/js/jquery.easypiechart.min.js"></script>
+        <script src="../static/js/jquery.sparkline.index.min.js"></script>
+        <script src="../static/js/jquery.flot.min.js"></script>
+        <script src="../static/js/jquery.flot.pie.min.js"></script>
+        <script src="../static/js/jquery.flot.resize.min.js"></script>
 
         <!-- ace scripts -->
-        <script src="static/js/ace-elements.min.js"></script>
-        <script src="static/js/ace.min.js"></script>
+        <script src="../static/js/ace-elements.min.js"></script>
+        <script src="../static/js/ace.min.js"></script>
+
+
+        <!-- pjax -->
+        <script src="../static/js/jquery.pjax.js"></script>
+        <script type="text/javascript">
+            $(function(){
+              $(document).pjax('.menu-pjax-a', '#main')
+
+              $(".menu-pjax-a").click(function(){
+                    $("#platform-menu").find("li").removeClass("active");
+                    $("#platform-menu").find(".hover-show").removeClass("hover-show");
+                    $(this).parent("li").siblings(".parent-menu").find(".submenu").slideUp("slow");
+                    $(this).parent("li").addClass("active").siblings().removeClass("active");
+                    $(this).parent("li").siblings(".open").removeClass("open");
+                    $(this).parents(".parent-menu").siblings(".parent-menu").find(".submenu").slideUp("slow");
+                    $(this).parents(".parent-menu").addClass("active").siblings().removeClass("active");
+                    $(this).parents(".open").siblings(".open").removeClass("open");
+
+              })
+            })
+        </script>
 
         <!-- inline scripts related to this page -->
         <script type="text/javascript">

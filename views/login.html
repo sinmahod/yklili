@@ -308,6 +308,11 @@
     <script type="text/javascript">
 
       jQuery(function($) {
+        //Debug模式下默认初始用户密码
+        $("#username").val('admin');
+        $("#password").val('admin');
+        $("#username").focus();
+
         //焦点在输入框时回车键执行事件
        $(document).on('keydown','input.form-control', function(evt){
         if(evt.keyCode==13){

@@ -55,30 +55,43 @@ func init() {
 	orm.RegisterModel(new(User))
 }
 
+func (user *User) Fill() error {
+	o := orm.NewOrm()
+	if user.Id > 0 {
+		return o.Read(user, "Id")
+	}
+	if user.UserName != "" {
+		return o.Read(user, "UserName")
+	}
+	if user.Email != "" {
+		return o.Read(user, "Email")
+	}
+	return fmt.Errorf("请确认是否传递了Id或UserName或Email", "")
+
+}
+
 func (user *User) String() string {
 	return fmt.Sprintf("{User:{Id:%d,UserName:'%s',Email:'%s',Phone:'%s',AddTime:'%s',AddUser:'%s'}}", user.Id, user.UserName, user.Email, user.Phone, user.AddTime, user.AddUser)
 }
 
 //根据用户名得到用户信息
-func GetUser(username string) (User, error) {
+func GetUser(username string) (*User, error) {
 	user := User{UserName: username}
-	o := orm.NewOrm()
-	err := o.Read(&user, "UserName")
+	err := user.Fill()
 	if err != nil {
-		return user, fmt.Errorf("用户[%s]不存在", username)
+		return &user, fmt.Errorf("用户[%s]不存在", username)
 	}
-	return user, nil
+	return &user, nil
 }
 
 //根据邮箱得到用户信息
-func GetUserByEmail(email string) (User, error) {
+func GetUserByEmail(email string) (*User, error) {
 	user := User{Email: email}
-	o := orm.NewOrm()
-	err := o.Read(&user, "Email")
+	err := user.Fill()
 	if err != nil {
-		return user, fmt.Errorf("邮箱[%s]未注册", email)
+		return &user, fmt.Errorf("邮箱[%s]未注册", email)
 	}
-	return user, nil
+	return &user, nil
 }
 
 //插入用户
