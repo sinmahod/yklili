@@ -337,7 +337,6 @@ function pjax(options) {
     fire('pjax:success', [data, status, xhr, options])
   }
 
-
   // Initialize pjax.state for the initial page load. Assume we're
   // using the container and options of the link we're loading for the
   // back button to the initial page. This ensures good back button
@@ -364,7 +363,6 @@ function pjax(options) {
     if (options.push && !options.replace) {
       // Cache current container element before replacing it
       cachePush(pjax.state.id, cloneContents(context))
-
       window.history.pushState(null, "", options.requestUrl)
     }
 
@@ -450,7 +448,11 @@ function onPjaxPopstate(event) {
     var cache = cacheMapping[state.id] || []
     var container = $(cache[0] || state.container), contents = cache[1]
 
+
+    locationReplace(location.href)  //启用本行注释以下代码使浏览器前进后退都重新请求服务器
+    /** 
     if (container.length) {
+      
       if (previousState) {
         // Cache current container before replacement and inform the
         // cache which direction the history shifted.
@@ -496,6 +498,7 @@ function onPjaxPopstate(event) {
     } else {
       locationReplace(location.href)
     }
+    **/
   }
   initialPop = false
 }

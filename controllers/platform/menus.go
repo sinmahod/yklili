@@ -1,9 +1,5 @@
 package platform
 
-import (
-//"github.com/astaxie/beego"
-)
-
 type MenusController struct {
 	PlatformController
 }

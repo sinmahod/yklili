@@ -2,22 +2,22 @@ package test
 
 import (
 	_ "beegostudy/models"
-	_ "github.com/go-sql-driver/mysql"
-	//"beegostudy/util"
+	"beegostudy/util"
 	"fmt"
 	"github.com/astaxie/beego/orm"
+	_ "github.com/go-sql-driver/mysql"
 	"testing"
 )
 
-func TestMain(t *testing.T) {
-	//s := util.LeftPad("aa", 'c', 8)
-	//t.Fatal(s)
-	//t.Fatal(util.RandInt(1))
-	//fmt.Println(util.GeneratePWD("qweqwe"))
-	//t.Fatal("qweqwe")
+func Test_LeftPad(t *testing.T) {
+	s := util.LeftPad("aa", 'c', 8)
+	t.Fatal(s)
+	t.Fatal(util.RandInt(1))
+	fmt.Println(util.GeneratePWD("qweqwe"))
+	t.Fatal("qweqwe")
 }
 
-func TestCreateTable(t *testing.T) {
+func Test_RunSyncdb(t *testing.T) {
 	/**************自动建表***********/
 	orm.RegisterDriver("mysql", orm.DRMySQL)
 
