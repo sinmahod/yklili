@@ -48,22 +48,21 @@
                     url: "/data/menulist",
                     datatype: "json",       //格式
                     height: $(window).height() - 320,     //表格高度，宽度默认自动填充
-                    colNames:['父级ID','菜单名称','图标', '请求链接', '排序','创建时间',' '],  //显示的字段
+                    colNames:[' ','父级ID','菜单名称','图标', '请求链接', '排序','创建时间'],  //显示的字段
                     colModel:[  //每一列的属性  name 列显示的名称；index 传到服务器端用来排序用的列名称；width 列宽度；align 对齐方式；sortable 是否可以排序
-                        
-                        {name:'Pid',index:'Pid', width:60, sorttype:"int", editable: true},
-                        {name:'MenuName',index:'sdate',width:90, editable:true,sortable:false},
-                        {name:'Icon',index:'MenuName', width:150,editable: true},
-                        {name:'Link',index:'Link', width:70, editable: true,sortable:false},
-                        {name:'InnerCode',index:'InnerCode', width:90, editable: true},
-                        {name:'AddTime',index:'AddTime', width:150, editable: true,sorttype:"date",unformat: pickDate} ,
                         {name:'Id',index:'', width:80, fixed:true, sortable:false, resize:false,
                             formatter:'actions', 
                             formatoptions:{ 
                                 keys:true,
                                 delOptions:{recreateForm: true, beforeShowForm:beforeDeleteCallback},
                             }
-                        }
+                        },
+                        {name:'Pid',index:'Pid', width:60, sorttype:"int", editable: true},
+                        {name:'MenuName',index:'sdate',width:90, editable:true,sortable:false},
+                        {name:'Icon',index:'MenuName', width:150,editable: true},
+                        {name:'Link',index:'Link', width:70, editable: true,sortable:false},
+                        {name:'InnerCode',index:'InnerCode', width:90, editable: true},
+                        {name:'AddTime',index:'AddTime', width:150, editable: true,sorttype:"date",unformat: pickDate} 
                     ], 
                     scrollOffset: 0,  //设置宽度为0px，不显示滚动条
                     viewrecords : true, //是否显示总数量
