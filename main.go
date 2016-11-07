@@ -1,8 +1,8 @@
 package main
 
 import (
+	"beegostudy/controllers/data"
 	"beegostudy/controllers/platform"
-	"beegostudy/controllers/platform/data"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/context"

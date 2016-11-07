@@ -11,3 +11,30 @@ body {
 .modal-dialog {
     margin-top: 10%;
 }
+
+.footer {
+    padding-top: 0px;
+}
+
+.ui-jqgrid .tree-wrap-ltr {
+    float: left;
+}
+
+
+.ui-icon { ; }
+/* positioning */
+
+.ui-icon-triangle-1-n {background-image: url(/static/images/ui-icons_256x240.png); background-position: 0 -16px; }
+.ui-icon-triangle-1-ne {background-image: url(/static/images/ui-icons_256x240.png); background-position: -16px -16px; }
+.ui-icon-triangle-1-e { background-image: url(/static/images/ui-icons_256x240.png);background-position: -32px -16px; }
+.ui-icon-triangle-1-se {background-image: url(/static/images/ui-icons_256x240.png); background-position: -48px -16px; }
+.ui-icon-triangle-1-s {background-image: url(/static/images/ui-icons_256x240.png); background-position: -64px -16px; }
+.ui-icon-triangle-1-sw {background-image: url(/static/images/ui-icons_256x240.png); background-position: -80px -16px; }
+.ui-icon-triangle-1-w { background-image: url(/static/images/ui-icons_256x240.png);background-position: -96px -16px; }
+.ui-icon-triangle-1-nw { background-image: url(/static/images/ui-icons_256x240.png);background-position: -112px -16px; }
+.ui-icon-triangle-2-n-s { background-image: url(/static/images/ui-icons_256x240.png);background-position: -128px -16px; }
+.ui-icon-triangle-2-e-w {background-image: url(/static/images/ui-icons_256x240.png); background-position: -144px -16px; }
+
+.ui-icon-radio-off { background-image: url(/static/images/ui-icons_256x240.png);background-position: -96px -144px; }
+.ui-icon-radio-on { background-image: url(/static/images/ui-icons_256x240.png);background-position: -112px -144px; }
+

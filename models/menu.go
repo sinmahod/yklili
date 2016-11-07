@@ -2,9 +2,10 @@ package models
 
 import (
 	"fmt"
-	"github.com/astaxie/beego/orm"
 	"strings"
 	"time"
+
+	"github.com/astaxie/beego/orm"
 )
 
 /**
@@ -25,13 +26,15 @@ type Menu struct {
 	Pid       int       `orm:"column(pid)"`
 	MenuName  string    `orm:"column(menuname);size(64)"`
 	Icon      string    `orm:"null;column(icon);size(32)"`
-	IsRoot    bool      `orm:"column(isroot);default(true)"`
+	IsLeaf    bool      `orm:"column(isleaf);default(true)"`
 	Link      string    `orm:"null;column(link);size(128)"`
 	InnerCode string    `orm:"column(innercode);size(128)"`
+	Level     int       `orm:"column(level)"`
 	OrderFlag int       `orm:"column(orderflag)"`
 	AddTime   time.Time `orm:"auto_now_add;type(datetime);column(addtime)"`
 	AddUser   string    `orm:"column(adduser)"`
 	Checked   bool      `orm:"-"`
+	Expanded  bool      `orm:"-"`
 	ChildNode []*Menu   `orm:"-"`
 }
 
@@ -99,4 +102,43 @@ func GetMenusLevel(url string) ([]*Menu, error) {
 		return menuslevel[:idx+1], nil
 	}
 	return menus, err
+}
+
+//得到分页的菜单
+/**
+*	size	每页查询长度
+*	index	查询的页码
+*	ordercolumn	排序字段
+*	orderby		升降序:desc\asc
+**/
+func GetMenusPage(size, index int, ordercolumn, orderby string) (*DataGrid, error) {
+
+	if ordercolumn == "" {
+		ordercolumn = "innercode"
+	} else if strings.EqualFold(orderby, "desc") {
+		ordercolumn = "-" + ordercolumn
+	}
+
+	var menus []*Menu
+	o := orm.NewOrm()
+
+	_, err := o.QueryTable("menu").OrderBy(ordercolumn).Limit(size, (index-1)*size).All(&menus)
+
+	if err == nil {
+		cnt, err := o.QueryTable("menu").Count()
+
+		pagetotal := cnt / int64(size)
+
+		if cnt%int64(size) > 0 {
+			pagetotal++
+		}
+
+		for _, menu := range menus {
+			menu.Expanded = true
+		}
+
+		return GetDataGrid(menus, index, int(pagetotal), cnt), err
+	}
+
+	return nil, err
 }

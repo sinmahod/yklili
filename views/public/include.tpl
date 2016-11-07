@@ -23,6 +23,9 @@
           <link rel="stylesheet" href="../static/css/ace-ie.min.css" />
         <![endif]-->
 
+        <!-- gl style -->
+        <link rel="stylesheet" href="../static/css/gl_style.css" />        
+
         <!-- inline styles related to this page -->
 
         <!-- ace settings handler -->
