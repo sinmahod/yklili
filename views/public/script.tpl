@@ -23,12 +23,12 @@
               $(".menu-pjax-a").click(function(){
                     $("#platform-menu").find("li").removeClass("active");
                     $("#platform-menu").find(".hover-show").removeClass("hover-show");
-                    $(this).parent("li").siblings(".parent-menu").find(".submenu").slideUp("slow");
+                    $(this).parent("li").siblings(".parent-menu").find(".submenu").slideUp("fast");
                     $(this).parent("li").addClass("active").siblings().removeClass("active");
                     $(this).parent("li").siblings(".open").removeClass("open");
-                    $(this).parents(".parent-menu").siblings(".parent-menu").find(".submenu").slideUp("slow");
+                    $(this).parents(".parent-menu").siblings(".parent-menu").find(".submenu").slideUp("fast");
                     $(this).parents(".parent-menu").addClass("active").siblings().removeClass("active");
                     $(this).parents(".open").siblings(".open").removeClass("open");
-              })
+              });
             })
         </script>

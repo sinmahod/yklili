@@ -20,6 +20,9 @@ body {
     float: left;
 }
 
+#jqgh_grid-table_cb {
+	text-align: center;
+}
 
 .ui-icon { ; }
 /* positioning */
