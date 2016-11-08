@@ -1,6 +1,7 @@
 package models
 
 import (
+	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
@@ -56,7 +57,11 @@ func init() {
 }
 
 func (menu *Menu) String() string {
-	return fmt.Sprintf("{Menu:{Id:%d,MenuName:'%s',AddTime:'%s',AddUser:'%s'}}", menu.Id, menu.MenuName, menu.AddTime, menu.AddUser)
+	data, err := json.MarshalIndent(menu, "", "    ")
+	if err != nil {
+		fmt.Printf("JSON marshaling failed: %s", err)
+	}
+	return fmt.Sprintf("%s\n", data)
 }
 
 //相关函数
