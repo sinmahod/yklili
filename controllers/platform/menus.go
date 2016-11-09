@@ -4,6 +4,6 @@ type MenusController struct {
 	PlatformController
 }
 
-func (c *MenusController) Get() {
+func (c *MenusController) Page() {
 	c.TplName = "menus.html"
 }

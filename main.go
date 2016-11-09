@@ -4,6 +4,7 @@ import (
 	"beegostudy/controllers/data"
 	"beegostudy/controllers/platform"
 
+	"fmt"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/context"
 	"github.com/astaxie/beego/orm"
@@ -32,11 +33,25 @@ func main() {
 	beego.Router("/", &MainController{})
 	beego.Router("/login", &platform.LoginController{})
 	beego.Router("/register", &platform.RegisterController{})
-	beego.Router("/platform/users", &platform.UsersController{})
-	beego.Router("/platform/menus", &platform.MenusController{})
-	beego.Router("/platform/test", &platform.TestController{})
 
-	beego.Router("/data/menulist", &data.MenuListController{})
+	//页面控制器
+	pages := map[string]beego.ControllerInterface{
+		"users": &platform.UsersController{},
+		"menus": &platform.MenusController{},
+	}
+	for name, controller := range pages {
+		beego.Router(fmt.Sprintf("/platform/%s", name), controller, "get:Page")
+	}
+
+	//数据控制器
+	models := map[string]beego.ControllerInterface{
+		"menu": &data.MenuController{},
+	}
+	for name, controller := range models {
+		beego.Router(fmt.Sprintf("/data/%s/:method", name), controller)
+	}
+
+	beego.Router("/platform/test", &platform.TestController{})
 
 	//校验用户登录：未登录则重定向到login
 	var FilterUser = func(ctx *context.Context) {

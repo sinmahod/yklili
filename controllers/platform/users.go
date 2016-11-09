@@ -4,6 +4,6 @@ type UsersController struct {
 	PlatformController
 }
 
-func (c *UsersController) Get() {
+func (c *UsersController) Page() {
 	c.TplName = "users.html"
 }

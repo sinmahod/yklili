@@ -1,6 +1,9 @@
 package data
 
-import "github.com/astaxie/beego"
+import (
+	"github.com/astaxie/beego"
+	"net/http"
+)
 
 type DataController struct {
 	beego.Controller
@@ -12,6 +15,8 @@ type DataController struct {
 	OrderColumn string
 	//升降序
 	OrderSord string
+	//方法名
+	MethodName string
 }
 
 /**
@@ -22,4 +27,9 @@ func (c *DataController) Prepare() {
 	c.PageIndex, _ = c.GetInt("page")
 	c.OrderColumn = c.GetString("sidx")
 	c.OrderSord = c.GetString("sord")
+	c.MethodName = c.GetString(":method")
+}
+
+func (c *DataController) methodNotFind() {
+	http.Error(c.Ctx.ResponseWriter, c.MethodName+" Method Not Find", 404)
 }
