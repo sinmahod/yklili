@@ -1,10 +1,10 @@
 package models
 
 import (
+	"encoding/json"
 	"fmt"
-	"time"
-
 	"github.com/astaxie/beego/orm"
+	"time"
 )
 
 /**
@@ -71,7 +71,11 @@ func (user *User) Fill() error {
 }
 
 func (user *User) String() string {
-	return fmt.Sprintf("{User:{Id:%d,UserName:'%s',Email:'%s',Phone:'%s',AddTime:'%s',AddUser:'%s'}}", user.Id, user.UserName, user.Email, user.Phone, user.AddTime, user.AddUser)
+	data, err := json.MarshalIndent(user, "", "    ")
+	if err != nil {
+		fmt.Printf("JSON marshaling failed: %s", err)
+	}
+	return fmt.Sprintf("%s\n", data)
 }
 
 //根据用户名得到用户信息
