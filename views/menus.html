@@ -11,7 +11,10 @@
                             <div class="col-xs-12">
                                 <!-- PAGE CONTENT BEGINS -->
 
+                                 <!--
                                  <table id="datatable" url="/data/menu/List" pkcolumn="Id" istree="true"></table>
+`                                -->
+                                <table id="datatable" url="/data/menu/List" addsave="/data/menu/Save" pkcolumn="Id" istree="true"></table>
 
                                 <div id="datapager"></div>
 
@@ -26,13 +29,14 @@
                     title: '菜单管理',
                     tableName: 'datatable',  
                     pageName: 'datapager', 
+                    treeColumn: 'MenuName',
                     // 设置数据表格列  
                     columnModel: [  
-                        {header:'菜单名称',name:'MenuName',index:'sdate',width:90, editable:true,sortable:false},
-                        {header:'图标',name:'Icon',index:'MenuName', width:150,editable: true},
-                        {header:'链接',name:'Link',index:'Link', width:70, editable: true,sortable:false},
+                        {header:'菜单名称',name:'MenuName',index:'MenuName',width:90, editable:true},
+                        {header:'图标',name:'Icon',index:'Icon', width:150,editable: true},
+                        {header:'链接',name:'Link',index:'Link', width:70, editable: true},
                         {header:'层级ID',name:'InnerCode',index:'InnerCode', width:90, editable: true},
-                        {header:'添加时间',name:'AddTime',index:'AddTime', width:150, editable: true,sorttype:"date",unformat: pickDate} ,
+                        {header:'添加时间',name:'AddTime',index:'AddTime', width:150, editable: false,unformat: pickDate} ,
                         {header:'操作',name:'Id',index:'', width:80, fixed:true, sortable:false, resize:false,
                             formatter:'actions', 
                             formatoptions:{ 

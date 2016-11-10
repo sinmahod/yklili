@@ -48,7 +48,7 @@ func main() {
 		"menu": &data.MenuController{},
 	}
 	for name, controller := range models {
-		beego.Router(fmt.Sprintf("/data/%s/:method", name), controller)
+		beego.Router(fmt.Sprintf("/data/%s/:method", name), controller, "*:Get")
 	}
 
 	beego.Router("/platform/test", &platform.TestController{})

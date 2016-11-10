@@ -1,6 +1,7 @@
 package models
 
 import (
+	"beegostudy/util"
 	"encoding/json"
 	"fmt"
 	"strings"
@@ -50,6 +51,10 @@ func (menu *Menu) SetID(id int) {
 
 func (menu *Menu) GetID() int {
 	return menu.Id
+}
+
+func (menu *Menu) SetValue(data map[string]interface{}) error {
+	return util.FillStruct(data, menu)
 }
 
 func init() {

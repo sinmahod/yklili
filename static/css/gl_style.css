@@ -41,3 +41,9 @@ body {
 .ui-icon-radio-off { background-image: url(/static/images/ui-icons_256x240.png);background-position: -96px -144px; }
 .ui-icon-radio-on { background-image: url(/static/images/ui-icons_256x240.png);background-position: -112px -144px; }
 
+
+
+/* jqGrid 的第一列被ace在修改页面给隐藏了这里展示 */
+.EditTable tr:first-child  {
+    display:table-row !important;
+}

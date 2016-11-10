@@ -6,6 +6,7 @@ var DataGrid = function(options){
 	//rows每页展示/请求数量  可选，默认10000
 	//pkcolumn 主键字段
 	//istree  是否树形展示
+    //addsave  添加数据或保存数据的url
 	//<table id="dataGrid" url="test" rows="10" pkcolumn="Id" istree="true"></table>
 	var dataGrid =  $('#'+options.tableName);
 	var dataGridPage = $('#'+options.pageName);
@@ -59,7 +60,7 @@ var DataGrid = function(options){
 		showRownum: true,	// 是否显示行号
 		showCheckbox: true,// 是否显示复选框
 		multiselect: true,      //是否可以多选
-                    	multiboxonly: true,     //只有选中checkbox才有效
+    	multiboxonly: true,     //只有选中checkbox才有效
 		sortable: false,	// 列表是否允许支持
 		
 		// 树结构表格
@@ -70,11 +71,11 @@ var DataGrid = function(options){
 		initExpandLevel: options.defaultExpandLevel,			// 保存初始化是设置的展开层次
 		treeReader: {	// 自定义树表格JSON读取参数
 			 level_field: "Level",  
-                       		 parent_id_field: "Pid",  
-                       		 leaf_field: "IsLeaf",  
-                       		 expanded_field: "Expanded" 
+       		 parent_id_field: "Pid",  
+       		 leaf_field: "IsLeaf",  
+       		 expanded_field: "Expanded" 
 		},
-		//ExpandColumn: options.treeColumn,	属性结构列的列明
+		ExpandColumn: options.treeColumn,	//属性结构列的列明
 
 		//设置宽度为0px，不显示滚动条
 		scrollOffset: 0,  
@@ -82,6 +83,9 @@ var DataGrid = function(options){
 		height: $(window).height() - 320,     //表格高度，宽度默认自动填充
 
 		pager : dataGridPage,     //翻页导航
+
+        closeAfterAdd: true,    //添加数据后关闭窗口
+        closeAfterEdit:true,     //修改数据后关闭窗口
 		//页码的文字
 		pgtext: '转到 <input class="ui-pg-input ui-corner-all" type="text" size="2" maxlength="7" value="0" role="textbox"> 页，共<span id="sp_1_grid-pager"></span>页',
 		loadComplete : function() {
@@ -93,7 +97,8 @@ var DataGrid = function(options){
                             		enableTooltips(table);
                         		}, 0);
                     	},
-                    	editurl: "./dummy.php"
+                    	editurl: dataGrid.attr('addsave'), //添加修改数据请求的url
+                        
       	}, options);
 	
 	// 获取列标题
@@ -143,6 +148,13 @@ var DataGrid = function(options){
 		dataGrid.jqGrid('setFrozenColumns'); // 冻结列，在colModel指定frozen: true
 	}	
 	
+    //postdata=提交的数据
+    var fn_editSubmit=function(response,postdata){ 
+        var json=response.responseText; 
+        alert(json);//显示返回值 
+        $('#cData').trigger('click');//执行关闭按钮的点击事件
+    } 
+
 	// 自动调整表格大小
 	$(window).triggerHandler('resize.jqGrid');
 	dataGrid.jqGrid('navGrid','#'+dataGridPage.attr('id'),
@@ -164,6 +176,13 @@ var DataGrid = function(options){
                         //edit record form
                         //closeAfterEdit: true,
                         //width: 700,
+                        closeOnEscape: true,    //开启ESC关闭对话框功能
+                        afterSubmit: fn_editSubmit, //提交后执行的函数
+
+                        bSubmit: "保存",
+                        bCancel: "关闭",
+                       // closeAfterAdd: true,    //添加数据后关闭窗口
+                       // closeAfterEdit:true,     //修改数据后关闭窗口
                         recreateForm: true,
                         beforeShowForm : function(e) {
                             var form = $(e[0]);
@@ -219,7 +238,7 @@ var DataGrid = function(options){
                         }
              });
 
-	$(document).one('ajaxloadstart.page', function(e) {
+	         $(document).one('ajaxloadstart.page', function(e) {
                     $.jgrid.gridDestroy(grid_selector);
                     $('.ui-jqdialog').remove();
              });

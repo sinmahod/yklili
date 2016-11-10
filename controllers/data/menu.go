@@ -29,3 +29,21 @@ func (c *MenuController) List() {
 		c.ServeJSON()
 	}
 }
+
+func (c *MenuController) Save() {
+	if len(c.RequestData) > 0 {
+		for k, v := range c.RequestData {
+			beego.Info("=======", k, v)
+		}
+		menu := new(models.Menu)
+		if err := menu.SetValue(c.RequestData); err != nil {
+			beego.Warn("请确认参数是否传递正确", err)
+			c.fail()
+		} else {
+			beego.Info(menu)
+			c.fail()
+		}
+	} else {
+		c.paramIsNull()
+	}
+}
