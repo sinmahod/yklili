@@ -1,6 +1,6 @@
                          <div class="page-header">
                             <h1>
-                                菜单管理
+                                <a href="javascript:void(0);" onclick="test()">菜单管理</a>
                                 <small>
                                     <i class="ace-icon fa fa-angle-double-right"></i>
                                 </small>
@@ -24,14 +24,27 @@
 
         <!-- jgrid -->
         <script type="text/javascript">
+
+        function test(){
+            
+            var ids=DataGrid.getSelectRowIds('datatable');
+          //  var celldata = $("#datatable").jqGrid('getCell',ids,'Id');
+//            var rowData = $('#datatable').jqGrid('getRowData',ids);
+            if(ids.length > 0){
+                alert(ids[0]+"---"+ids.length)
+            }
+  //          alert(celldata)
+        }
+
              jQuery(function($) {
                 var dataGrid = new DataGrid({  
                     title: '菜单管理',
                     tableName: 'datatable',  
                     pageName: 'datapager', 
                     treeColumn: 'MenuName',
-                    // 设置数据表格列  
+                    // 设置数据表格列
                     columnModel: [  
+                        {name:'Id',index:'Id',width:90, editable:true,hidden:true},
                         {header:'菜单名称',name:'MenuName',index:'MenuName',width:90, editable:true},
                         {header:'图标',name:'Icon',index:'Icon', width:150,editable: true},
                         {header:'链接',name:'Link',index:'Link', width:70, editable: true},

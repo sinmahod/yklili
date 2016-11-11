@@ -1,12 +1,13 @@
+(function ($) {
 /**
  * jqGrid 封装类
  */
-var DataGrid = function(options){
+ window.DataGrid = function(options){
 	//url 数据请求连接  必选
 	//rows每页展示/请求数量  可选，默认10000
 	//pkcolumn 主键字段
 	//istree  是否树形展示
-    //addsave  添加数据或保存数据的url
+	//addsave  添加数据或保存数据的url
 	//<table id="dataGrid" url="test" rows="10" pkcolumn="Id" istree="true"></table>
 	var dataGrid =  $('#'+options.tableName);
 	var dataGridPage = $('#'+options.pageName);
@@ -60,7 +61,7 @@ var DataGrid = function(options){
 		showRownum: true,	// 是否显示行号
 		showCheckbox: true,// 是否显示复选框
 		multiselect: true,      //是否可以多选
-    	multiboxonly: true,     //只有选中checkbox才有效
+    		multiboxonly: true,     //只有选中checkbox才有效
 		sortable: false,	// 列表是否允许支持
 		
 		// 树结构表格
@@ -70,10 +71,10 @@ var DataGrid = function(options){
 		defaultExpandLevel: 0,						// 默认展开的层次
 		initExpandLevel: options.defaultExpandLevel,			// 保存初始化是设置的展开层次
 		treeReader: {	// 自定义树表格JSON读取参数
-			 level_field: "Level",  
-       		 parent_id_field: "Pid",  
-       		 leaf_field: "IsLeaf",  
-       		 expanded_field: "Expanded" 
+			level_field: "Level",  
+			parent_id_field: "Pid",  
+			leaf_field: "IsLeaf",  
+			expanded_field: "Expanded" 
 		},
 		ExpandColumn: options.treeColumn,	//属性结构列的列明
 
@@ -84,8 +85,8 @@ var DataGrid = function(options){
 
 		pager : dataGridPage,     //翻页导航
 
-        closeAfterAdd: true,    //添加数据后关闭窗口
-        closeAfterEdit:true,     //修改数据后关闭窗口
+		closeAfterAdd: true,    //添加数据后关闭窗口
+		closeAfterEdit:true,     //修改数据后关闭窗口
 		//页码的文字
 		pgtext: '转到 <input class="ui-pg-input ui-corner-all" type="text" size="2" maxlength="7" value="0" role="textbox"> 页，共<span id="sp_1_grid-pager"></span>页',
 		loadComplete : function() {
@@ -238,17 +239,41 @@ var DataGrid = function(options){
                         }
              });
 
-	         $(document).one('ajaxloadstart.page', function(e) {
+	        $(document).one('ajaxloadstart.page', function(e) {
                     $.jgrid.gridDestroy(grid_selector);
                     $('.ui-jqdialog').remove();
              });
 };
 
 
+//封装常用方法
+
+/**
+*   得到当前选中行ID，返回数值型数组
+*   @Param  tableid  table的ID
+*   @Return  ids[] 选中行字段值
+*/
+DataGrid.getSelectRowIds = function(tableid){
+	var tableGrid =  $('#'+tableid);
+	var pkcolumn = tableGrid.attr('pkcolumn');
+	var rowIds = tableGrid.jqGrid('getGridParam','selarrrow');
+	if (rowIds.length == 0){
+		var rowIds = new Array();
+		 id =  tableGrid.jqGrid('getGridParam','selrow');
+		 if (id!=null){
+			 rowIds[0] = id	
+		 }
+	}
+	var ids = new Array();
+	for (var i = 0 ; i < rowIds.length ; i ++){
+		ids[i] = $("#datatable").jqGrid('getCell',rowIds[i],pkcolumn);	
+	}
+	return  ids;
+}
+
 
 
 //文本替换
-(function($){
 	/**
 	 * jqGrid Chinese Translation
 	 * 咖啡兔 yanhonglei@gmail.com
@@ -515,4 +540,5 @@ function enableTooltips(table) {
     $(table).find('.ui-pg-div').tooltip({container:'body'});
 }
             
+
                 
