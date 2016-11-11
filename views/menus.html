@@ -1,22 +1,31 @@
                          <div class="page-header">
-                            <h1>
-                                <a href="javascript:void(0);" onclick="test()">菜单管理</a>
-                                <small>
-                                    <i class="ace-icon fa fa-angle-double-right"></i>
-                                </small>
-                            </h1>
+                            <button class="btn btn-sm btn-primary" id="addbutton" onclick="addMenu()">
+                                <i class="ace-icon fa fa-plus bigger-125"></i>
+                                <span class="bigger-115 no-text-shadow">新建菜单</span>
+                            </button>
+                             <button class="btn btn-sm btn-info">
+                                <i class="ace-icon fa fa-pencil bigger-125"></i>
+                                <span class="bigger-115 no-text-shadow">修改菜单</span>
+                            </button>
+                             <button class="btn btn-sm btn-success">
+                                <i class="ace-icon fa fa-minus bigger-125"></i>
+                                <span class="bigger-115 no-text-shadow">删除菜单</span>
+                            </button>
+                             <button class="btn btn-sm btn-purple">
+                                <i class="ace-icon fa fa-search-plus bigger-125"></i>
+                                <span class="bigger-115 no-text-shadow">查看菜单</span>
+                            </button>
                         </div><!-- /.page-header -->
 
                         <div class="row">
                             <div class="col-xs-12">
                                 <!-- PAGE CONTENT BEGINS -->
+                                <table id="datatable" url="/data/menu/List" addsave="/data/menu/Save" istree="true" treeColumn="MenuName"></table>
 
-                                 <!--
-                                 <table id="datatable" url="/data/menu/List" pkcolumn="Id" istree="true"></table>
-`                                -->
-                                <table id="datatable" url="/data/menu/List" addsave="/data/menu/Save" pkcolumn="Id" istree="true"></table>
+                                <div id="datapager">
+                                    
 
-                                <div id="datapager"></div>
+                                </div>
 
                                 <!-- PAGE CONTENT ENDS -->
                             </div><!-- /.col -->
@@ -25,15 +34,65 @@
         <!-- jgrid -->
         <script type="text/javascript">
 
+        // $("#addbutton").on(ace.click_event, function() {
+        //     bootbox.confirm("Are you sure?", function(result) {
+        //                 if(result) {
+        //                     //
+        //                 }
+        //             });
+        //     bootbox.prompt("What is your name?", function(result) {
+        //         if (result === null) {
+                    
+        //         } else {
+                    
+        //         }
+        //     });
+        // });
+
+        function addMenu(){
+            bootbox.dialog({
+                title: "新建菜单",
+                message: "<span class='bigger-110'>I am a custom dialog with smaller buttons</span>",
+                buttons:
+                {
+                    "success" :
+                     {
+                        "label" : "<i class='ace-icon fa fa-check'></i> Success!",
+                        "className" : "btn-sm btn-success",
+                        "callback": function() {
+                            //Example.show("great success");
+                        }
+                    },
+                    "danger" :
+                    {
+                        "label" : "Danger!",
+                        "className" : "btn-sm btn-danger",
+                        "callback": function() {
+                            //Example.show("uh oh, look out!");
+                        }
+                    }, 
+                    "click" :
+                    {
+                        "label" : "Click ME!",
+                        "className" : "btn-sm btn-primary",
+                        "callback": function() {
+                            //Example.show("Primary button");
+                        }
+                    }, 
+                    "button" :
+                    {
+                        "label" : "Just a button...",
+                        "className" : "btn-sm"
+                    }
+                }
+            });
+        }
+
         function test(){
-            
-            var ids=DataGrid.getSelectRowIds('datatable');
-          //  var celldata = $("#datatable").jqGrid('getCell',ids,'Id');
-//            var rowData = $('#datatable').jqGrid('getRowData',ids);
-            if(ids.length > 0){
-                alert(ids[0]+"---"+ids.length)
-            }
-  //          alert(celldata)
+            DataGrid.loadData('datatable');
+            var ids = DataGrid.getSelectRowData('datatable');
+            var data = DataGrid.getSelectRowData('datatable');
+            //alert(data)
         }
 
              jQuery(function($) {
@@ -41,23 +100,15 @@
                     title: '菜单管理',
                     tableName: 'datatable',  
                     pageName: 'datapager', 
-                    treeColumn: 'MenuName',
                     // 设置数据表格列
                     columnModel: [  
-                        {name:'Id',index:'Id',width:90, editable:true,hidden:true},
-                        {header:'菜单名称',name:'MenuName',index:'MenuName',width:90, editable:true},
-                        {header:'图标',name:'Icon',index:'Icon', width:150,editable: true},
-                        {header:'链接',name:'Link',index:'Link', width:70, editable: true},
-                        {header:'层级ID',name:'InnerCode',index:'InnerCode', width:90, editable: true},
-                        {header:'添加时间',name:'AddTime',index:'AddTime', width:150, editable: false,unformat: pickDate} ,
-                        {header:'操作',name:'Id',index:'', width:80, fixed:true, sortable:false, resize:false,
-                            formatter:'actions', 
-                            formatoptions:{ 
-                                keys:true,
-                                delOptions:{recreateForm: true, beforeShowForm:beforeDeleteCallback},
-                            }
-                        }
+                        {name:'Id',index:'Id',hidden:true,key:true},
+                        {label:'菜单名称',name:'MenuName',index:'MenuName',width:90},
+                        {label:'图标',name:'Icon',index:'Icon', width:150},
+                        {label:'链接',name:'Link',index:'Link', width:70},
+                        {label:'层级ID',name:'InnerCode',index:'InnerCode', width:90},
+                        {label:'添加时间',name:'AddTime',index:'AddTime', width:150,formatter: 'date',formatoptions:{srcformat: 'Y-m-dTH:i:s',newformat: 'Y-m-d H:i:s'}}
                     ]
-                });  
+                });
             });
         </script>

@@ -5,10 +5,9 @@
  window.DataGrid = function(options){
 	//url 数据请求连接  必选
 	//rows每页展示/请求数量  可选，默认10000
-	//pkcolumn 主键字段
 	//istree  是否树形展示
 	//addsave  添加数据或保存数据的url
-	//<table id="dataGrid" url="test" rows="10" pkcolumn="Id" istree="true"></table>
+	//<table id="dataGrid" url="test" rows="10" istree="true"></table>
 	var dataGrid =  $('#'+options.tableName);
 	var dataGridPage = $('#'+options.pageName);
 
@@ -57,7 +56,6 @@
 		colModel: options.columnModel,
 
 		// 列表参数
-		dataId: dataGrid.attr('pkcolumn') ? dataGrid.attr('pkcolumn') : 'id', 		// 指定数据主键
 		showRownum: true,	// 是否显示行号
 		showCheckbox: true,// 是否显示复选框
 		multiselect: true,      //是否可以多选
@@ -76,7 +74,7 @@
 			leaf_field: "IsLeaf",  
 			expanded_field: "Expanded" 
 		},
-		ExpandColumn: options.treeColumn,	//属性结构列的列明
+		ExpandColumn: dataGrid.attr('treeColumn'),	//树形结构列的列明
 
 		//设置宽度为0px，不显示滚动条
 		scrollOffset: 0,  
@@ -88,24 +86,12 @@
 		closeAfterAdd: true,    //添加数据后关闭窗口
 		closeAfterEdit:true,     //修改数据后关闭窗口
 		//页码的文字
-		pgtext: '转到 <input class="ui-pg-input ui-corner-all" type="text" size="2" maxlength="7" value="0" role="textbox"> 页，共<span id="sp_1_grid-pager"></span>页',
-		loadComplete : function() {
-                       		var table = this;
-                        		setTimeout(function(){
-                            		styleCheckbox(table);
-		                          updateActionIcons(table);
-                            		updatePagerIcons(table);
-                            		enableTooltips(table);
-                        		}, 0);
-                    	},
-                    	editurl: dataGrid.attr('addsave'), //添加修改数据请求的url
-                        
-      	}, options);
+		pgtext: '转到 <input class="ui-pg-input ui-corner-all" type="text" size="2" maxlength="7" value="0" role="textbox"> 页，共<span id="sp_1_grid-pager"></span>页'
+
+      }, options);
 	
 	// 获取列标题
-	options.colNames = [];
 	for(var i=0; i<options.colModel.length; i++){
-		options.colNames.push(options.colModel[i].header);
 		// 如果是树结构表格
 		if (options.treeGrid || !options.sortable){
 			options.colModel[i].sortable = false; // 是否排序列
@@ -152,7 +138,6 @@
     //postdata=提交的数据
     var fn_editSubmit=function(response,postdata){ 
         var json=response.responseText; 
-        alert(json);//显示返回值 
         $('#cData').trigger('click');//执行关闭按钮的点击事件
     } 
 
@@ -160,18 +145,12 @@
 	$(window).triggerHandler('resize.jqGrid');
 	dataGrid.jqGrid('navGrid','#'+dataGridPage.attr('id'),
             	{   //navbar options
-                        edit: true,
-                        editicon : 'ace-icon fa fa-pencil blue',
-                        add: true,
-                        addicon : 'ace-icon fa fa-plus-circle purple',
-                        del: true,
-                        delicon : 'ace-icon fa fa-trash-o red',
-                        search: true,
-                        searchicon : 'ace-icon fa fa-search orange',
-                        refresh: true,
-                        refreshicon : 'ace-icon fa fa-refresh green',
-                        view: true,
-                        viewicon : 'ace-icon fa fa-search-plus grey',
+                        edit: false,
+                        add: false,
+                        del: false,
+                        search: false,
+                        refresh: false,
+                        view: false,
              },
              {
                         //edit record form
@@ -242,33 +221,58 @@
 	        $(document).one('ajaxloadstart.page', function(e) {
                     $.jgrid.gridDestroy(grid_selector);
                     $('.ui-jqdialog').remove();
-             });
+            });
 };
 
 
 //封装常用方法
 
 /**
-*   得到当前选中行ID，返回数值型数组
+*   得到当前选中行主键（如果未设置主键则返回行号），返回数值型数组
 *   @Param  tableid  table的ID
 *   @Return  ids[] 选中行字段值
 */
 DataGrid.getSelectRowIds = function(tableid){
 	var tableGrid =  $('#'+tableid);
-	var pkcolumn = tableGrid.attr('pkcolumn');
 	var rowIds = tableGrid.jqGrid('getGridParam','selarrrow');
 	if (rowIds.length == 0){
 		var rowIds = new Array();
-		 id =  tableGrid.jqGrid('getGridParam','selrow');
-		 if (id!=null){
+		var id = tableGrid.jqGrid('getGridParam','selrow');
+		if (id!=null){
 			 rowIds[0] = id	
-		 }
+		}
 	}
-	var ids = new Array();
-	for (var i = 0 ; i < rowIds.length ; i ++){
-		ids[i] = $("#datatable").jqGrid('getCell',rowIds[i],pkcolumn);	
-	}
-	return  ids;
+	
+	return  rowIds;
+}
+
+/**
+*   得到当前选中行数据，返回数值型数组
+*   @Param  tableid  table的ID
+*   @Return  ids[] 选中行字段值
+*/
+DataGrid.getSelectRowData = function(tableid){
+    var tableGrid =  $('#'+tableid);
+    //var pkcolumn = tableGrid.attr('pkcolumn');
+    //var rowIds = tableGrid.jqGrid('getGridParam','selarrrow');
+    //if (rowIds.length == 0){
+        var id =  tableGrid.jqGrid('getGridParam','selrow');
+        if (id!=null){
+             return tableGrid.jqGrid('getRowData',id);
+        }
+    // }
+    // var ids = new Array();
+    // for (var i = 0 ; i < rowIds.length ; i ++){
+    //     ids[i] = $("#datatable").jqGrid('getCell',rowIds[i],pkcolumn);  
+    // }
+    // return  ids;
+}
+
+/**
+*   重新加载DataGrid
+*/
+DataGrid.loadData = function(tableid){
+    $('#'+tableid).trigger('reloadGrid');
 }
 
 
@@ -443,102 +447,3 @@ DataGrid.getSelectRowIds = function(tableid){
 	});
 })(jQuery);
 
-/**  ace funcation  **/
-//switch element when editing inline
-function aceSwitch( cellvalue, options, cell ) {
-    setTimeout(function(){
-        $(cell) .find('input[type=checkbox]')
-            .addClass('ace ace-switch ace-switch-5')
-            .after('<span class="lbl"></span>');
-    }, 0);
-}
-//enable datepicker
-function pickDate( cellvalue, options, cell ) {
-    setTimeout(function(){
-        $(cell) .find('input[type=text]')
-            .datepicker({format:'yyyy-mm-dd' , autoclose:true}); 
-    }, 0);
-}
-
-//navButtons
-function style_edit_form(form) {
-    form.find('input[name=sdate]').datepicker({format:'yyyy-mm-dd' , autoclose:true})
-    
-    form.find('input[name=stock]').addClass('ace ace-switch ace-switch-5').after('<span class="lbl"></span>');
-    var buttons = form.next().find('.EditButton .fm-button');
-    buttons.addClass('btn btn-sm').find('[class*="-icon"]').hide();//ui-icon, s-icon
-    buttons.eq(0).addClass('btn-primary').prepend('<i class="ace-icon fa fa-check"></i>');
-    buttons.eq(1).prepend('<i class="ace-icon fa fa-times"></i>')
-    
-    buttons = form.next().find('.navButton a');
-    buttons.find('.ui-icon').hide();
-    buttons.eq(0).append('<i class="ace-icon fa fa-chevron-left"></i>');
-    buttons.eq(1).append('<i class="ace-icon fa fa-chevron-right"></i>');       
-}
-
-function style_delete_form(form) {
-    var buttons = form.next().find('.EditButton .fm-button');
-    buttons.addClass('btn btn-sm btn-white btn-round').find('[class*="-icon"]').hide();//ui-icon, s-icon
-    buttons.eq(0).addClass('btn-danger').prepend('<i class="ace-icon fa fa-trash-o"></i>');
-    buttons.eq(1).addClass('btn-default').prepend('<i class="ace-icon fa fa-times"></i>')
-}
-
-function style_search_filters(form) {
-    form.find('.delete-rule').val('X');
-    form.find('.add-rule').addClass('btn btn-xs btn-primary');
-    form.find('.add-group').addClass('btn btn-xs btn-success');
-    form.find('.delete-group').addClass('btn btn-xs btn-danger');
-}
-function style_search_form(form) {
-    var dialog = form.closest('.ui-jqdialog');
-    var buttons = dialog.find('.EditTable')
-    buttons.find('.EditButton a[id*="_reset"]').addClass('btn btn-sm btn-info').find('.ui-icon').attr('class', 'ace-icon fa fa-retweet');
-    buttons.find('.EditButton a[id*="_query"]').addClass('btn btn-sm btn-inverse').find('.ui-icon').attr('class', 'ace-icon fa fa-comment-o');
-    buttons.find('.EditButton a[id*="_search"]').addClass('btn btn-sm btn-purple').find('.ui-icon').attr('class', 'ace-icon fa fa-search');
-}
-
-function beforeDeleteCallback(e) {
-    var form = $(e[0]);
-    if(form.data('styled')) return false;
-    
-    form.closest('.ui-jqdialog').find('.ui-jqdialog-titlebar').wrapInner('<div class="widget-header" />')
-    style_delete_form(form);
-    
-    form.data('styled', true);
-}
-
-function beforeEditCallback(e) {
-    var form = $(e[0]);
-    form.closest('.ui-jqdialog').find('.ui-jqdialog-titlebar').wrapInner('<div class="widget-header" />')
-    style_edit_form(form);
-}
-
-function styleCheckbox(table) {           
-}
-
-
-function updateActionIcons(table) {
-}
-
-function updatePagerIcons(table) {
-    var replacement = {
-        'ui-icon-seek-first' : 'ace-icon fa fa-angle-double-left bigger-140',
-        'ui-icon-seek-prev' : 'ace-icon fa fa-angle-left bigger-140',
-        'ui-icon-seek-next' : 'ace-icon fa fa-angle-right bigger-140',
-        'ui-icon-seek-end' : 'ace-icon fa fa-angle-double-right bigger-140'
-    };
-    $('.ui-pg-table:not(.navtable) > tbody > tr > .ui-pg-button > .ui-icon').each(function(){
-        var icon = $(this);
-        var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
-        
-        if($class in replacement) icon.attr('class', 'ui-icon '+replacement[$class]);
-    })
-}
-
-function enableTooltips(table) {
-    $('.navtable .ui-pg-button').tooltip({container:'body'});
-    $(table).find('.ui-pg-div').tooltip({container:'body'});
-}
-            
-
-                

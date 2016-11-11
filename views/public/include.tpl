@@ -55,3 +55,6 @@
             //配置jqGrid交替颜色
             jQuery.extend(jQuery.jgrid.defaults, { altRows:true });
         </script>
+
+        <!-- Dialog -->
+        <script src="../static/js/bootbox.js"></script>

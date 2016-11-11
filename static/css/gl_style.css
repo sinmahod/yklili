@@ -19,7 +19,9 @@ body {
 .ui-jqgrid .tree-wrap-ltr {
     float: left;
 }
-
+.ui-jqgrid-pager {
+    height: 50px !important;
+}
 .ui-th-div {
 	text-align: center;
 }
@@ -47,3 +49,11 @@ body {
 .EditTable tr:first-child  {
     display:table-row !important;
 }
+
+tr.jqgrow {
+    height:39px;
+}
+
+
+
+/* 定义带图片按钮中的文字与按钮高度一致 */
