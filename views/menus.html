@@ -38,7 +38,31 @@
             // DataGrid.setParams("datatable","Id",12);
             // DataGrid.setParams("datatable","Ids",122);
             // DataGrid.loadData("datatable");
-            alert(DataGrid.getSelectRowData("datatable")["Icon"]);
+            //alert(DataGrid.getSelectRowData("datatable")["Icon"]);
+            BootstrapDialog.show({
+                message: $('<div></div>').load('menus'),
+                buttons: [{
+                    label: 'Button 1',
+                    title: 'Mouse over Button 1'
+                }, {
+                    label: 'Button 2',
+                    // no title as it is optional
+                    cssClass: 'btn-primary',
+                    action: function(){
+                        alert('Hi Orange!');
+                    }
+                }, {
+                    icon: 'glyphicon glyphicon-ban-circle',
+                    label: 'Button 3',
+                    title: 'Mouse over Button 3',
+                    cssClass: 'btn-warning'
+                }, {
+                    label: 'Close',
+                    action: function(dialogItself){
+                        dialogItself.close();
+                    }
+                }]
+            });
        }
 
         function addMenu(){

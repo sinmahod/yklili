@@ -23,10 +23,9 @@ body {
     height: 50px !important;
 }
 .ui-th-div {
-	text-align: center;
+    text-align: center;
 }
 
-.ui-icon { ; }
 /* positioning */
 
 .ui-icon-triangle-1-n {background-image: url(/static/images/ui-icons_256x240.png); background-position: 0 -16px; }
@@ -58,10 +57,15 @@ tr.jqgrow {
 
 /* 页头按钮栏格式覆盖 */
 .page-header {
-     padding-bottom: 10px;
-     padding-top: 0px;
+    padding-bottom: 10px;
+    padding-top: 0px;
 }
 .page-header button{
-     width: 105px;
-     margin-top: 5px;
+    width: 105px;
+    margin-top: 5px;
+}
+
+/* bootstrap-dialog 头部的关闭按钮大小调整（覆盖ace）*/
+.bootstrap-dialog-close-button .close {
+    font-size: 21px;
 }

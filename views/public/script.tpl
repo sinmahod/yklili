@@ -7,7 +7,9 @@
         <!--[if lte IE 8]>
           <script src="../static/js/excanvas.min.js"></script>
         <![endif]-->
-       
+        
+        <!-- bootstrapDialog -->
+        <script src="../static/js/bootstrap-dialog.min.js"></script>
 
         <!-- ace scripts -->
         <script src="../static/js/ace-elements.min.js"></script>

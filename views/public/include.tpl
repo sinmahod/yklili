@@ -19,6 +19,9 @@
         <link rel="stylesheet" href="../static/css/ace-skins.min.css" />
         <link rel="stylesheet" href="../static/css/ace-rtl.min.css" />
 
+        <!-- bootstrapDialog -->
+        <link rel="stylesheet" href="../static/css/bootstrap-dialog.min.css" />
+
         <!--[if lte IE 9]>
           <link rel="stylesheet" href="../static/css/ace-ie.min.css" />
         <![endif]-->
@@ -46,7 +49,7 @@
         <script src="../static/js/jquery-1.11.3.min.js"></script>
         <![endif]-->
 
-         <!-- page specific plugin scripts -->
+        <!-- page specific plugin scripts -->
         <script src="../static/js/bootstrap-datepicker.min.js"></script>
         <script src="../static/js/jquery.jqGrid.min.js"></script>
         <script src="../static/js/grid.locale-en.js"></script>
@@ -56,5 +59,3 @@
             jQuery.extend(jQuery.jgrid.defaults, { altRows:true });
         </script>
 
-        <!-- Dialog -->
-        <script src="../static/js/bootbox.js"></script>
