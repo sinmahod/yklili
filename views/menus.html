@@ -1,9 +1,9 @@
                          <div class="page-header">
-                            <button class="btn btn-sm btn-primary" id="addbutton" onclick="addMenu()">
+                            <button class="btn btn-sm btn-primary" onclick="addMenu()">
                                 <i class="ace-icon fa fa-plus bigger-125"></i>
                                 <span class="bigger-115 no-text-shadow">新建菜单</span>
                             </button>
-                             <button class="btn btn-sm btn-info">
+                             <button class="btn btn-sm btn-info" onclick="addParam()">
                                 <i class="ace-icon fa fa-pencil bigger-125"></i>
                                 <span class="bigger-115 no-text-shadow">修改菜单</span>
                             </button>
@@ -34,20 +34,12 @@
         <!-- jgrid -->
         <script type="text/javascript">
 
-        // $("#addbutton").on(ace.click_event, function() {
-        //     bootbox.confirm("Are you sure?", function(result) {
-        //                 if(result) {
-        //                     //
-        //                 }
-        //             });
-        //     bootbox.prompt("What is your name?", function(result) {
-        //         if (result === null) {
-                    
-        //         } else {
-                    
-        //         }
-        //     });
-        // });
+       function addParam(){
+            // DataGrid.setParams("datatable","Id",12);
+            // DataGrid.setParams("datatable","Ids",122);
+            // DataGrid.loadData("datatable");
+            alert(DataGrid.getSelectRowData("datatable")["Icon"]);
+       }
 
         function addMenu(){
             bootbox.dialog({

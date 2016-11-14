@@ -2,8 +2,9 @@ package data
 
 import (
 	"beegostudy/models"
-	"github.com/astaxie/beego"
 	"reflect"
+
+	"github.com/astaxie/beego"
 )
 
 type MenuController struct {
@@ -22,6 +23,11 @@ func (c *MenuController) Get() {
 }
 
 func (c *MenuController) List() {
+	if len(c.RequestData) > 0 {
+		for k, v := range c.RequestData {
+			beego.Info("=======", k, v)
+		}
+	}
 	if datagrid, err := models.GetMenusPage(c.PageSize, c.PageIndex, c.OrderColumn, c.OrderSord); err != nil {
 		beego.Error(err)
 	} else {

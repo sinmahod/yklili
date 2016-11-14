@@ -51,9 +51,17 @@ body {
 }
 
 tr.jqgrow {
-    height:39px;
+    height: 39px;
 }
 
 
 
-/* 定义带图片按钮中的文字与按钮高度一致 */
+/* 页头按钮栏格式覆盖 */
+.page-header {
+     padding-bottom: 10px;
+     padding-top: 0px;
+}
+.page-header button{
+     width: 105px;
+     margin-top: 5px;
+}

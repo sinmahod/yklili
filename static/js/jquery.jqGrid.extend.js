@@ -247,32 +247,40 @@ DataGrid.getSelectRowIds = function(tableid){
 }
 
 /**
-*   得到当前选中行数据，返回数值型数组
+*   得到当前选中行数据，返回KV对象
 *   @Param  tableid  table的ID
-*   @Return  ids[] 选中行字段值
+*   @Return  {K:V} 选中行字段值
 */
 DataGrid.getSelectRowData = function(tableid){
     var tableGrid =  $('#'+tableid);
-    //var pkcolumn = tableGrid.attr('pkcolumn');
-    //var rowIds = tableGrid.jqGrid('getGridParam','selarrrow');
-    //if (rowIds.length == 0){
         var id =  tableGrid.jqGrid('getGridParam','selrow');
         if (id!=null){
              return tableGrid.jqGrid('getRowData',id);
         }
-    // }
-    // var ids = new Array();
-    // for (var i = 0 ; i < rowIds.length ; i ++){
-    //     ids[i] = $("#datatable").jqGrid('getCell',rowIds[i],pkcolumn);  
-    // }
-    // return  ids;
+}
+
+DataGrid.Params = {};
+
+/**
+*    给DataGrid设置值
+*    @Param tableid table的ID
+*    @Param key 参数名
+*    @Param value 参数值
+*    @Return 无
+*/
+DataGrid.setParams = function(tableid , key , value){
+     DataGrid.Params[key] = value;
 }
 
 /**
-*   重新加载DataGrid
+*    重新加载DataGrid
+*    @Param tableid table的ID
+*    @Return 无
 */
 DataGrid.loadData = function(tableid){
-    $('#'+tableid).trigger('reloadGrid');
+    $('#'+tableid).jqGrid("setGridParam", { postData: DataGrid.Params }).trigger('reloadGrid');
+    /** 使用完毕后清空 **/
+    DataGrid.Params = {};
 }
 
 
