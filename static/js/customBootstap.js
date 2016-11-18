@@ -30,10 +30,10 @@
                    '<div class="modal-body">' +
                    '</div>' +
                    '<div class="modal-footer">' +
-                       '<button type="button" class="btn btn-default cancel" data-dismiss="modal">[BtnCancel]</button>' +
-                       '<button type="button" class="btn btn-primary no" data-dismiss="modal" style="display:none">[BtnNo]</button>' +
-                       '<button type="button" class="btn btn-primary en" style="display:none" data-dismiss="modal">[BtnEn]</button>' +
-                       '<button type="button" class="btn btn-primary ok" data-dismiss="modal">[BtnOk]</button>' +
+                     '<button type="button" class="btn btn-default cancel" data-dismiss="modal">[BtnCancel]</button>' +
+                     '<button type="button" class="btn btn-primary no" data-dismiss="modal" style="display:none">[BtnNo]</button>' +
+                     '<button type="button" class="btn btn-primary en" style="display:none" data-dismiss="modal">[BtnEn]</button>' +
+                     '<button type="button" class="btn btn-primary ok" data-dismiss="modal">[BtnOk]</button>' +
                    '</div>' +
                  '</div>' +
                '</div>' +
@@ -64,7 +64,6 @@
         }[key];
       });
       $('body').append(content);
-
       $('#' + modalId).modal({
         width: options.width,
         backdrop: 'static'
@@ -76,7 +75,7 @@
     }
  
     return {
-      alert: function (options) {        
+      alert: function (options) {
         if (typeof options == 'string') {
           options = {
             message: options
@@ -90,7 +89,6 @@
           id: id,
           on: function (callback) {
             if (callback && callback instanceof Function) {
-              modal.find('.ok').focus();
               modal.find('.ok').click(function () { callback(true); });
             }
           },
@@ -101,7 +99,7 @@
               });
             }
           }
-        };        
+        };
       },
       confirm: function (options) {
         var id = init(options);
@@ -158,31 +156,31 @@
         var target = $('#' + modalId);
         target.find('.modal-body').html('<iframe id="myframes" name="myframes" src="'+options.url+'" width="100%" height="100%" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="yes" ></iframe>')
         if(options.height){
-            target.find('.modal-body').css("height",options.height);
+          target.find('.modal-body').css("height",options.height);
         }
         if(options.width&&options.width!='800'){
-            target.find('.modal-content').css("width",options.width);
+          target.find('.modal-content').css("width",options.width);
         }
       /*  debugger;
         if(options.width&&options.width=='510'){
-            target.find('.no').show();
+          target.find('.no').show();
         }*/
         if(options.title&&options.title=='选择专家'){
-            target.find('.no').show();
+          target.find('.no').show();
         }
         if(options.width&&options.title=='同约人员'){
-            target.find('.cancel').hide();
-            target.find('.ok').hide();
-            target.find('.en').show();
+          target.find('.cancel').hide();
+          target.find('.ok').hide();
+          target.find('.en').show();
         }
         if(options.title&&options.title=='查看回复'){
-            target.find('.cancel').hide();
-            target.find('.ok').hide();
+          target.find('.cancel').hide();
+          target.find('.ok').hide();
         }
         if(options.hidden){
-            if(options.hidden=='footer'){
-                target.find('.modal-footer').hide();
-            }
+          if(options.hidden=='footer'){
+            target.find('.modal-footer').hide();
+          }
         }
         if (options.onReady())
           options.onReady.call(target);
@@ -198,31 +196,31 @@
             id: modalId,
             on: function (callback) {
               if (callback && callback instanceof Function) {
-                  target.find('.ok').click(function () { 
-                      if(callback(true)){
-                          $('body').find(target).remove();
-                      }
-                });
+                target.find('.ok').click(function () { 
+                  if(callback(true)){
+                    $('body').find(target).remove();
+                  }
+              });
               }
             },
             no:function(callback){
-                 if (callback && callback instanceof Function) {
-                    target.find('.no').click(function () { callback(true); });
+               if (callback && callback instanceof Function) {
+                  target.find('.no').click(function () { callback(true); });
                  }
             },
             en:function(callback){
              if (callback && callback instanceof Function) {
-                    target.find('.en').click(function () { callback(true); });
+                  target.find('.en').click(function () { callback(true); });
                 }
            },
             off: function (callback) {
                 if (callback && callback instanceof Function) {
-                    target.find('.cancel').click(function () { callback(true); });
+                  target.find('.cancel').click(function () { callback(true); });
                 }
             },
             hide: function (callback) {
               if (callback && callback instanceof Function) {
-                  target.on('hide.bs.modal', function (e) {
+                target.on('hide.bs.modal', function (e) {
                   callback(e);
                 });
               }

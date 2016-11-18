@@ -1,0 +1,23 @@
+	<div class="space-4"></div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label no-padding-right" for="form-field-6">
+		Tooltip and help button
+		</label>
+		<div class="col-sm-9">				<input data-rel="tooltip" type="text" id="form-field-6" placeholder="Tooltip on hover" title="Hello Tooltip!" data-placement="bottom" />
+			<span class="help-button" data-rel="popover" data-trigger="hover" data-placement="left" data-content="More details." title="Popover on hover">
+			?
+			</span>
+		</div>
+	</div>
+
+	<div class="space-4"></div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label no-padding-right" for="form-field-6">
+		Tooltip and help button
+		</label>
+		<div class="col-sm-9">				<input data-rel="tooltip" type="text" id="form-field-6" placeholder="Tooltip on hover" title="Hello Tooltip!" data-placement="bottom" />
+			<span class="help-button" data-rel="popover" data-trigger="hover" data-placement="left" data-content="More details." title="Popover on hover">
+			?
+			</span>
+		</div>
+	</div>

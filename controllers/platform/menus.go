@@ -5,5 +5,5 @@ type MenusController struct {
 }
 
 func (c *MenusController) Page() {
-	c.TplName = "menus.html"
+	c.TplName = "platform/menus.html"
 }

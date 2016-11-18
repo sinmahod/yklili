@@ -39,68 +39,55 @@
             // DataGrid.setParams("datatable","Ids",122);
             // DataGrid.loadData("datatable");
             //alert(DataGrid.getSelectRowData("datatable")["Icon"]);
-            BootstrapDialog.show({
-                message: $('<div></div>').load('menus'),
+            // BootstrapDialog.show({
+            //     title: "新建菜单",
+            //     message: $('<div></div>').load('menu/menuDialog.dml'),
+            //     size:'size-wide',
+            //     draggable: true,
+            //     buttons: [{
+            //         label: '确定',
+            //         cssClass: 'btn-primary',
+            //         action: function(){
+            //             alert('Hi Orange!');
+            //         }
+            //     }, {
+            //         label: '取消',
+            //         action: function(dialogItself){
+            //             dialogItself.close();
+            //         }
+            //     }]
+            // });
+
+            //BootFrame.alert("test");
+            //BootFrame.confirm("aaa",function(){alert(1);})
+            var bf = BootFrame.dialog();
+            bf.title("Test");
+            bf.message("哈哈");
+            bf.url('menu/menuDialog.dml');
+            bf.width(300);
+            bf.height(300);
+            bf.addButton("确认", function(){alert(1);})
+            bf.addButton("确认2", function(){alert(2);},'btn-warning')
+            bf.show();
+       }
+
+        function addMenu(){
+           BootstrapDialog.show({
+                title: "新建菜单2",
+                message: $('<div></div>').load('menu/menuDialog.dml'),
+                draggable: true,
                 buttons: [{
-                    label: 'Button 1',
-                    title: 'Mouse over Button 1'
-                }, {
-                    label: 'Button 2',
-                    // no title as it is optional
+                    label: '确定',
                     cssClass: 'btn-primary',
                     action: function(){
                         alert('Hi Orange!');
                     }
                 }, {
-                    icon: 'glyphicon glyphicon-ban-circle',
-                    label: 'Button 3',
-                    title: 'Mouse over Button 3',
-                    cssClass: 'btn-warning'
-                }, {
-                    label: 'Close',
+                    label: '取消',
                     action: function(dialogItself){
                         dialogItself.close();
                     }
                 }]
-            });
-       }
-
-        function addMenu(){
-            bootbox.dialog({
-                title: "新建菜单",
-                message: "<span class='bigger-110'>I am a custom dialog with smaller buttons</span>",
-                buttons:
-                {
-                    "success" :
-                     {
-                        "label" : "<i class='ace-icon fa fa-check'></i> Success!",
-                        "className" : "btn-sm btn-success",
-                        "callback": function() {
-                            //Example.show("great success");
-                        }
-                    },
-                    "danger" :
-                    {
-                        "label" : "Danger!",
-                        "className" : "btn-sm btn-danger",
-                        "callback": function() {
-                            //Example.show("uh oh, look out!");
-                        }
-                    }, 
-                    "click" :
-                    {
-                        "label" : "Click ME!",
-                        "className" : "btn-sm btn-primary",
-                        "callback": function() {
-                            //Example.show("Primary button");
-                        }
-                    }, 
-                    "button" :
-                    {
-                        "label" : "Just a button...",
-                        "className" : "btn-sm"
-                    }
-                }
             });
         }
 

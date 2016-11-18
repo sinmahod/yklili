@@ -2,9 +2,11 @@ package main
 
 import (
 	"beegostudy/controllers/data"
+	"beegostudy/controllers/dml"
 	"beegostudy/controllers/platform"
 
 	"fmt"
+
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/context"
 	"github.com/astaxie/beego/orm"
@@ -39,6 +41,7 @@ func main() {
 		"users": &platform.UsersController{},
 		"menus": &platform.MenusController{},
 	}
+
 	for name, controller := range pages {
 		beego.Router(fmt.Sprintf("/platform/%s", name), controller, "get:Page")
 	}
@@ -47,6 +50,7 @@ func main() {
 	models := map[string]beego.ControllerInterface{
 		"menu": &data.MenuController{},
 	}
+
 	for name, controller := range models {
 		beego.Router(fmt.Sprintf("/data/%s/:method", name), controller, "*:Get")
 	}
@@ -56,9 +60,15 @@ func main() {
 	//校验用户登录：未登录则重定向到login
 	var FilterUser = func(ctx *context.Context) {
 		if ctx.Input.Session("User") == nil {
-			ctx.Redirect(302, "/login")
+			//如果使用dialog方式会出现弹出窗口被定向到了登录页，这里使用js跳转
+			//ctx.Redirect(302, "platform.LoginPage")
+			ctx.WriteString(platform.LoginPageScript)
 		}
 	}
+
+	//dml格式支持直接预览
+	beego.AddTemplateExt("dml")
+	beego.Router("/:path.dml", &dml.DMLController{})
 
 	beego.InsertFilter("/platform/*", beego.BeforeRouter, FilterUser)
 	beego.Run()

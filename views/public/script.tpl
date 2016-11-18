@@ -10,6 +10,7 @@
         
         <!-- bootstrapDialog -->
         <script src="../static/js/bootstrap-dialog.min.js"></script>
+        <script src="../static/js/bootstrap-dialog.extend.js"></script>
 
         <!-- ace scripts -->
         <script src="../static/js/ace-elements.min.js"></script>

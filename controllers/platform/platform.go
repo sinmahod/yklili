@@ -2,6 +2,7 @@ package platform
 
 import (
 	"beegostudy/models"
+
 	"github.com/astaxie/beego"
 )
 
@@ -19,7 +20,7 @@ func (c *PlatformController) Prepare() {
 	if pjax == "" {
 
 		defer func() {
-			c.Layout = "platform.html"
+			c.Layout = "platform/platform.html"
 
 			c.LayoutSections = make(map[string]string)
 			c.LayoutSections["Include"] = "public/include.tpl"

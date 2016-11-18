@@ -5,5 +5,5 @@ type UsersController struct {
 }
 
 func (c *UsersController) Page() {
-	c.TplName = "users.html"
+	c.TplName = "platform/users.html"
 }

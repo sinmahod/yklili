@@ -8,6 +8,11 @@ import (
 	"github.com/astaxie/beego"
 )
 
+const (
+	LoginPage       string = "/login"
+	LoginPageScript string = "<script>window.location.href=\"/login\";</script>"
+)
+
 type LoginController struct {
 	beego.Controller
 }
