@@ -6,7 +6,6 @@
 	//url 数据请求连接  必选
 	//rows每页展示/请求数量  可选，默认10000
 	//istree  是否树形展示
-	//addsave  添加数据或保存数据的url
 	//<table id="dataGrid" url="test" rows="10" istree="true"></table>
 	var dataGrid =  $('#'+options.tableName);
 	var dataGridPage = $('#'+options.pageName);
@@ -23,19 +22,19 @@
 
 	var parent_column = dataGrid.closest('[class*="col-"]');
                 //resize to fit page size
-                $(window).on('resize.jqGrid', function () {
+        $(window).on('resize.jqGrid', function () {
+            dataGrid.jqGrid( 'setGridWidth', parent_column.width() );
+        })
+        
+        //resize on sidebar collapse/expand
+        $(document).on('settings.ace.jqGrid' , function(ev, event_name, collapsed) {
+            if( event_name === 'sidebar_collapsed' || event_name === 'main_container_fixed' ) {
+                //setTimeout is for webkit only to give time for DOM changes and then redraw!!!
+                setTimeout(function() {
                     dataGrid.jqGrid( 'setGridWidth', parent_column.width() );
-                })
-                
-                //resize on sidebar collapse/expand
-                $(document).on('settings.ace.jqGrid' , function(ev, event_name, collapsed) {
-                    if( event_name === 'sidebar_collapsed' || event_name === 'main_container_fixed' ) {
-                        //setTimeout is for webkit only to give time for DOM changes and then redraw!!!
-                        setTimeout(function() {
-                            dataGrid.jqGrid( 'setGridWidth', parent_column.width() );
-                        }, 20);
-                    }
-                })
+                }, 20);
+            }
+        })
 
 	options = $.extend({
 		url: dataGrid.attr('url'),
@@ -143,85 +142,11 @@
 
 	// 自动调整表格大小
 	$(window).triggerHandler('resize.jqGrid');
-	dataGrid.jqGrid('navGrid','#'+dataGridPage.attr('id'),
-            	{   //navbar options
-                        edit: false,
-                        add: false,
-                        del: false,
-                        search: false,
-                        refresh: false,
-                        view: false,
-             },
-             {
-                        //edit record form
-                        //closeAfterEdit: true,
-                        //width: 700,
-                        closeOnEscape: true,    //开启ESC关闭对话框功能
-                        afterSubmit: fn_editSubmit, //提交后执行的函数
 
-                        bSubmit: "保存",
-                        bCancel: "关闭",
-                       // closeAfterAdd: true,    //添加数据后关闭窗口
-                       // closeAfterEdit:true,     //修改数据后关闭窗口
-                        recreateForm: true,
-                        beforeShowForm : function(e) {
-                            var form = $(e[0]);
-                            form.closest('.ui-jqdialog').find('.ui-jqdialog-titlebar').wrapInner('<div class="widget-header" />')
-                            style_edit_form(form);
-                        }
-             },
-             {
-                        //new record form
-                        closeAfterAdd: true,
-                        recreateForm: true,
-                        viewPagerButtons: false,
-                        beforeShowForm : function(e) {
-                            var form = $(e[0]);
-                            form.closest('.ui-jqdialog').find('.ui-jqdialog-titlebar')
-                            wrapInner('<div class="widget-header" />')
-                            style_edit_form(form);
-                        }
-             },
-             {
-                        //delete record form
-                        recreateForm: true,
-                        beforeShowForm : function(e) {
-                            var form = $(e[0]);
-                            if(form.data('styled')) return false;
-                            
-                            form.closest('.ui-jqdialog').find('.ui-jqdialog-titlebar').wrapInner('<div class="widget-header" />')
-                            style_delete_form(form);
-                            
-                            form.data('styled', true);
-                        },
-                        onClick : function(e) {
-                        }
-             },
-             {
-                        recreateForm: true,
-                        afterShowSearch: function(e){
-                            var form = $(e[0]);
-                            form.closest('.ui-jqdialog').find('.ui-jqdialog-title').wrap('<div class="widget-header" />')
-                            style_search_form(form);
-                        },
-                        afterRedraw: function(){
-                            style_search_filters($(this));
-                        }
-                        ,
-                        multipleSearch: true,
-             },
-             {
-                        recreateForm: true,
-                        beforeShowForm: function(e){
-                            var form = $(e[0]);
-                            form.closest('.ui-jqdialog').find('.ui-jqdialog-title').wrap('<div class="widget-header" />')
-                        }
-             });
-
-	        $(document).one('ajaxloadstart.page', function(e) {
-                    $.jgrid.gridDestroy(grid_selector);
-                    $('.ui-jqdialog').remove();
-            });
+    $(document).one('ajaxloadstart.page', function(e) {
+            $.jgrid.gridDestroy(grid_selector);
+            $('.ui-jqdialog').remove();
+    });
 };
 
 

@@ -5,12 +5,20 @@
     window.BootFrame = function () {
 	return {
 		//弹出框
-		alert: function (message,fn) {
-		      	BootstrapDialog.alert(message, function(){
-		      		if (fn){
-		      			fn();
-		      		}
-		        	});
+		alert: function (msg,fn,tle) {
+	        	BootstrapDialog.alert({
+		            title: tle ? tle : '提示',
+		            message: msg,
+		            type: BootstrapDialog.TYPE_PRIMARY, // <-- Default value is BootstrapDialog.TYPE_WARNING
+		            closable: true, // <-- Default value is false
+		            draggable: true, // <-- Default value is false
+		            buttonLabel: '确定', // <-- Default value is 'OK',
+		            callback: function(result) {
+		               if (fn){
+		               		fn();
+		               }
+		            }
+		        });
 		},
 		//选择框
 		confirm: function (message,truefn,falsefn){
@@ -79,9 +87,9 @@
 					if (!hideclose){
 						var bt = {
 							label: '取消',
-					                    	action: function(dialogItself){
-					                        		dialogItself.close();
-					                    	}
+		                    	action: function(dialogItself){
+		                        		dialogItself.close();
+		                    	}
 						}
 						b.push(bt)	
 					}

@@ -3,6 +3,7 @@ package data
 import (
 	"beegostudy/models"
 	"reflect"
+	"strconv"
 
 	"github.com/astaxie/beego"
 )
@@ -22,12 +23,8 @@ func (c *MenuController) Get() {
 	}
 }
 
+//DataGrid列表数据加载
 func (c *MenuController) List() {
-	if len(c.RequestData) > 0 {
-		for k, v := range c.RequestData {
-			beego.Info("=======", k, v)
-		}
-	}
 	if datagrid, err := models.GetMenusPage(c.PageSize, c.PageIndex, c.OrderColumn, c.OrderSord); err != nil {
 		beego.Error(err)
 	} else {
@@ -36,6 +33,30 @@ func (c *MenuController) List() {
 	}
 }
 
+//修改/新建初始化
+func (c *MenuController) InitPage() {
+	idStr := c.GetString("Id")
+	id, _ := strconv.Atoi(idStr)
+
+	menu, err := models.GetMenu(id)
+	if err != nil {
+		beego.Error(err)
+		return
+	}
+	c.Data["Menu"] = menu
+
+	menus, err := models.GetMenusByLevel(1)
+	if err != nil {
+		beego.Error(err)
+		return
+	}
+	c.Data["ParentMenus"] = menus
+
+	c.TplName = "platform/menu/menuDialog.html"
+	c.AddScript()
+}
+
+//保持数据
 func (c *MenuController) Save() {
 	if len(c.RequestData) > 0 {
 		for k, v := range c.RequestData {
@@ -44,10 +65,8 @@ func (c *MenuController) Save() {
 		menu := new(models.Menu)
 		if err := menu.SetValue(c.RequestData); err != nil {
 			beego.Warn("请确认参数是否传递正确", err)
-			c.fail()
 		} else {
 			beego.Info(menu)
-			c.fail()
 		}
 	} else {
 		c.paramIsNull()

@@ -3,7 +3,7 @@
                                 <i class="ace-icon fa fa-plus bigger-125"></i>
                                 <span class="bigger-115 no-text-shadow">新建菜单</span>
                             </button>
-                             <button class="btn btn-sm btn-info" onclick="addParam()">
+                             <button class="btn btn-sm btn-info" onclick="editMenu()">
                                 <i class="ace-icon fa fa-pencil bigger-125"></i>
                                 <span class="bigger-115 no-text-shadow">修改菜单</span>
                             </button>
@@ -20,7 +20,7 @@
                         <div class="row">
                             <div class="col-xs-12">
                                 <!-- PAGE CONTENT BEGINS -->
-                                <table id="datatable" url="/data/menu/List" addsave="/data/menu/Save" istree="true" treeColumn="MenuName"></table>
+                                <table id="datatable" url="/data/menu/List" istree="true" treeColumn="MenuName"></table>
 
                                 <div id="datapager">
                                     
@@ -33,6 +33,30 @@
 
         <!-- jgrid -->
         <script type="text/javascript">
+
+        function editMenu(){
+            var ids = DataGrid.getSelectRowIds("datatable");
+
+            if (ids.length == 0){
+                BootFrame.alert("请选择要修改的菜单");
+                return;
+            }
+
+            var bf = BootFrame.dialog();
+            bf.title("修改菜单");
+            bf.url('/data/menu/InitPage?Id='+ids[0]);
+            bf.width(500);
+            bf.height(300);
+            bf.addButton("确认", function(){
+                alert(1);
+            });
+            bf.addButton("确认2", function(){
+                alert(2);
+            },'btn-warning');
+            bf.show();
+        }
+
+
 
        function addParam(){
             // DataGrid.setParams("datatable","Id",12);
@@ -64,7 +88,7 @@
             bf.title("Test");
             bf.message("哈哈");
             bf.url('menu/menuDialog.dml');
-            bf.width(300);
+            bf.width(500);
             bf.height(300);
             bf.addButton("确认", function(){alert(1);})
             bf.addButton("确认2", function(){alert(2);},'btn-warning')

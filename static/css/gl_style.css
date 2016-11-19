@@ -70,7 +70,19 @@ tr.jqgrow {
     font-size: 21px;
 }
 
-/*  dialog宽度 */
+/* 鼠标经过输入框改变边框颜色 */
+input[type=text]:hover,select:hover{
+    border: 1px solid #ffb752;
+}
+
+/* 输入框与下拉框默认宽度设置 */
+.modal-dialog input[type=text],.modal-dialog select{
+    width: 200px;
+}
+
+/*  dialog宽度，只有在大屏时才生效 */
+@media (min-width: 768px) {
+
 .dialog-50 .modal-dialog {width: 50px;}
 .dialog-55 .modal-dialog {width: 55px;}
 .dialog-60 .modal-dialog {width: 60px;}
@@ -272,7 +284,7 @@ tr.jqgrow {
 
 .dialog-1000 .modal-dialog {width: 1000px;}
 
-
+}
 
 /*  dialog高度 */
 .dialog-h-50 .modal-body {height: 50px;}

@@ -2,7 +2,7 @@
         <link rel="stylesheet" href="../static/css/bootstrap.min.css" />
         <link rel="stylesheet" href="../static/font-awesome/4.5.0/css/font-awesome.min.css" />
 
-               <!-- page specific plugin styles -->
+        <!-- page specific plugin styles -->
         <link rel="stylesheet" href="../static/css/jquery-ui.min.css" />
         <link rel="stylesheet" href="../static/css/bootstrap-datepicker3.min.css" />
         <link rel="stylesheet" href="../static/css/ui.jqgrid.min.css" />

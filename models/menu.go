@@ -152,3 +152,32 @@ func GetMenusPage(size, index int, ordercolumn, orderby string) (*DataGrid, erro
 
 	return nil, err
 }
+
+//查询数据库
+func (menu *Menu) Fill() error {
+	o := orm.NewOrm()
+	if menu.Id > 0 {
+		return o.Read(menu, "Id")
+	}
+
+	return fmt.Errorf("请确认是否传递了Id", "")
+
+}
+
+//根据ID得到菜单数据
+func GetMenu(id int) (*Menu, error) {
+	menu := Menu{Id: id}
+	err := menu.Fill()
+	if err != nil {
+		return &menu, fmt.Errorf("菜单[%s]不存在", id)
+	}
+	return &menu, nil
+}
+
+//返回对应级别的菜单组
+func GetMenusByLevel(level int) ([]*Menu, error) {
+	var menus []*Menu
+	o := orm.NewOrm()
+	_, err := o.QueryTable("menu").Filter("Level", level).OrderBy("innercode").All(&menus)
+	return menus, err
+}

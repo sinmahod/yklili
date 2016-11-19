@@ -16,7 +16,6 @@
         <script src="../static/js/ace-elements.min.js"></script>
         <script src="../static/js/ace.min.js"></script>
 
-
         <!-- pjax -->
         <script src="../static/js/jquery.pjax.js"></script>
         <script type="text/javascript">
@@ -34,4 +33,6 @@
                     $(this).parents(".open").siblings(".open").removeClass("open");
               });
             })
+            
+            $('[data-rel=tooltip]').tooltip({container:'body'});
         </script>

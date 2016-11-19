@@ -1,6 +1,7 @@
 package data
 
 import (
+	"bytes"
 	"github.com/astaxie/beego"
 	"net/http"
 )
@@ -50,21 +51,22 @@ func (c *DataController) paramIsNull() {
 	http.Error(c.Ctx.ResponseWriter, "参数为空", 510)
 }
 
-type ResultJSON struct {
-	Status string `json:"status"`
-	//Message string `json:"message"`
-}
+const (
+	Script string = "<script>$('[data-rel=tooltip]').tooltip({container:'body'});</script>"
+)
 
-func (c *DataController) success() {
-	c.Ctx.WriteString("success")
-}
+//在模板结尾追加js
+func (c *DataController) AddScript() error {
+	rb, err := c.RenderBytes()
+	if err != nil {
+		return err
+	}
+	var buffer bytes.Buffer
+	buffer.WriteString(string(rb))
+	buffer.WriteString("\n")
+	buffer.WriteString(Script)
 
-func (c *DataController) fail() {
-	c.Ctx.WriteString("0")
-}
-
-func (c *DataController) success2() {
-	result := &ResultJSON{"success"}
-	c.Data["json"] = result
-	c.ServeJSON()
+	c.Ctx.Output.Header("Content-Type", "text/html; charset=utf-8")
+	c.Ctx.Output.Body(buffer.Bytes())
+	return nil
 }
