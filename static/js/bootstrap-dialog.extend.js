@@ -41,7 +41,12 @@
 			var hideclose = false;
 			var w = 600;
 			var h = 150;
+			var diaid;
+			var id;
 			return{
+				id : function(id){
+					diaid = id;
+				},
 				title : function(title){
 					t = title;
 				},
@@ -93,13 +98,30 @@
 						}
 						b.push(bt)	
 					}
-				  	BootstrapDialog.show({
+				  	var dialog = BootstrapDialog.show({
+				  					id: diaid,
 					                title: t,
 					                message: m,
 					                cssClass: 'dialog-'+w+' dialog-h-'+h,
 					                draggable: true,
 					                buttons: b
 				            });
+				  	id = dialog.$modal[0].id;
+				},
+				getFormData: function(){
+					var s = $("#"+id + " form");
+					if (s.length == 0) {
+						BootFrame.alert("未找到form标签");
+						return;
+					}
+					if (s[0].length == 0 ){
+						BootFrame.alert("form中不存在表单");
+						return;
+					}
+					var a = s[0];
+					for (var i = 0 ; i < a.length; i ++){
+						alert(a[i].id + "     "+a[i].value);
+					}
 				}
 			}//<! return >
 		}//<! dialog >

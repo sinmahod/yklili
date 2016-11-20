@@ -181,3 +181,27 @@ func GetMenusByLevel(level int) ([]*Menu, error) {
 	_, err := o.QueryTable("menu").Filter("Level", level).OrderBy("innercode").All(&menus)
 	return menus, err
 }
+
+type MenuSelectInit struct {
+	Menu
+	Select string
+}
+
+//返回所有顶级菜单，并指定当前父级
+func GetTopMenus(pid int) ([]MenuSelectInit, error) {
+	menus, err := GetMenusByLevel(1)
+	if err != nil {
+		return nil, err
+	}
+
+	menuselectinit := make([]MenuSelectInit, 5)
+
+	for i, menu := range menus {
+		menuselectinit[i].Menu.Id = menu.Id
+		menuselectinit[i].Menu.MenuName = menu.MenuName
+		if menu.Id == pid {
+			menuselectinit[i].Select = "selected"
+		}
+	}
+	return menuselectinit, nil
+}

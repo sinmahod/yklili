@@ -36,21 +36,24 @@ func (c *MenuController) List() {
 //修改/新建初始化
 func (c *MenuController) InitPage() {
 	idStr := c.GetString("Id")
-	id, _ := strconv.Atoi(idStr)
 
-	menu, err := models.GetMenu(id)
-	if err != nil {
-		beego.Error(err)
-		return
-	}
-	c.Data["Menu"] = menu
+	if idStr != "" {
+		id, _ := strconv.Atoi(idStr)
 
-	menus, err := models.GetMenusByLevel(1)
-	if err != nil {
-		beego.Error(err)
-		return
+		menu, err := models.GetMenu(id)
+		if err != nil {
+			beego.Error(err)
+			return
+		}
+		c.Data["Menu"] = menu
+
+		menus, err := models.GetTopMenus(menu.Pid)
+		if err != nil {
+			beego.Error(err)
+			return
+		}
+		c.Data["ParentMenus"] = menus
 	}
-	c.Data["ParentMenus"] = menus
 
 	c.TplName = "platform/menu/menuDialog.html"
 	c.AddScript()
