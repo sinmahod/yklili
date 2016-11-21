@@ -20,6 +20,8 @@ type DataController struct {
 	MethodName string
 	//存放字段和值的数据
 	RequestData map[string]interface{}
+	//返回数据
+	ResponseData map[string]interface{}
 }
 
 /**
@@ -41,6 +43,7 @@ func (c *DataController) Prepare() {
 			c.RequestData[k] = v[0]
 		}
 	}
+	c.ResponseData = make(map[string]interface{})
 }
 
 func (c *DataController) methodNotFind() {
@@ -56,7 +59,7 @@ const (
 )
 
 //在模板结尾追加js
-func (c *DataController) AddScript() error {
+func (c *DataController) addScript() error {
 	rb, err := c.RenderBytes()
 	if err != nil {
 		return err
@@ -69,4 +72,39 @@ func (c *DataController) AddScript() error {
 	c.Ctx.Output.Header("Content-Type", "text/html; charset=utf-8")
 	c.Ctx.Output.Body(buffer.Bytes())
 	return nil
+}
+
+//普通的put方法
+func (c *DataController) put(key string, val interface{}) {
+	c.ResponseData[key] = val
+}
+
+//成功
+func (c *DataController) success(message string) {
+	c.ResponseData["STATUS"] = 1
+	c.ResponseData["MESSAGE"] = message
+}
+
+//失败
+func (c *DataController) fail(message string) {
+	c.ResponseData["STATUS"] = 0
+	c.ResponseData["MESSAGE"] = message
+}
+
+//重写ServeJson，增加将ResponseData写入json的操作
+func (c *DataController) ServeJSON(encoding ...bool) {
+	if c.Data["json"] == nil {
+		c.Data["json"] = c.ResponseData
+	}
+	var (
+		hasIndent   = true
+		hasEncoding = false
+	)
+	if beego.BConfig.RunMode == beego.PROD {
+		hasIndent = false
+	}
+	if len(encoding) > 0 && encoding[0] == true {
+		hasEncoding = true
+	}
+	c.Ctx.Output.JSON(c.Data["json"], hasIndent, hasEncoding)
 }

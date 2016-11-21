@@ -51,7 +51,9 @@
                 alert(1);
             });
             bf.addButton("确认2", function(){
-                bf.getFormData();
+                SendData.Post("/data/menu/Save",bf.getFormData(),function(response){
+                    BootFrame.alert(response.STATUS+"   "+response.MESSAGE);
+                });
             },'btn-warning');
             bf.show();
         }

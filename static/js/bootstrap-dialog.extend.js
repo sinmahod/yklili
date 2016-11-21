@@ -1,6 +1,9 @@
 (function ($) {
  /**
  * BootstrapDialog 封装类
+ * author: gl
+ * time: 2016/11/18 22:33:07
+ * email: sinmahod@qq.com
  */
     window.BootFrame = function () {
 	return {
@@ -119,9 +122,16 @@
 						return;
 					}
 					var a = s[0];
+					var tempArr = [];
+					tempArr.push('{');
 					for (var i = 0 ; i < a.length; i ++){
-						alert(a[i].id + "     "+a[i].value);
+						if (i != 0){
+							tempArr.push(',');
+						}
+						tempArr.push('"'+a[i].id + '":"'+a[i].value+'"');
 					}
+					tempArr.push('}');
+					return $.parseJSON(tempArr.join(''));
 				}
 			}//<! return >
 		}//<! dialog >

@@ -56,7 +56,7 @@ func (c *MenuController) InitPage() {
 	}
 
 	c.TplName = "platform/menu/menuDialog.html"
-	c.AddScript()
+	c.addScript()
 }
 
 //保持数据
@@ -74,4 +74,6 @@ func (c *MenuController) Save() {
 	} else {
 		c.paramIsNull()
 	}
+	c.success("操作成功")
+	c.ServeJSON()
 }

@@ -1,6 +1,9 @@
 (function ($) {
 /**
  * jqGrid 封装类
+ * author: gl
+ * time: 2016/10/30 11:42:50
+ * email: sinmahod@qq.com
  */
  window.DataGrid = function(options){
 	//url 数据请求连接  必选

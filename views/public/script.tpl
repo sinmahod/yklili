@@ -18,6 +18,9 @@
 
         <!-- pjax -->
         <script src="../static/js/jquery.pjax.js"></script>
+
+        <!-- ajax -->
+        <script src="../static/js/jquery.senddata.js"></script>
         <script type="text/javascript">
             $(function(){
               $(document).pjax('.menu-pjax-a', '#main')
