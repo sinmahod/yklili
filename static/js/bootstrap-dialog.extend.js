@@ -1,11 +1,11 @@
-			(function ($) {
+(function ($) {
  /**
  * BootstrapDialog 封装类
  * author: gl
  * time: 2016/11/18 22:33:07
  * email: sinmahod@qq.com
  */
-    window.BootFrame = function () {
+    window.BootFrame = function (e) {
 	return {
 		//弹出框
 		alert: function (msg,fn,tle) {
@@ -17,23 +17,23 @@
 		            draggable: true, // <-- Default value is false
 		            buttonLabel: '确定', // <-- Default value is 'OK',
 		            callback: function(result) {
-		               if (fn){
+		                 	if (fn && fn instanceof Function) {
 		               		fn();
-		               }
+	               		}
 		            }
 		        });
 		},
 		//选择框
-		confirm: function (message,truefn,falsefn){
+		confirm: function (message,fn,falsefn){
 			BootstrapDialog.confirm(message, function(result){
             				if(result) {
-			             	if(truefn){
-			             		truefn();
-			             	}
+			             	if (fn && fn instanceof Function) {
+			               		fn();
+		               		}
 			            	}else {
-			             	if(falsefn){
-			             		falsefn();
-			             	}
+			             	if (fn && fn instanceof Function) {
+			               		fn();
+		               		}
 			            }
 			});
 		},
@@ -46,7 +46,7 @@
 			var h = 150;
 			var diaid;
 			var id;
-			var dialog;
+			var dobj;
 			return{
 				id : function(id){
 					diaid = id;
@@ -67,6 +67,8 @@
 					h = height / 5 * 5 ; //框头框尾130px
 				},
 				addButton: function(name,fn,css){
+					var bf = this;  //获得dialog实体
+
 					if(!css){
 						css = 'btn-primary';
 					}
@@ -75,7 +77,9 @@
 							label:name,
 							cssClass:css,
 							action:function(){
-								fn();
+								if (fn && fn instanceof Function) {
+						               		fn(bf,this);  //这里的this指的是按钮
+					               		}
 							}
 						}]
 					 }else{
@@ -83,7 +87,9 @@
 							label:name,
 							cssClass:css,
 							action:function(){
-								fn();
+								if (fn && fn instanceof Function) {
+						               		fn(bf,this);  //这里的this指的是按钮
+					               		}
 							}
 						}
 						b.push(bt)
@@ -102,7 +108,7 @@
 						}
 						b.push(bt);
 					}
-				  	dialog = BootstrapDialog.show({
+				  	dobj = BootstrapDialog.show({
 			  			   id: diaid,
 					                title: t,
 					                message: m,
@@ -110,7 +116,7 @@
 					                draggable: true,
 					                buttons: b
 				            });
-				  	id = dialog.$modal[0].id;
+				  	id = dobj.$modal[0].id;
 				},
 				getFormData: function(){
 					var s = $("#"+id + " form");
@@ -135,7 +141,7 @@
 					return $.parseJSON(tempArr.join(''));
 				},
 				close: function(){
-					dialog.close();
+					dobj.close();
 				}
 			}//<! return >
 		}//<! dialog >

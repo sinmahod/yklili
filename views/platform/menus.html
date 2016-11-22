@@ -36,28 +36,48 @@
 
         function editMenu(){
             var ids = DataGrid.getSelectRowIds("datatable");
-
+            
             if (ids.length == 0){
                 BootFrame.alert("请选择要修改的菜单");
                 return;
             }
-
             var bf = BootFrame.dialog();
             bf.title("修改菜单");
             bf.url('/data/menu/InitPage?Id='+ids[0]);
             bf.width(500);
             bf.height(300);
-            bf.addButton("确认", function(){
-                bf.close();
-            });
-            bf.addButton("确认2", function(){
-                SendData.Post("/data/menu/Save",bf.getFormData(),function(response){
-                    BootFrame.alert(response.STATUS+"   "+response.MESSAGE,function(){
-                        bf.close();
-                    });
-                });
-            },'btn-warning');
+            bf.addButton("确认",save);
             bf.show();
+        }
+
+        function save(bf,but){ //默认接收两个参数，1 BootFrame ，2 当前按钮
+            but.disable();  //禁止点击按钮
+            but.spin();     //增加按钮等待图标
+            SendData.Post("/data/menu/Save",bf.getFormData(),function(response){
+                if ( response.STATUS==1){
+                    BootFrame.alert(response.MESSAGE,function(){
+                        bf.close()
+                    });
+                }else{
+                    BootFrame.alert(response.MESSAGE,function(){
+                        but.enable();   //解除按钮点击
+                        but.stopSpin(); //清楚等待图标
+                    });
+                }
+            });
+        }
+
+        function sss(bf,but){
+            but.disable();
+            but.spin();
+
+            SendData.Post("/data/menu/Save",bf.getFormData(),function(response){
+                BootFrame.alert(response.STATUS+"   "+response.MESSAGE,function(){
+                    // but.enable();
+                    // but.stopSpin();
+                    bf.close();
+                });
+            });
         }
 
 
