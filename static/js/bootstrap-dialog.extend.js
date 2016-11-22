@@ -1,4 +1,4 @@
-(function ($) {
+			(function ($) {
  /**
  * BootstrapDialog 封装类
  * author: gl
@@ -46,6 +46,7 @@
 			var h = 150;
 			var diaid;
 			var id;
+			var dialog;
 			return{
 				id : function(id){
 					diaid = id;
@@ -95,14 +96,14 @@
 					if (!hideclose){
 						var bt = {
 							label: '取消',
-		                    	action: function(dialogItself){
-		                        		dialogItself.close();
-		                    	}
+					                    	action: function(dialogItself){
+					                        		dialogItself.close();
+					                    	}
 						}
-						b.push(bt)	
+						b.push(bt);
 					}
-				  	var dialog = BootstrapDialog.show({
-				  					id: diaid,
+				  	dialog = BootstrapDialog.show({
+			  			   id: diaid,
 					                title: t,
 					                message: m,
 					                cssClass: 'dialog-'+w+' dialog-h-'+h,
@@ -132,6 +133,9 @@
 					}
 					tempArr.push('}');
 					return $.parseJSON(tempArr.join(''));
+				},
+				close: function(){
+					dialog.close();
 				}
 			}//<! return >
 		}//<! dialog >

@@ -48,11 +48,13 @@
             bf.width(500);
             bf.height(300);
             bf.addButton("确认", function(){
-                alert(1);
+                bf.close();
             });
             bf.addButton("确认2", function(){
                 SendData.Post("/data/menu/Save",bf.getFormData(),function(response){
-                    BootFrame.alert(response.STATUS+"   "+response.MESSAGE);
+                    BootFrame.alert(response.STATUS+"   "+response.MESSAGE,function(){
+                        bf.close();
+                    });
                 });
             },'btn-warning');
             bf.show();
