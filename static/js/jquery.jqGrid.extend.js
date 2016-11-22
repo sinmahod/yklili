@@ -87,11 +87,31 @@
 
 		closeAfterAdd: true,    //添加数据后关闭窗口
 		closeAfterEdit:true,     //修改数据后关闭窗口
+		loadComplete : function() {	//修改翻页图标样式
+			updatePagerIcons(this);
+		},
+
 		//页码的文字
 		pgtext: '转到 <input class="ui-pg-input ui-corner-all" type="text" size="2" maxlength="7" value="0" role="textbox"> 页，共<span id="sp_1_grid-pager"></span>页'
 
       }, options);
 	
+	function updatePagerIcons(table) {
+		var replacement = {
+			'ui-icon-seek-first' : 'ace-icon fa fa-angle-double-left bigger-140',
+			'ui-icon-seek-prev' : 'ace-icon fa fa-angle-left bigger-140',
+			'ui-icon-seek-next' : 'ace-icon fa fa-angle-right bigger-140',
+			'ui-icon-seek-end' : 'ace-icon fa fa-angle-double-right bigger-140'
+		};
+		$('.ui-pg-table:not(.navtable) > tbody > tr > .ui-pg-button > .ui-icon').each(function(){
+				var icon = $(this);
+				var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
+			
+				if($class in replacement) icon.attr('class', 'ui-icon '+replacement[$class]);
+			});
+	}
+
+
 	// 获取列标题
 	for(var i=0; i<options.colModel.length; i++){
 		// 如果是树结构表格
