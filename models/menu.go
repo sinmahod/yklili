@@ -52,7 +52,7 @@ func (menu *Menu) SetID(id interface{}) error {
 	if err == nil {
 		menu.Id = menuid
 	} else {
-		fmt.Printf("[ERROR]:Id字段必须为正整数型【%v】", id)
+		fmt.Printf("[ERROR]:Id字段必须为正整数型 【%v】", id)
 	}
 	return err
 }
