@@ -20,12 +20,9 @@
                         <div class="row">
                             <div class="col-xs-12">
                                 <!-- PAGE CONTENT BEGINS -->
-                                <table id="datatable" url="/data/menu/List" ></table>
+                                <table id="datatable" url="/data/menu/List" istree="true" treeColumn="MenuName"></table>
 
-                                <div id="datapager">
-                                    
-
-                                </div>
+                                <div id="datapager"></div>
 
                                 <!-- PAGE CONTENT ENDS -->
                             </div><!-- /.col -->
@@ -46,7 +43,7 @@
             bf.url('/data/menu/InitPage?Id='+ids[0]);
             bf.width(500);
             bf.height(300);
-            bf.addButton("确认",save);
+            bf.addButton("确认",save,null,13);
             bf.show();
         }
 
@@ -56,6 +53,7 @@
             SendData.Post("/data/menu/Save",bf.getFormData(),function(response){
                 if ( response.STATUS==1){
                     BootFrame.alert(response.MESSAGE,function(){
+                        DataGrid.loadData('datatable');
                         bf.close()
                     });
                 }else{

@@ -40,7 +40,13 @@ func setField(obj interface{}, name string, value interface{}) error {
 
 	var err error
 	if structFieldType != val.Type() {
-		val, err = typeConversion(fmt.Sprintf("%v", value), structFieldValue.Type().Name()) //类型转换
+		valStr := fmt.Sprintf("%v", value)
+		ntype := structFieldValue.Type().Name()
+		//如果是空字符串则只能Set到string类型，其他类型跳过
+		if valStr == "" && ntype != "string" {
+			return nil
+		}
+		val, err = typeConversion(valStr, ntype) //类型转换
 		if err != nil {
 			fmt.Println("============================", fmt.Sprintf("%v", value), structFieldValue.Type().Name(), structFieldType, val.Type(), err)
 			return err

@@ -16,6 +16,7 @@
 		            closable: true, // <-- Default value is false
 		            draggable: true, // <-- Default value is false
 		            buttonLabel: '确定', // <-- Default value is 'OK',
+		            hotkey:13,
 		            callback: function(result) {
 		                 	if (fn && fn instanceof Function) {
 		               		fn();
@@ -66,7 +67,7 @@
 				height:function(height){
 					h = height / 5 * 5 ; //框头框尾130px
 				},
-				addButton: function(name,fn,css){
+				addButton: function(name,fn,css,keycode){
 					var bf = this;  //获得dialog实体
 
 					if(!css){
@@ -76,6 +77,7 @@
 						b = [{
 							label:name,
 							cssClass:css,
+							hotkey:keycode?keycode:0,
 							action:function(){
 								if (fn && fn instanceof Function) {
 						               		fn(bf,this);  //这里的this指的是按钮
@@ -86,6 +88,7 @@
 						var bt = {
 							label:name,
 							cssClass:css,
+							hotkey:keycode?keycode:0,
 							action:function(){
 								if (fn && fn instanceof Function) {
 						               		fn(bf,this);  //这里的this指的是按钮
