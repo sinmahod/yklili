@@ -9,14 +9,22 @@
     return {
         //Post
         Post: function(controller,data,fn){
-            $.post(controller,data,function(result){
+            var jstr = null;
+            if (data != null){
+                jstr = data.toJSON();
+            }
+            $.post(controller,jstr,function(result){
                 if(fn){
                     fn(result);
                 }
             });
         },//<! Post >
         Get: function(controller,data,fn){
-            $.get(controller,data,function(result){
+            var jstr = null;
+            if (data != null){
+                jstr = data.toJSON();
+            }
+            $.get(controller,jstr,function(result){
                 if(fn){
                     fn(result);
                 }

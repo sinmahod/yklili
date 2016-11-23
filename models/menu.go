@@ -4,6 +4,7 @@ import (
 	"beegostudy/util"
 	"encoding/json"
 	"fmt"
+	"strconv"
 	"strings"
 	"time"
 
@@ -45,8 +46,15 @@ func (m *Menu) TableName() string {
 	return "menu"
 }
 
-func (menu *Menu) SetID(id int) {
-	menu.Id = id
+func (menu *Menu) SetID(id interface{}) error {
+	tmpId := fmt.Sprintf("%v", id)
+	menuid, err := strconv.Atoi(tmpId)
+	if err == nil {
+		menu.Id = menuid
+	} else {
+		fmt.Printf("[ERROR]:Id字段必须为正整数型【%v】", id)
+	}
+	return err
 }
 
 func (menu *Menu) GetID() int {
@@ -55,6 +63,29 @@ func (menu *Menu) GetID() int {
 
 func (menu *Menu) SetValue(data map[string]interface{}) error {
 	return util.FillStruct(data, menu)
+}
+
+//查询数据库
+func (menu *Menu) Fill() error {
+	o := orm.NewOrm()
+	if menu.Id > 0 {
+		return o.Read(menu, "Id")
+	}
+
+	return fmt.Errorf("请确认是否传递了Id", "")
+
+}
+
+//插入
+func (menu *Menu) Insert() (int64, error) {
+	o := orm.NewOrm()
+	return o.Insert(menu)
+}
+
+//修改
+func (menu *Menu) Update(column ...string) (int64, error) {
+	o := orm.NewOrm()
+	return o.Update(menu, column...)
 }
 
 func init() {
@@ -151,17 +182,6 @@ func GetMenusPage(size, index int, ordercolumn, orderby string) (*DataGrid, erro
 	}
 
 	return nil, err
-}
-
-//查询数据库
-func (menu *Menu) Fill() error {
-	o := orm.NewOrm()
-	if menu.Id > 0 {
-		return o.Read(menu, "Id")
-	}
-
-	return fmt.Errorf("请确认是否传递了Id", "")
-
 }
 
 //根据ID得到菜单数据

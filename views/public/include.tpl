@@ -53,7 +53,7 @@
         <script src="../static/js/bootstrap-datepicker.min.js"></script>
         <script src="../static/js/jquery.jqGrid.min.js"></script>
         <script src="../static/js/grid.locale-en.js"></script>
-        <script src="../static/js/jquery.jqGrid.extend.js" ></script>
+        <script src="../static/js/gl.jqGrid.extend.js" ></script>
         <script type="text/javascript">
             //配置jqGrid交替颜色
             jQuery.extend(jQuery.jgrid.defaults, { altRows:true });

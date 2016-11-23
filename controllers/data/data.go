@@ -2,8 +2,9 @@ package data
 
 import (
 	"bytes"
-	"github.com/astaxie/beego"
 	"net/http"
+
+	"github.com/astaxie/beego"
 )
 
 type DataController struct {
@@ -40,6 +41,7 @@ func (c *DataController) Prepare() {
 	c.RequestData = make(map[string]interface{})
 	for k, v := range c.Ctx.Request.Form {
 		if len(v) > 0 {
+			beego.Info(k, "=========", v)
 			c.RequestData[k] = v[0]
 		}
 	}

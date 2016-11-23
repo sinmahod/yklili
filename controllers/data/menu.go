@@ -62,18 +62,25 @@ func (c *MenuController) InitPage() {
 //保持数据
 func (c *MenuController) Save() {
 	if len(c.RequestData) > 0 {
-		for k, v := range c.RequestData {
-			beego.Info("=======", k, v)
-		}
 		menu := new(models.Menu)
+		if c.RequestData["Id"] != nil {
+			menu.SetID(c.RequestData["Id"])
+			menu.Fill()
+		}
 		if err := menu.SetValue(c.RequestData); err != nil {
 			beego.Warn("请确认参数是否传递正确", err)
+			c.fail("操作失败，请确认参数是否传递正确")
 		} else {
-			beego.Info(menu)
+			i, err := menu.Update()
+			beego.Info(i, err)
+			if err != nil {
+				c.fail("操作失败，数据修改时出现错误")
+			} else {
+				c.success("操作成功")
+			}
 		}
 	} else {
-		c.paramIsNull()
+		c.fail("操作失败，传递参数为空")
 	}
-	c.success("操作成功")
 	c.ServeJSON()
 }

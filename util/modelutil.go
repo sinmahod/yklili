@@ -42,6 +42,7 @@ func setField(obj interface{}, name string, value interface{}) error {
 	if structFieldType != val.Type() {
 		val, err = typeConversion(fmt.Sprintf("%v", value), structFieldValue.Type().Name()) //类型转换
 		if err != nil {
+			fmt.Println("============================", fmt.Sprintf("%v", value), structFieldValue.Type().Name(), structFieldType, val.Type(), err)
 			return err
 		}
 	}

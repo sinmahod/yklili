@@ -1,4 +1,4 @@
-       
+
         <script type="text/javascript">
             if('ontouchstart' in document.documentElement) document.write("<script src='../static/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
         </script>
@@ -10,7 +10,7 @@
         
         <!-- bootstrapDialog -->
         <script src="../static/js/bootstrap-dialog.min.js"></script>
-        <script src="../static/js/bootstrap-dialog.extend.js"></script>
+        <script src="../static/js/gl.bootstrap-dialog.extend.js"></script>
 
         <!-- ace scripts -->
         <script src="../static/js/ace-elements.min.js"></script>
@@ -20,7 +20,10 @@
         <script src="../static/js/jquery.pjax.js"></script>
 
         <!-- ajax -->
-        <script src="../static/js/jquery.senddata.js"></script>
+        <script src="../static/js/gl.senddata.js"></script>
+
+        <script src="../static/js/gl.map.js"></script>
+
         <script type="text/javascript">
             $(function(){
               $(document).pjax('.menu-pjax-a', '#main')

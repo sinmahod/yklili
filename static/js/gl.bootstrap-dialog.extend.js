@@ -8,11 +8,11 @@
     window.BootFrame = function (e) {
 	return {
 		//弹出框
-		alert: function (msg,fn,tle) {
+		alert: function (msg,fn,tle,iswarning) {
 	        	BootstrapDialog.alert({
 		            title: tle ? tle : '提示',
 		            message: msg,
-		            type: BootstrapDialog.TYPE_PRIMARY, // <-- Default value is BootstrapDialog.TYPE_WARNING
+		            type: iswarning ? BootstrapDialog.TYPE_WARNING : BootstrapDialog.TYPE_PRIMARY, // <-- Default value is BootstrapDialog.TYPE_WARNING
 		            closable: true, // <-- Default value is false
 		            draggable: true, // <-- Default value is false
 		            buttonLabel: '确定', // <-- Default value is 'OK',
@@ -129,16 +129,11 @@
 						return;
 					}
 					var a = s[0];
-					var tempArr = [];
-					tempArr.push('{');
+					var $map = new Map();    
 					for (var i = 0 ; i < a.length; i ++){
-						if (i != 0){
-							tempArr.push(',');
-						}
-						tempArr.push('"'+a[i].id + '":"'+a[i].value+'"');
+  						$map.put(a[i].id , a[i].value);   
 					}
-					tempArr.push('}');
-					return $.parseJSON(tempArr.join(''));
+					return $map;
 				},
 				close: function(){
 					dobj.close();
