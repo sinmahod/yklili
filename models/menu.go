@@ -8,6 +8,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 )
 
@@ -29,7 +30,7 @@ type Menu struct {
 	Pid       int       `orm:"column(pid)"`
 	MenuName  string    `orm:"column(menuname);size(64)"`
 	Icon      string    `orm:"null;column(icon);size(32)"`
-	IsLeaf    bool      `orm:"column(isleaf);default(true)"`
+	IsLeaf    bool      `orm:"-"`
 	Link      string    `orm:"null;column(link);size(128)"`
 	InnerCode string    `orm:"column(innercode);size(128)"`
 	Level     int       `orm:"column(level)"`
@@ -46,19 +47,47 @@ func (m *Menu) TableName() string {
 	return "menu"
 }
 
-func (menu *Menu) SetID(id interface{}) error {
+func (menu *Menu) SetId(id interface{}) error {
 	tmpId := fmt.Sprintf("%v", id)
 	menuid, err := strconv.Atoi(tmpId)
 	if err == nil {
 		menu.Id = menuid
 	} else {
-		fmt.Printf("[ERROR]:Id字段必须为正整数型【%v】", id)
+		beego.Error("Id字段必须为正整数型【%v】\n", id)
 	}
 	return err
 }
 
-func (menu *Menu) GetID() int {
+func (menu *Menu) GetId() int {
 	return menu.Id
+}
+
+func (menu *Menu) GetPid() int {
+	return menu.Pid
+}
+
+func (menu *Menu) SetLevel(l int) {
+	menu.Level = l
+}
+
+//是否为叶子节点
+func (menu *Menu) GetIsLeaf() bool {
+	o := orm.NewOrm()
+	var count int
+	o.Raw("SELECT COUNT(*) FROM menu WHERE pid=?", menu.Id).QueryRow(&count)
+	return count == 0
+}
+
+func (menu *Menu) SetAddTime(t time.Time) {
+	menu.AddTime = t
+}
+
+func (menu *Menu) SetCurrentTime() {
+	menu.AddTime = time.Now()
+}
+
+func (menu *Menu) SetAddUser(uname string) {
+	menu.AddUser = uname
 }
 
 func (menu *Menu) SetValue(data map[string]interface{}) error {
@@ -95,12 +124,23 @@ func init() {
 func (menu *Menu) String() string {
 	data, err := json.MarshalIndent(menu, "", "    ")
 	if err != nil {
-		fmt.Printf("JSON marshaling failed: %s", err)
+		beego.Warn("JSON marshaling failed: %s", err)
 	}
 	return fmt.Sprintf("%s\n", data)
 }
 
 //相关函数
+
+//根据ID得到菜单数据
+func GetMenu(id int) (*Menu, error) {
+	menu := Menu{Id: id}
+	err := menu.Fill()
+	if err != nil {
+		beego.Error("菜单Id不存在")
+		return &menu, err
+	}
+	return &menu, nil
+}
 
 //得到所有的菜单
 func GetMenus() ([]*Menu, error) {
@@ -119,6 +159,7 @@ func GetMenusLevel(url string) ([]*Menu, error) {
 		idx := 0
 		//线型遍历一遍
 		for _, menu := range menus {
+			menu.IsLeaf = true //默认全部是叶子节点
 			if strings.EqualFold(menu.Link, url) {
 				menu.Checked = true
 			}
@@ -135,6 +176,7 @@ func GetMenusLevel(url string) ([]*Menu, error) {
 				//如果当前元素是menuslevel第idx个元素的子集时就放入ChildNode中
 				if menu.Checked {
 					menuslevel[idx].Checked = true
+					menuslevel[idx].IsLeaf = false //如果有子级则不为叶子节点
 				}
 				menuslevel[idx].ChildNode = append(menuslevel[idx].ChildNode, menu)
 			}
@@ -184,16 +226,6 @@ func GetMenusPage(size, index int, ordercolumn, orderby string) (*DataGrid, erro
 	return nil, err
 }
 
-//根据ID得到菜单数据
-func GetMenu(id int) (*Menu, error) {
-	menu := Menu{Id: id}
-	err := menu.Fill()
-	if err != nil {
-		return &menu, fmt.Errorf("菜单[%s]不存在", id)
-	}
-	return &menu, nil
-}
-
 //返回对应级别的菜单组
 func GetMenusByLevel(level int) ([]*Menu, error) {
 	var menus []*Menu
@@ -214,8 +246,7 @@ func GetTopMenus(pid int) ([]MenuSelectInit, error) {
 		return nil, err
 	}
 
-	menuselectinit := make([]MenuSelectInit, 5)
-
+	menuselectinit := make([]MenuSelectInit, len(menus))
 	for i, menu := range menus {
 		menuselectinit[i].Menu.Id = menu.Id
 		menuselectinit[i].Menu.MenuName = menu.MenuName

@@ -17,6 +17,8 @@
                 if(fn){
                     fn(result);
                 }
+            }).error(function() { 
+                BootFrame.alert("服务器发生错误",null,"错误",true); 
             });
         },//<! Post >
         Get: function(controller,data,fn){
@@ -28,6 +30,8 @@
                 if(fn){
                     fn(result);
                 }
+            }).error(function() {
+                BootFrame.alert("服务器发生错误",null,"错误",true); 
             });
         }//<! Get >
     }//<! return >

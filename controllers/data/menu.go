@@ -2,8 +2,11 @@ package data
 
 import (
 	"beegostudy/models"
+	"beegostudy/models/orm"
+	"beegostudy/util"
 	"reflect"
 	"strconv"
+	"strings"
 
 	"github.com/astaxie/beego"
 )
@@ -47,7 +50,7 @@ func (c *MenuController) InitPage() {
 		}
 		c.Data["Menu"] = menu
 
-		menus, err := models.GetTopMenus(menu.Pid)
+		menus, err := models.GetTopMenus(menu.GetPid())
 		if err != nil {
 			beego.Error(err)
 			return
@@ -63,22 +66,64 @@ func (c *MenuController) InitPage() {
 func (c *MenuController) Save() {
 	if len(c.RequestData) > 0 {
 		menu := new(models.Menu)
-		if c.RequestData["Id"] != nil {
-			menu.SetID(c.RequestData["Id"])
+		tran := new(orm.Transaction)
+		if util.IsNumber(c.RequestData["Id"]) {
+			menu.SetId(c.RequestData["Id"])
 			menu.Fill()
 		}
 		if err := menu.SetValue(c.RequestData); err != nil {
 			beego.Warn("请确认参数是否传递正确", err)
 			c.fail("操作失败，请确认参数是否传递正确")
 		} else {
-			i, err := menu.Update()
-			beego.Info(i, err)
-			if err != nil {
+			if !util.IsNumber(c.RequestData["Id"]) {
+				pid := util.Atoi(c.RequestData["Pid"])
+				if pid == 0 {
+					menu.SetLevel(1)
+				} else {
+					menu.SetLevel(2)
+				}
+				menu.SetCurrentTime()
+				user := c.GetSession("User").(*models.User)
+				menu.SetAddUser(user.GetUserName())
+				tran.Add(menu, orm.INSERT)
+			} else {
+				tran.Add(menu, orm.UPDATE)
+			}
+
+			if tran.Commit() != nil {
+				beego.Error(err)
 				c.fail("操作失败，数据修改时出现错误")
 			} else {
 				c.success("操作成功")
 			}
 		}
+	} else {
+		c.fail("操作失败，传递参数为空")
+	}
+	c.ServeJSON()
+}
+
+func (c *MenuController) Del() {
+	ids := c.GetString("Ids")
+	if ids != "" {
+		tran := new(orm.Transaction)
+		idList := strings.Split(ids, ",")
+		for _, id := range idList {
+			menu := new(models.Menu)
+			menu.SetId(id)
+			if !menu.GetIsLeaf() {
+				c.fail("操作失败，要删除的菜单存在子级菜单，请先删除子级菜单")
+				c.ServeJSON()
+				return
+			}
+			tran.Add(menu, orm.DELETE)
+		}
+		if tran.Commit() == nil {
+			c.success("操作成功")
+		} else {
+			c.fail("操作失败，传递参数为空")
+		}
+
 	} else {
 		c.fail("操作失败，传递参数为空")
 	}

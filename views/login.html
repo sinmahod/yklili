@@ -21,6 +21,10 @@
     <!-- ace styles -->
     <link rel="stylesheet" href="static/css/ace.min.css" />
 
+    <!-- bootstrapDialog -->
+    <link rel="stylesheet" href="../static/css/bootstrap-dialog.min.css" />
+
+
     <!--[if lte IE 9]>
       <link rel="stylesheet" href="static/css/ace-part2.min.css" />
     <![endif]-->
@@ -302,7 +306,9 @@
     <!-- page specific plugin scripts -->
     <script src="static/js/bootstrap.min.js"></script>
 
-    <script src="static/js/customBootstap.js"></script>
+    <!-- bootstrapDialog -->
+        <script src="../static/js/bootstrap-dialog.min.js"></script>
+        <script src="../static/js/gl.bootstrap-dialog.extend.js"></script>
 
     <!-- inline scripts related to this page -->
     <script type="text/javascript">
@@ -327,19 +333,16 @@
           $("#username").blur();
           $("#password").blur();
           if (!$("#username").val()){
-             var a = Ewin.alert({message:"请输入用户名！"});
-             a.on(function(){
+             BootFrame.alert("请输入用户名！",function(){
                 $("#username").focus();
              });
-
              return;
           }
 
            if (!$("#password").val()){
-              var a = Ewin.alert({message:"请输入密码！"});
-              a.on(function(){
+              BootFrame.alert("请输入密码！",function(){
                 $("#password").focus();
-             })
+              });
              return;
           }
 
@@ -347,38 +350,38 @@
               if ( json.status == 1){
                    window.location.href = json.link;
               }else{
-                   Ewin.alert({message:json.msg});
+                     BootFrame.alert(json.msg);
               }
           });
         });
 
         $("#register").on('click',function(e){
           if(!$("#email").val()){
-              Ewin.alert({message:"邮箱不能为空！"});
+              BootFrame.alert("邮箱不能为空！");
               return;
           }
           if(!$("#registerusername").val()){
-              Ewin.alert({message:"用户名不能为空！"});
+              BootFrame.alert("用户名不能为空！");
               return;
           }
           if(!$("#registerpassword").val()){
-              Ewin.alert({message:"密码不能为空！"});
+              BootFrame.alert("密码不能为空！");
               return;
           }
           if($("#registerpassword").val()!=$("#confirmpassword").val()){
-              Ewin.alert({message:"两次密码不一致！"});
+              BootFrame.alert("两次密码不一致！");
               return;
           }
 
           if(!$("#agreement").is(":checked")){
-              Ewin.alert({message:"请同意用户协议！"});
+              BootFrame.alert("请同意用户协议！");
               return;
           }
           $.post("/register", { email:$("#email").val(),username: $("#registerusername").val(),password: $("#registerpassword").val(),phone:$("#phone").val()},function(json){
               if ( json.status == 1){
-                  Ewin.alert({message:json.msg});
+                BootFrame.alert(json.msg);
               }else{
-                  Ewin.alert({message:json.msg});
+                 BootFrame.alert(json.msg);
               }
           });
         });

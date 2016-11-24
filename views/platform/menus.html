@@ -7,7 +7,7 @@
                                 <i class="ace-icon fa fa-pencil bigger-125"></i>
                                 <span class="bigger-115 no-text-shadow">修改菜单</span>
                             </button>
-                             <button class="btn btn-sm btn-success">
+                             <button class="btn btn-sm btn-success" onclick="delMenu()">
                                 <i class="ace-icon fa fa-minus bigger-125"></i>
                                 <span class="bigger-115 no-text-shadow">删除菜单</span>
                             </button>
@@ -31,6 +31,23 @@
         <!-- jgrid -->
         <script type="text/javascript">
 
+        jQuery(function($) {
+                var dataGrid = new DataGrid({  
+                    title: '菜单管理',
+                    tableName: 'datatable',  
+                    pageName: 'datapager', 
+                    // 设置数据表格列
+                    columnModel: [  
+                        {name:'Id',index:'Id',hidden:true,key:true},
+                        {label:'菜单名称',name:'MenuName',index:'MenuName',width:90},
+                        {label:'图标',name:'Icon',index:'Icon', width:150},
+                        {label:'链接',name:'Link',index:'Link', width:70},
+                        {label:'层级ID',name:'InnerCode',index:'InnerCode', width:90},
+                        {label:'添加时间',name:'AddTime',index:'AddTime', width:150,formatter: 'date',formatoptions:{srcformat: 'Y-m-dTH:i:s',newformat: 'Y-m-d H:i:s'}}
+                    ]
+                });
+        }); 
+
         function editMenu(){
             var ids = DataGrid.getSelectRowIds("datatable");
             
@@ -46,6 +63,16 @@
             bf.addButton("确认",save,null,13);
             bf.show();
         }
+
+       function addMenu(){
+           var bf = BootFrame.dialog();
+            bf.title("新建菜单");
+            bf.url('/data/menu/InitPage');
+            bf.width(500);
+            bf.height(300);
+            bf.addButton("确认",save,null,13);
+            bf.show();
+       }
 
         function save(bf,but){ //默认接收两个参数，1 BootFrame ，2 当前按钮
             but.disable();  //禁止点击按钮
@@ -65,99 +92,26 @@
             });
         }
 
-        function sss(bf,but){
-            but.disable();
-            but.spin();
-
-            SendData.Post("/data/menu/Save",bf.getFormData(),function(response){
-                BootFrame.alert(response.STATUS+"   "+response.MESSAGE,function(){
-                    // but.enable();
-                    // but.stopSpin();
-                    bf.close();
-                });
+        function delMenu(){
+            var ids = DataGrid.getSelectRowIds("datatable");
+            
+            if (ids.length == 0){
+                BootFrame.alert("请选择要删除的菜单");
+                return;
+            }
+            BootFrame.confirm("您确定要删除这个菜单吗？", function(){
+                var map = new Map();
+                map.put("Ids", ids)
+                SendData.Post("/data/menu/Del",map,function(response){
+                if ( response.STATUS==1){
+                    BootFrame.alert(response.MESSAGE,function(){
+                        DataGrid.loadData('datatable');
+                    });
+                }else{
+                    BootFrame.alert(response.MESSAGE,null,"操作失败",true);
+                }
+            });
             });
         }
-
-
-
-       function addParam(){
-            // DataGrid.setParams("datatable","Id",12);
-            // DataGrid.setParams("datatable","Ids",122);
-            // DataGrid.loadData("datatable");
-            //alert(DataGrid.getSelectRowData("datatable")["Icon"]);
-            // BootstrapDialog.show({
-            //     title: "新建菜单",
-            //     message: $('<div></div>').load('menu/menuDialog.dml'),
-            //     size:'size-wide',
-            //     draggable: true,
-            //     buttons: [{
-            //         label: '确定',
-            //         cssClass: 'btn-primary',
-            //         action: function(){
-            //             alert('Hi Orange!');
-            //         }
-            //     }, {
-            //         label: '取消',
-            //         action: function(dialogItself){
-            //             dialogItself.close();
-            //         }
-            //     }]
-            // });
-
-            //BootFrame.alert("test");
-            //BootFrame.confirm("aaa",function(){alert(1);})
-            var bf = BootFrame.dialog();
-            bf.title("Test");
-            bf.message("哈哈");
-            bf.url('menu/menuDialog.dml');
-            bf.width(500);
-            bf.height(300);
-            bf.addButton("确认", function(){alert(1);})
-            bf.addButton("确认2", function(){alert(2);},'btn-warning')
-            bf.show();
-       }
-
-        function addMenu(){
-           BootstrapDialog.show({
-                title: "新建菜单2",
-                message: $('<div></div>').load('menu/menuDialog.dml'),
-                draggable: true,
-                buttons: [{
-                    label: '确定',
-                    cssClass: 'btn-primary',
-                    action: function(){
-                        alert('Hi Orange!');
-                    }
-                }, {
-                    label: '取消',
-                    action: function(dialogItself){
-                        dialogItself.close();
-                    }
-                }]
-            });
-        }
-
-        function test(){
-            DataGrid.loadData('datatable');
-            var ids = DataGrid.getSelectRowData('datatable');
-            var data = DataGrid.getSelectRowData('datatable');
-            //alert(data)
-        }
-
-             jQuery(function($) {
-                var dataGrid = new DataGrid({  
-                    title: '菜单管理',
-                    tableName: 'datatable',  
-                    pageName: 'datapager', 
-                    // 设置数据表格列
-                    columnModel: [  
-                        {name:'Id',index:'Id',hidden:true,key:true},
-                        {label:'菜单名称',name:'MenuName',index:'MenuName',width:90},
-                        {label:'图标',name:'Icon',index:'Icon', width:150},
-                        {label:'链接',name:'Link',index:'Link', width:70},
-                        {label:'层级ID',name:'InnerCode',index:'InnerCode', width:90},
-                        {label:'添加时间',name:'AddTime',index:'AddTime', width:150,formatter: 'date',formatoptions:{srcformat: 'Y-m-dTH:i:s',newformat: 'Y-m-d H:i:s'}}
-                    ]
-                });
-            });
+             
         </script>

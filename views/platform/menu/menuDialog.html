@@ -9,7 +9,7 @@
 					<div class="col-sm-9">				
 						<div>
 							<select id="Pid">
-								<option value="">顶级菜单</option>
+								<option value="0">顶级菜单</option>
 								{{range .ParentMenus}}
 								<option value="{{.Id}}" {{.Select}}>{{.MenuName}}</option>
 								{{end}}

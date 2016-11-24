@@ -16,7 +16,6 @@
 		            closable: true, // <-- Default value is false
 		            draggable: true, // <-- Default value is false
 		            buttonLabel: '确定', // <-- Default value is 'OK',
-		            hotkey:13,
 		            callback: function(result) {
 		                 	if (fn && fn instanceof Function) {
 		               		fn();
@@ -26,17 +25,27 @@
 		},
 		//选择框
 		confirm: function (message,fn,falsefn){
-			BootstrapDialog.confirm(message, function(result){
-            				if(result) {
-			             	if (fn && fn instanceof Function) {
-			               		fn();
-		               		}
-			            	}else {
-			             	if (fn && fn instanceof Function) {
-			               		fn();
-		               		}
-			            }
-			});
+			BootstrapDialog.confirm({
+			            title: '请选择',
+			            message: message,
+			            type: BootstrapDialog.TYPE_WARNING, // <-- Default value is BootstrapDialog.TYPE_PRIMARY
+			            closable: true, // <-- Default value is false
+			            draggable: true, // <-- Default value is false
+			            btnCancelLabel: '取消', // <-- Default value is 'Cancel',
+			            btnOKLabel: '确定', // <-- Default value is 'OK',
+			            btnOKClass: 'btn-warning', // <-- If you didn't specify it, dialog type will be used,
+			            callback: function(result) {
+					if(result) {
+					   	if (fn && fn instanceof Function) {
+			               			fn();
+		               			}
+					}else {
+					    	if (falsefn && falsefn instanceof Function) {
+			               			falsefn();
+		               			}
+					}
+			             }
+		        	});
 		},
 		//Dialog
 		dialog: function(){
