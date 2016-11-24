@@ -487,3 +487,45 @@ input[type=text]:hover,select:hover{
 .dialog-h-995 .modal-body {height: 995px;}
 
 .dialog-h-1000 .modal-body {height: 1000px;}
+
+
+/* 页面查询表单样式 */
+.table-detail {
+    display: none;
+}
+.bottom-border {
+    border-bottom: 1px dotted #E2E2E2;
+    margin-bottom: 10px;
+}
+
+.page-header {
+    margin: 0 0 0px;
+    border-bottom: inherit;
+}
+
+.search-form {
+    display: table-row;
+    padding-left: inherit;
+    padding-right: inherit;
+}
+
+.right{
+   text-align: right!important;
+}
+
+.search-title {
+    color: #336199;
+    background-color: #EDF3F4;
+    border-top: 1px solid #F7FBFF;
+    padding: 6px 10px 6px 12px;
+    font-weight: 400;
+    vertical-align: middle;
+    width:auto;
+}
+.search-value{
+    border-top: 1px dotted #DCEBF7;
+    padding: 6px 4px 6px 12px;
+}
+.search-text {
+    width:100%;
+}

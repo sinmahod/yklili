@@ -11,11 +11,72 @@
                                 <i class="ace-icon fa fa-minus bigger-125"></i>
                                 <span class="bigger-115 no-text-shadow">删除菜单</span>
                             </button>
-                             <button class="btn btn-sm btn-purple">
+                             <button class="btn btn-sm btn-purple search-button">
                                 <i class="ace-icon fa fa-search-plus bigger-125"></i>
-                                <span class="bigger-115 no-text-shadow">查看菜单</span>
+                                <span class="bigger-115 no-text-shadow">展开查询</span>
                             </button>
                         </div><!-- /.page-header -->
+                        
+                        <div class="bottom-border"></div>
+                        <!-- search -->
+                        <div class="table-detail">
+                            <div class="row">
+                                <div class="profile-user-info profile-user-info-striped">
+                                    <div class="search-form col-md-4 col-sm-6">
+                                        <div class="search-title"> 菜单名称 </div>
+                                        <div class="search-value">
+                                            <input type="text" id="form-field-1" placeholder="Username" class="search-text">
+                                        </div>
+                                    </div>
+
+                                    <div class="search-form col-md-4 col-sm-6">
+                                        <div class="search-title"> 链接地址 </div>
+                                        <div class="search-value">
+                                            <input type="text" id="form-field-1" placeholder="Username" class="search-text">
+                                        </div>
+                                    </div>
+
+                                     <div class="search-form col-md-4 col-sm-6">
+                                        <div class="search-title"> 创建时间 </div>
+                                        <div class="search-value">
+                                            <input type="text" id="form-field-1" placeholder="Username" class="search-text">
+                                        </div>
+                                    </div>
+
+                                     <div class="search-form col-md-4 col-sm-6">
+                                        <div class="search-title"> Username </div>
+                                        <div class="search-value">
+                                            <input type="text" id="form-field-1" placeholder="Username" class="search-text">
+                                        </div>
+                                    </div>
+
+                                     <div class="search-form col-md-4 col-sm-6">
+                                        <div class="search-title"> Username </div>
+                                        <div class="search-value">
+                                            <input type="text" id="form-field-1" placeholder="Username" class="search-text">
+                                        </div>
+                                    </div>
+
+                                     <div class="search-form col-md-4 col-sm-6">
+                                        <div class="search-title"> Username </div>
+                                        <div class="search-value">
+                                            <input type="text" id="form-field-1" placeholder="Username" class="search-text">
+                                        </div>
+                                    </div>
+
+                                    <div class="search-form col-md-12 right">
+                                    <div class="search-title">
+                                        <button type="button" class="btn btn-sm btn-success">
+                                            查询
+                                            <i class="ace-icon fa fa-arrow-right icon-on-right bigger-110"></i>
+                                        </button>
+                                    </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end search -->
 
                         <div class="row">
                             <div class="col-xs-12">
@@ -45,6 +106,15 @@
                         {label:'层级ID',name:'InnerCode',index:'InnerCode', width:90},
                         {label:'添加时间',name:'AddTime',index:'AddTime', width:150,formatter: 'date',formatoptions:{srcformat: 'Y-m-dTH:i:s',newformat: 'Y-m-d H:i:s'}}
                     ]
+                });
+                $(".search-button").click(function(){
+                    if ($(".table-detail").css("display") == 'none'){
+                        $(this).children("span").text("收起查询")
+                    }else{
+                        $(this).children("span").text("展开查询")
+                    }
+                    $(".table-detail").slideToggle("slow");
+                    
                 });
         }); 
 
