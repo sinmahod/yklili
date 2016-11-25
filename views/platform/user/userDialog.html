@@ -1,6 +1,6 @@
 	<div class="row">
 		<div class="col-xs-12">
-			<form class="form-horizontal" id="form122" role="form">
+			<form class="form-horizontal" id="userform" role="form">
 				<input type="hidden" id="Id" value="{{.User.Id}}" />
 				{{if .User.Id}}
 				<div class="form-group">
@@ -42,7 +42,7 @@
 					真实姓名
 					</label>
 					<div class="col-sm-9">				
-						<input data-rel="tooltip" type="text" placeholder="请输入真实姓名" title="2-10个汉字或字母" data-placement="bottom" id="RealName" value="{{.User.RealName}}" />
+						<input data-rel="tooltip" type="text" placeholder="请输入真实姓名" title="2-10个汉字或字母" data-placement="bottom" id="RealName" name="RealName" value="{{.User.RealName}}" />
 					</div>
 				</div>
 				<div class="form-group">
@@ -64,3 +64,47 @@
 			</form>
 		</div>
 	</div>
+<script>
+ jQuery(function($) {
+	$('#userform').validate({
+		errorClass: 'help-block',
+		focusInvalid: false,
+		ignore: "",
+		rules: {
+			RealName: {
+				required: true
+			}
+		},
+		messages: {
+			RealName: "Please accept our policy"
+		},
+		highlight: function (e) {
+			$(e).closest('.form-group').removeClass('has-info').addClass('has-error');
+		},
+
+		success: function (e) {
+			$(e).closest('.form-group').removeClass('has-error');//.addClass('has-info');
+			$(e).remove();
+		},
+		errorPlacement: function (error, element) {
+			if(element.is('input[type=checkbox]') || element.is('input[type=radio]')) {
+				var controls = element.closest('div[class*="col-"]');
+				if(controls.find(':checkbox,:radio').length > 1) controls.append(error);
+				else error.insertAfter(element.nextAll('.lbl:eq(0)').eq(0));
+			}
+			else if(element.is('.select2')) {
+				error.insertAfter(element.siblings('[class*="select2-container"]:eq(0)'));
+			}
+			else if(element.is('.chosen-select')) {
+				error.insertAfter(element.siblings('[class*="chosen-container"]:eq(0)'));
+			}
+			else error.insertAfter(element);
+		},
+
+		submitHandler: function (form) {
+		},
+		invalidHandler: function (form) {
+		}
+	});
+});
+</script>
