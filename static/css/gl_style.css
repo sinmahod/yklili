@@ -80,6 +80,11 @@ input[type=text]:hover,select:hover{
     width: 200px;
 }
 
+/* dialog框增加滚动条 */
+.modal-body {
+    overflow: auto;
+}
+
 /*  dialog宽度，只有在大屏时才生效 */
 @media (min-width: 768px) {
 

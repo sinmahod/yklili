@@ -11,11 +11,11 @@ import (
 	"github.com/astaxie/beego"
 )
 
-type MenuController struct {
+type UserController struct {
 	DataController
 }
 
-func (c *MenuController) Get() {
+func (c *UserController) Get() {
 	//得到方法名，利用反射机制获取机构体
 	value := reflect.ValueOf(c)
 	//判断结构中是否存在方法，存在则执行
@@ -27,8 +27,8 @@ func (c *MenuController) Get() {
 }
 
 //DataGrid列表数据加载
-func (c *MenuController) List() {
-	if datagrid, err := models.GetMenusPage(c.PageSize, c.PageIndex, c.OrderColumn, c.OrderSord); err != nil {
+func (c *UserController) List() {
+	if datagrid, err := models.GetUsersPage(c.PageSize, c.PageIndex, c.OrderColumn, c.OrderSord); err != nil {
 		beego.Error(err)
 	} else {
 		c.Data["json"] = datagrid
@@ -37,57 +37,44 @@ func (c *MenuController) List() {
 }
 
 //修改/新建初始化
-func (c *MenuController) InitPage() {
+func (c *UserController) InitPage() {
 	idStr := c.GetString("Id")
 
 	if idStr != "" {
 		id, _ := strconv.Atoi(idStr)
 
-		menu, err := models.GetMenu(id)
+		user, err := models.GetUserById(id)
 		if err != nil {
 			beego.Error(err)
 			return
 		}
-		c.Data["Menu"] = menu
-
-		menus, err := models.GetTopMenus(menu.GetPid())
-		if err != nil {
-			beego.Error(err)
-			return
-		}
-		c.Data["ParentMenus"] = menus
+		c.Data["User"] = user
 	}
 
-	c.TplName = "platform/menu/menuDialog.html"
+	c.TplName = "platform/user/userDialog.html"
 	c.addScript()
 }
 
 //保持数据
-func (c *MenuController) Save() {
+func (c *UserController) Save() {
 	if len(c.RequestData) > 0 {
-		menu := new(models.Menu)
+		user := new(models.User)
 		tran := new(orm.Transaction)
 		if util.IsNumber(c.RequestData["Id"]) {
-			menu.SetId(c.RequestData["Id"])
-			menu.Fill()
+			user.SetId(c.RequestData["Id"])
+			user.Fill()
 		}
-		if err := menu.SetValue(c.RequestData); err != nil {
+		if err := user.SetValue(c.RequestData); err != nil {
 			beego.Warn("请确认参数是否传递正确", err)
 			c.fail("操作失败，请确认参数是否传递正确")
 		} else {
 			if !util.IsNumber(c.RequestData["Id"]) {
-				pid := util.Atoi(c.RequestData["Pid"])
-				if pid == 0 {
-					menu.SetLevel(1)
-				} else {
-					menu.SetLevel(2)
-				}
-				menu.SetCurrentTime()
+				user.SetCurrentTime()
 				sysuser := c.GetSession("User").(*models.User)
-				menu.SetAddUser(sysuser.GetUserName())
-				tran.Add(menu, orm.INSERT)
+				user.SetAddUser(sysuser.GetUserName())
+				tran.Add(user, orm.INSERT)
 			} else {
-				tran.Add(menu, orm.UPDATE)
+				tran.Add(user, orm.UPDATE)
 			}
 
 			if tran.Commit() != nil {
@@ -103,20 +90,15 @@ func (c *MenuController) Save() {
 	c.ServeJSON()
 }
 
-func (c *MenuController) Del() {
+func (c *UserController) Del() {
 	ids := c.GetString("Ids")
 	if ids != "" {
 		tran := new(orm.Transaction)
 		idList := strings.Split(ids, ",")
 		for _, id := range idList {
-			menu := new(models.Menu)
-			menu.SetId(id)
-			if !menu.GetIsLeaf() {
-				c.fail("操作失败，要删除的菜单存在子级菜单，请先删除子级菜单")
-				c.ServeJSON()
-				return
-			}
-			tran.Add(menu, orm.DELETE)
+			user := new(models.User)
+			user.SetId(id)
+			tran.Add(user, orm.DELETE)
 		}
 		if tran.Commit() == nil {
 			c.success("操作成功")

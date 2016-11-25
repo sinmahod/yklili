@@ -1,0 +1,702 @@
+<form>
+<div class="row">
+	<div class="col-xs-3 col-sm-3">
+		<ul class="list-unstyled">
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-adjust" type="radio">
+						<i class="ace-icon fa fa-adjust"></i>
+					</label>
+				</div>
+			</li>
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-asterisk" type="radio">
+						<i class="ace-icon fa fa-asterisk"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-ban" type="radio">
+						<i class="ace-icon fa fa-ban"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-bar-chart-o" type="radio">
+						<i class="ace-icon fa fa-bar-chart-o"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-barcode" type="radio">
+						<i class="ace-icon fa fa-barcode"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-flask" type="radio">
+						<i class="ace-icon fa fa-flask"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-beer" type="radio">
+						<i class="ace-icon fa fa-beer"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-bell-o" type="radio">
+						<i class="ace-icon fa fa-bell-o"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-bell" type="radio">
+						<i class="ace-icon fa fa-bell"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-bolt" type="radio">
+						<i class="ace-icon fa fa-bolt"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-book" type="radio">
+						<i class="ace-icon fa fa-book"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-bookmark" type="radio">
+						<i class="ace-icon fa fa-bookmark"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-bookmark-o" type="radio">
+						<i class="ace-icon fa fa-bookmark-o"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-briefcase" type="radio">
+						<i class="ace-icon fa fa-briefcase"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-bullhorn" type="radio">
+						<i class="ace-icon fa fa-bullhorn"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-calendar" type="radio">
+						<i class="ace-icon fa fa-calendar"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-camera" type="radio">
+						<i class="ace-icon fa fa-camera"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-camera-retro" type="radio">
+						<i class="ace-icon fa fa-camera-retro"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-certificate" type="radio">
+						<i class="ace-icon fa fa-certificate"></i>
+					</label>
+				</div>
+			</li>
+		</ul>
+	</div>
+
+	<div class="col-xs-3 col-sm-3">
+		<ul class="list-unstyled">
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-check-square-o" type="radio">
+						<i class="ace-icon fa fa-check-square-o"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-square-o" type="radio">
+						<i class="ace-icon fa fa-square-o"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-circle" type="radio">
+						<i class="ace-icon fa fa-circle"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-circle-o" type="radio">
+						<i class="ace-icon fa fa-circle-o"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-cloud" type="radio">
+						<i class="ace-icon fa fa-cloud"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-cloud-download" type="radio">
+						<i class="ace-icon fa fa-cloud-download"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-cloud-upload" type="radio">
+						<i class="ace-icon fa fa-cloud-upload"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-coffee" type="radio">
+						<i class="ace-icon fa fa-coffee"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-cog" type="radio">
+						<i class="ace-icon fa fa-cog"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-cogs" type="radio">
+						<i class="ace-icon fa fa-cogs"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-comment" type="radio">
+						<i class="ace-icon fa fa-comment"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-comment-o" type="radio">
+						<i class="ace-icon fa fa-comment-o"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-comments" type="radio">
+						<i class="ace-icon fa fa-comments"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-comments-o" type="radio">
+						<i class="ace-icon fa fa-comments-o"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-credit-card" type="radio">
+						<i class="ace-icon fa fa-credit-card"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-tachometer" type="radio">
+						<i class="ace-icon fa fa-tachometer"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-desktop" type="radio">
+						<i class="ace-icon fa fa-desktop"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-arrow-circle-o-down" type="radio">
+						<i class="ace-icon fa fa-arrow-circle-o-down"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-download" type="radio">
+						<i class="ace-icon fa fa-download"></i>
+					</label>
+				</div>
+			</li>
+		</ul>
+	</div>
+
+	<div class="col-xs-3 col-sm-3">
+		<ul class="list-unstyled">
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-pencil-square-o" type="radio">
+						<i class="ace-icon fa fa-pencil-square-o"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-envelope" type="radio">
+						<i class="ace-icon fa fa-envelope"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-envelope-o" type="radio">
+						<i class="ace-icon fa fa-envelope-o"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-exchange" type="radio">
+						<i class="ace-icon fa fa-exchange"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-exclamation-circle" type="radio">
+						<i class="ace-icon fa fa-exclamation-circle"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-external-link" type="radio">
+						<i class="ace-icon fa fa-external-link"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-eye-slash" type="radio">
+						<i class="ace-icon fa fa-eye-slash"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-eye" type="radio">
+						<i class="ace-icon fa fa-eye"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-video-camera" type="radio">
+						<i class="ace-icon fa fa-video-camera"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-fighter-jet" type="radio">
+						<i class="ace-icon fa fa-fighter-jet"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-film" type="radio">
+						<i class="ace-icon fa fa-film"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-filter" type="radio">
+						<i class="ace-icon fa fa-filter"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-fire" type="radio">
+						<i class="ace-icon fa fa-fire"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-flag" type="radio">
+						<i class="ace-icon fa fa-flag"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-folder" type="radio">
+						<i class="ace-icon fa fa-folder"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-folder-open" type="radio">
+						<i class="ace-icon fa fa-folder-open"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-folder-o" type="radio">
+						<i class="ace-icon fa fa-folder-o"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-folder-open-o" type="radio">
+						<i class="ace-icon fa fa-folder-open-o"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-cutlery" type="radio">
+						<i class="ace-icon fa fa-cutlery"></i>
+					</label>
+				</div>
+			</li>
+		</ul>
+	</div>
+
+	<div class="col-xs-3 col-sm-3">
+		<ul class="list-unstyled">
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-gift" type="radio">
+						<i class="ace-icon fa fa-gift"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-glass" type="radio">
+						<i class="ace-icon fa fa-glass"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-globe" type="radio">
+						<i class="ace-icon fa fa-globe"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-users" type="radio">
+						<i class="ace-icon fa fa-users"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-hdd-o" type="radio">
+						<i class="ace-icon fa fa-hdd-o"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-headphones" type="radio">
+						<i class="ace-icon fa fa-headphones"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-heart" type="radio">
+						<i class="ace-icon fa fa-heart"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-heart-o" type="radio">
+						<i class="ace-icon fa fa-heart-o"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-home" type="radio">
+						<i class="ace-icon fa fa-home"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-inbox" type="radio">
+						<i class="ace-icon fa fa-inbox"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-info-circle" type="radio">
+						<i class="ace-icon fa fa-info-circle"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-key" type="radio">
+						<i class="ace-icon fa fa-key"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-leaf" type="radio">
+						<i class="ace-icon fa fa-leaf"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-laptop" type="radio">
+						<i class="ace-icon fa fa-laptop"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-gavel" type="radio">
+						<i class="ace-icon fa fa-gavel"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-lemon-o" type="radio">
+						<i class="ace-icon fa fa-lemon-o"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-lightbulb-o" type="radio">
+						<i class="ace-icon fa fa-lightbulb-o"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-lock" type="radio">
+						<i class="ace-icon fa fa-lock"></i>
+					</label>
+				</div>
+			</li>
+
+			<li>
+				<div class="radio">
+					<label>
+						<input name="icon-value" value="fa-unlock" type="radio">
+						<i class="ace-icon fa fa-unlock"></i>
+					</label>
+				</div>
+			</li>
+		</ul>
+	</div>
+</div>	
+</form>

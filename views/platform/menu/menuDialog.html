@@ -30,9 +30,10 @@
 					图标
 					</label>
 					<div class="col-sm-9">				
-						<input data-rel="tooltip" type="text" placeholder="请输入图标" title="请输入图标" data-placement="bottom" id="Icon" value="{{.Menu.Icon}}" />
+						<input data-rel="tooltip" type="text" placeholder="请选择图标" title="请选择图标" data-placement="bottom" id="Icon" value="{{.Menu.Icon}}" onclick="openIcon()" />
 					</div>
 				</div>
+
 				<div class="form-group">
 					<label class="col-sm-3 control-label no-padding-right" for="form-field-6">
 					链接
@@ -44,4 +45,24 @@
 			</form>
 		</div>
 	</div>
-
+<script>
+function openIcon(){
+	 var bf = BootFrame.dialog();
+            bf.title("选择图标");
+            bf.url('/platform/icon/icon.dml');
+            bf.type('type-success');
+            bf.width(450);
+            bf.height(300);
+            bf.addButton("确认",selectIcon,'btn-success');
+            bf.show();
+}
+function selectIcon(bf,btn){
+	var mp = bf.getFormData();
+	if (mp.size() == 0){
+		BootFrame.alert("请选择一个图标");
+	}else{
+		$('#Icon').val(mp.get('icon-value'));
+		bf.close();
+	}
+}
+</script>

@@ -1,10 +1,15 @@
 package models
 
 import (
+	"beegostudy/util"
 	"encoding/json"
 	"fmt"
-	"github.com/astaxie/beego/orm"
+	"strconv"
+	"strings"
 	"time"
+
+	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/orm"
 )
 
 /**
@@ -23,6 +28,7 @@ import (
 type User struct {
 	Id       int       `orm:"pk;auto;column(id)"`
 	UserName string    `orm:"column(username);index;unique;size(64)"`
+	RealName string    `orm:"column(realname);size(128)"`
 	Password string    `orm:"column(password);size(64)"`
 	Email    string    `orm:"column(email);index;unique;size(64)"`
 	Phone    string    `orm:"null;column(phone);size(32)"`
@@ -35,11 +41,18 @@ func (u *User) TableName() string {
 	return "user"
 }
 
-func (user *User) SetID(id int) {
-	user.Id = id
+func (user *User) SetId(id interface{}) error {
+	tmpId := fmt.Sprintf("%v", id)
+	userid, err := strconv.Atoi(tmpId)
+	if err == nil {
+		user.Id = userid
+	} else {
+		beego.Error("Id字段必须为正整数型【%v】\n", id)
+	}
+	return err
 }
 
-func (user *User) GetID() int {
+func (user *User) GetId() int {
 	return user.Id
 }
 
@@ -49,6 +62,22 @@ func (user *User) GetUserName() string {
 
 func (user *User) GetPassword() string {
 	return user.Password
+}
+
+func (user *User) SetAddTime(t time.Time) {
+	user.AddTime = t
+}
+
+func (user *User) SetAddUser(uname string) {
+	user.AddUser = uname
+}
+
+func (user *User) SetCurrentTime() {
+	user.AddTime = time.Now()
+}
+
+func (user *User) SetValue(data map[string]interface{}) error {
+	return util.FillStruct(data, user)
 }
 
 func init() {
@@ -78,6 +107,16 @@ func (user *User) String() string {
 	return fmt.Sprintf("%s\n", data)
 }
 
+//根据Id得到用户信息
+func GetUserById(id int) (*User, error) {
+	user := User{Id: id}
+	err := user.Fill()
+	if err != nil {
+		return &user, fmt.Errorf("用户Id[%s]不存在", id)
+	}
+	return &user, nil
+}
+
 //根据用户名得到用户信息
 func GetUser(username string) (*User, error) {
 	user := User{UserName: username}
@@ -96,6 +135,41 @@ func GetUserByEmail(email string) (*User, error) {
 		return &user, fmt.Errorf("邮箱[%s]未注册", email)
 	}
 	return &user, nil
+}
+
+//得到分页的菜单
+/**
+*	size	每页查询长度
+*	index	查询的页码
+*	ordercolumn	排序字段
+*	orderby		升降序:desc\asc
+**/
+func GetUsersPage(size, index int, ordercolumn, orderby string) (*DataGrid, error) {
+
+	if ordercolumn == "" {
+		ordercolumn = "addtime"
+	} else if strings.EqualFold(orderby, "desc") {
+		ordercolumn = "-" + ordercolumn
+	}
+
+	var users []*User
+	o := orm.NewOrm()
+
+	_, err := o.QueryTable("user").OrderBy(ordercolumn).Limit(size, (index-1)*size).All(&users)
+
+	if err == nil {
+		cnt, err := o.QueryTable("user").Count()
+
+		pagetotal := cnt / int64(size)
+
+		if cnt%int64(size) > 0 {
+			pagetotal++
+		}
+
+		return GetDataGrid(users, index, int(pagetotal), cnt), err
+	}
+
+	return nil, err
 }
 
 //插入用户

@@ -2,6 +2,7 @@ package dml
 
 import (
 	"bytes"
+
 	"github.com/astaxie/beego"
 )
 
@@ -10,15 +11,15 @@ type DMLController struct {
 	DMLPath string
 }
 
+func (c *DMLController) Get() {
+	c.TplName = c.DMLPath + ".dml"
+}
+
 /**
 *   准备方法，得到页面URL，专门处理dml文件（Dialog文件）
 **/
 func (c *DMLController) Prepare() {
 	c.DMLPath = c.GetString(":path")
-}
-
-func (c *DMLController) Finish() {
-	c.TplName = c.DMLPath + ".dml"
 }
 
 func (c *DMLController) Render() error {
@@ -36,7 +37,7 @@ func (c *DMLController) Render() error {
 }
 
 const (
-	Script string = "<script>$('[data-rel=tooltip]').tooltip({container:'body'});</script>"
+	Script string = "<script>$('[data-rel=tooltip]').tooltip({container:'body'});$('[data-rel=popover]').popover({html:true});</script>"
 )
 
 func AddScript(content string) string {

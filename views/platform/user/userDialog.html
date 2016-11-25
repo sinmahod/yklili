@@ -1,0 +1,66 @@
+	<div class="row">
+		<div class="col-xs-12">
+			<form class="form-horizontal" id="form122" role="form">
+				<input type="hidden" id="Id" value="{{.User.Id}}" />
+				{{if .User.Id}}
+				<div class="form-group">
+					<label class="col-sm-3 control-label no-padding-right" for="form-field-6">
+					用户名称
+					</label>
+					<div class="col-sm-9">				
+						<input  type="text" data-placement="bottom" readonly="readonly" id="UserName" value="{{.User.UserName}}"  />
+					</div>
+				</div>
+				{{else}}
+				<div class="form-group">
+					<label class="col-sm-3 control-label no-padding-right" for="form-field-6">
+					用户名称
+					</label>
+					<div class="col-sm-9">				
+						<input data-rel="tooltip" type="text" placeholder="请输入用户名称" title="4-18个字母或数字" data-placement="bottom" id="UserName" value="{{.User.UserName}}" verify="notnull" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label no-padding-right" for="form-field-6">
+					密码
+					</label>
+					<div class="col-sm-9">				
+						<input data-rel="tooltip" type="password" placeholder="请输入密码" title="4-18个字符" data-placement="bottom" id="Password" value="{{.User.Password}}" style="width: 200px;" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label no-padding-right" for="form-field-6">
+					重复密码
+					</label>
+					<div class="col-sm-9">				
+						<input data-rel="tooltip" type="text" placeholder="请输入用户名称" title="4-18个字符" data-placement="bottom" id="RePassword" value="" />
+					</div>
+				</div>
+				{{end}}
+				<div class="form-group">
+					<label class="col-sm-3 control-label no-padding-right" for="form-field-6">
+					真实姓名
+					</label>
+					<div class="col-sm-9">				
+						<input data-rel="tooltip" type="text" placeholder="请输入真实姓名" title="2-10个汉字或字母" data-placement="bottom" id="RealName" value="{{.User.RealName}}" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label no-padding-right" for="form-field-6">
+					电子邮箱
+					</label>
+					<div class="col-sm-9">				
+						<input data-rel="tooltip" type="text" placeholder="请输入电子邮箱" title="请输入电子邮箱" data-placement="bottom" id="Email" value="{{.User.Email}}" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label no-padding-right" for="form-field-6">
+					联系电话
+					</label>
+					<div class="col-sm-9">				
+						<input data-rel="tooltip" type="text" placeholder="请输入联系电话" title="请输入联系电话" data-placement="bottom" id="Phone" value="{{.User.Phone}}" />
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>

@@ -57,12 +57,16 @@
 			var diaid;
 			var id;
 			var dobj;
+			var p;
 			return{
 				id : function(id){
 					diaid = id;
 				},
 				title : function(title){
 					t = title;
+				},
+				type : function(type){
+					p = type;
 				},
 				message :function(message){
 					m = message;
@@ -125,10 +129,32 @@
 					                title: t,
 					                message: m,
 					                cssClass: 'dialog-'+w+' dialog-h-'+h,
+					                type: p,
 					                draggable: true,
 					                buttons: b
 				            });
 				  	id = dobj.$modal[0].id;
+				},
+				verifyForm: function(){
+					var s = $("#"+id + " form");
+					if (s.length == 0) {
+						BootFrame.alert("未找到form标签");
+						return false;
+					}
+					if (s[0].length == 0 ){
+						BootFrame.alert("form中不存在表单");
+						return false;
+					}
+
+					var a = s[0];
+					for (var i = 0 ; i < a.length; i ++){
+						//判断表单类型
+						var _ver = $(a[i]).attr('verify');
+						if (_ver == 'notnull') {
+							
+						}
+					}
+					return true;
 				},
 				getFormData: function(){
 					var s = $("#"+id + " form");
@@ -143,7 +169,18 @@
 					var a = s[0];
 					var $map = new Map();    
 					for (var i = 0 ; i < a.length; i ++){
-  						$map.put(a[i].id , a[i].value);   
+						//判断表单类型
+						var elementid = a[i].id;
+						if (elementid == "") {
+							elementid = a[i].name;
+						}
+						if (a[i].type == "radio"){ 
+							if(a[i].checked == true){
+								$map.put(elementid , a[i].value);
+							}
+						}else{
+							$map.put(elementid , a[i].value);
+						}
 					}
 					return $map;
 				},
