@@ -1,0 +1,198 @@
+#%RAML 0.8
+title: 中国建筑标准设计院项目pdf阅读器
+version: v2.0
+mediaType: application/json
+baseUri: http://api.zving.com/zgjzbook/{version}
+
+#以下涉及用户相关的所有操作均用后端session获取用户相关ID信息
+#
+
+#书签相关接口
+/bookmark:
+  description: <strong>书签管理</strong>：实现图书书签相关接口，书签内容包括的页码、章节（大纲）名称、阅读百分比、添加时间
+  #增加书签
+  /add:
+    post:
+      description: 增加书签
+      body:
+        schema: |
+          {
+            "$schema": "http://json-schema.org/draft-03/schema",
+            "type": "object",
+            "properties": {
+              "id":{
+                "description":"ID",
+                "required":true,
+                "type":"string"
+                },
+              "pageno":{
+                "description": "页码",
+                "required": true,
+                "type": "number"
+              },
+              "title":{
+                "description": "章节（大纲）名称",
+                "required": true,
+                "type": "string"
+              },
+              "percent":{
+                "description": "百分比",
+                "required": true,
+                "type": "number"
+              }
+            }
+          }
+        example: |
+          {
+            "id":"92813926-F3F9-FBD7-04E4-5283E74CE58F",
+            "pageno":14,
+            "title":"3 主要设备和器材的检验",
+            "percent":18
+          }
+      responses:
+        200:
+          body:
+            schema: |
+              {
+              "$schema": "http://json-schema.org/draft-03/schema",
+              "type": "object",
+              "properties": {
+                "status":{
+                  "description": "状态",
+                  "required": true,
+                  "type": "number"
+                  },
+                  "message":{
+                    "description": "消息",
+                    "required": true,
+                    "type": "String"
+                    }
+                }
+              }
+            example: |
+              {
+                "status": 200,
+                "message": "成功"
+              }
+  #删除书签
+  /delete:
+    post:
+      description: 删除书签
+      body:
+        schema: |
+          {
+            "$schema": "http://json-schema.org/draft-03/schema",
+            "type": "object",
+            "properties": {
+              "id":{
+                "description": "书签编号",
+                "required": true,
+                "type": "number"
+              }
+            }
+          }
+        example: |
+          {
+            "id":1029
+          }
+      responses:
+        200:
+          body:
+            schema: |
+              {
+              "$schema": "http://json-schema.org/draft-03/schema",
+              "type": "object",
+              "properties": {
+                "status":{
+                  "description": "状态",
+                  "required": true,
+                  "type": "number"
+                  },
+                  "message":{
+                    "description": "消息",
+                    "required": true,
+                    "type": "String"
+                    }
+                }
+              }
+            example: |
+              {
+                "status": 200,
+                "message": "成功"
+              }
+  #获取书签列表
+  /getList:
+    get:
+      description: 获取书签列表
+      body:
+        schema: |
+          {
+            "$schema": "http://json-schema.org/draft-03/schema",
+            "type": "object",
+            "properties": {
+              "bookid":{
+                "description":"图书编号",
+                "required":true,
+                "type":"number"
+              }
+            }
+          }
+        example: |
+          {
+            "bookid":10301
+          }
+      responses:
+        200:
+          body:
+            schema: |
+              {
+              "$schema": "http://json-schema.org/draft-03/schema",
+              "type": "object",
+              "properties": {
+                "status":{
+                  "description": "状态",
+                  "required": true,
+                  "type": "number"
+                  },
+                  "message":{
+                    "description": "消息",
+                    "required": true,
+                    "type": "string"
+                  },
+                  "datas":{
+                      "description":"数据列表",
+                      "type":"objectInArray",
+                      "items":{
+                        "id":{
+                          "description":"标签编号",
+                          "type":"nubmer"
+                        },
+                        "pageno":{
+                          "description":"页码",
+                          "type":"nubmer"
+                        },
+                        "title":{
+                          "description":"章节（大纲）名称",
+                          "type":"string"
+                        },
+                        "percent":{
+                          "description":"阅读百分比",
+                          "type":"nubmer"
+                        },
+                        "addtime":{
+                          "description":"添加时间",
+                          "type":"datetime"
+                        }
+                      }
+                  }
+                }
+              }
+            example: |
+              {
+                "status": 200,
+                "message": "成功",
+                "datas":[
+                  {"id":111,"pageno":14,"title":"3 主要设备和器材的检验","percent":16,"addtime":"2016-10-28 12:20:33"},
+                  {"id":111,"pageno":16,"title":"4 海底光缆线路铺设前期准备","percent":20,"addtime":"2016-10-28 12:20:51"}
+                ]
+              }

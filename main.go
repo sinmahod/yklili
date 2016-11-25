@@ -1,11 +1,14 @@
 package main
 
 import (
-	"beegostudy/controllers"
-	"beegostudy/models"
+	"beegostudy/controllers/data"
+	"beegostudy/controllers/dml"
+	"beegostudy/controllers/platform"
+
 	"fmt"
 
 	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/context"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -21,24 +24,52 @@ type MainController struct {
 }
 
 func (this *MainController) Get() {
-	o := orm.NewOrm()
-	o.Using("default") // 默认使用 default，你可以指定为其他数据库
-
-	user := new(models.User)
-	user.SetID(1)
-	o.Read(user)
-	fmt.Println(user)
-
-	this.Data["UserName"] = user.UserName
+	this.Data["UserName"] = "HHHHH"
 	this.TplName = "test.html"
-
 }
 
 func main() {
-	orm.Debug = true //ORM调试模式打开
+	orm.Debug = true                                 //ORM调试模式打开
+	beego.BConfig.WebConfig.Session.SessionOn = true //启用Session
 
 	beego.Router("/", &MainController{})
-	beego.Router("/login", &controllers.LoginController{})
-	beego.Router("/register", &controllers.RegisterController{})
+	beego.Router("/login", &platform.LoginController{})
+	beego.Router("/register", &platform.RegisterController{})
+
+	//页面控制器
+	pages := map[string]beego.ControllerInterface{
+		"users": &platform.UsersController{},
+		"menus": &platform.MenusController{},
+	}
+
+	for name, controller := range pages {
+		beego.Router(fmt.Sprintf("/platform/%s", name), controller, "get:Page")
+	}
+
+	//数据控制器
+	models := map[string]beego.ControllerInterface{
+		"menu": &data.MenuController{},
+	}
+
+	for name, controller := range models {
+		beego.Router(fmt.Sprintf("/data/%s/:method", name), controller, "*:Get")
+	}
+
+	beego.Router("/platform/test", &platform.TestController{})
+
+	//校验用户登录：未登录则重定向到login
+	var FilterUser = func(ctx *context.Context) {
+		if ctx.Input.Session("User") == nil {
+			//如果使用dialog方式会出现弹出窗口被定向到了登录页，这里使用js跳转
+			//ctx.Redirect(302, "platform.LoginPage")
+			ctx.WriteString(platform.LoginPageScript)
+		}
+	}
+
+	//dml格式支持直接预览
+	beego.AddTemplateExt("dml")
+	beego.Router("/:path.dml", &dml.DMLController{})
+
+	beego.InsertFilter("/platform/*", beego.BeforeRouter, FilterUser)
 	beego.Run()
 }
