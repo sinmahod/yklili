@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"net/http"
 
+	"beegostudy/util"
+
 	"github.com/astaxie/beego"
 )
 
@@ -66,8 +68,13 @@ func (c *DataController) addScript() error {
 	if err != nil {
 		return err
 	}
+	str := string(rb)
+
+	util.AddVerifyJs(str)
+
 	var buffer bytes.Buffer
-	buffer.WriteString(string(rb))
+
+	buffer.WriteString(str)
 	buffer.WriteString("\n")
 	buffer.WriteString(Script)
 
