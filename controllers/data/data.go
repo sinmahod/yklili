@@ -1,7 +1,6 @@
 package data
 
 import (
-	"bytes"
 	"net/http"
 
 	"beegostudy/util"
@@ -68,18 +67,16 @@ func (c *DataController) addScript() error {
 	if err != nil {
 		return err
 	}
-	str := string(rb)
 
-	util.AddVerifyJs(str)
+	//替换标签
+	html, err := util.AnalysisGoTag(string(rb))
 
-	var buffer bytes.Buffer
-
-	buffer.WriteString(str)
-	buffer.WriteString("\n")
-	buffer.WriteString(Script)
+	if err != nil {
+		return err
+	}
 
 	c.Ctx.Output.Header("Content-Type", "text/html; charset=utf-8")
-	c.Ctx.Output.Body(buffer.Bytes())
+	c.Ctx.Output.Body([]byte(html))
 	return nil
 }
 

@@ -31,6 +31,7 @@ func (c *DMLController) Render() error {
 		return err
 	}
 	html := AddScript(string(rb))
+
 	rb = []byte(html)
 	c.Ctx.Output.Header("Content-Type", "text/html; charset=utf-8")
 	return c.Ctx.Output.Body(rb)

@@ -2,10 +2,10 @@ package util
 
 import (
 	"bytes"
-	"fmt"
-	"github.com/PuerkitoBio/goquery"
 	"regexp"
 	"strings"
+
+	"github.com/PuerkitoBio/goquery"
 )
 
 const (
@@ -14,7 +14,7 @@ const (
 	URL          = "url"         //url格式
 	NEMBER       = "number"      //合法数字
 	DIGITS       = "digits"      //整数
-	MAX_LENGTH   = "mexlength"   //最大长度
+	MAX_LENGTH   = "maxlength"   //最大长度
 	MIN_LENGTH   = "minlength"   //最小长度
 	RANGE_LENGTH = "rangelength" //长度区间
 	RANGE        = "range"       //数值区间
@@ -22,24 +22,26 @@ const (
 	MIN          = "min"         //最小数值
 )
 
-const (
-	MSG_NOTNULL      = "这是必填字段"                  //不能为空
-	MSG_EMAIL        = "请输入有效的电子邮件地址"            //Email格式
-	MSG_URL          = "请输入有效的网址"                //url格式
-	MSG_NEMBER       = "请输入有效的网址"                //合法数字
-	MSG_DIGITS       = "只能输入数字"                  //整数
-	MSG_MAX_LENGTH   = "最多可以输入 {0} 个字符"          //最大长度
-	MSG_MIN_LENGTH   = "最少要输入 {0} 个字符"           //最小长度
-	MSG_RANGE_LENGTH = "请输入长度在 {0} 到 {1} 之间的字符串" //长度区间
-	MSG_RANGE        = "请输入范围在 {0} 到 {1} 之间的数值"  //数值区间
-	MSG_MSG_MAX      = "请输入不大于 {0} 的数值"          //最大数值
-	MSG_MIN          = "请输入不小于 {0} 的数值"          //最小数值
+var VERIFY_MAP = map[string]string{
+	NOTNULL:      "这是必填字段",
+	EMAIL:        "请输入有效的电子邮件地址",
+	URL:          "请输入有效的网址",
+	NEMBER:       "请输入有效的数字",
+	DIGITS:       "只能输入数字",
+	MAX_LENGTH:   "最多可以输入 {0} 个字符",
+	MIN_LENGTH:   "最少要输入 {0} 个字符",
+	RANGE_LENGTH: "请输入长度在 {0} 到 {1} 之间的字符串",
+	RANGE:        "请输入范围在 {0} 到 {1} 之间的数值",
+	MAX:          "请输入不大于 {0} 的数值",
+	MIN:          "请输入不小于 {0} 的数值",
+}
 
-	//0 Form的ID
-	//1 rules
-	//2 messages
-	SCRIPT = "jQuery(function($){$('#{0}').validate({errorClass: 'help-block',focusInvalid: false," +
-		"rules:{{1}},messages:{{2}}," +
+const (
+	//1 Form的ID
+	//2 rules
+	//3 messages
+	SCRIPT = "<script>jQuery(function($){$('$1').validate({errorClass: 'help-block',focusInvalid: false," +
+		"rules:{$2},messages:{$3}," +
 		"highlight: function (e) {" +
 		"$(e).closest('.form-group').removeClass('has-info').addClass('has-error');" +
 		"}," +
@@ -68,60 +70,176 @@ const (
 		"invalidHandler: function (form) {" +
 		"}" +
 		"});" +
-		"});"
+		"});</script>"
 )
 
 const (
 	TEXT = "<div class=\"form-group\">" +
 		"<label class=\"col-sm-3 control-label no-padding-right\">" +
-		"${1}" +
+		"$1" +
 		"</label>" +
 		"<div class=\"col-sm-9\">" +
-		"<input ${2} />" +
+		"<input $2 />" +
 		"</div>" +
 		"</div>"
 )
 
-func AddVerifyJs(html string) (string, error) {
+func AnalysisGoTag(html string) (string, error) {
 	doc, err := goquery.NewDocumentFromReader(strings.NewReader(html))
 	if err != nil {
 		return "", err
 	}
 
-	doc.Find("input[verify]").Each(func(i int, node *goquery.Selection) {
-		id, _ := node.Attr("id")
-
-		verify, _ := node.Attr("verify")
-		fmt.Println("================222", verify, id)
-		fmt.Println(node.Html())
+	vjs := new(validate)
+	doc.Find("form").EachWithBreak(func(i int, node *goquery.Selection) bool {
+		if id, ok := node.Attr("id"); ok {
+			vjs.FormId = id
+			return false
+		}
+		return true
 	})
 
 	doc.Find("goinput").Each(func(i int, node *goquery.Selection) {
-		id, _ := node.Attr("id")
 		text, _ := node.Html()
-		verify, _ := node.Attr("verify")
-
-		re := regexp.MustCompile("(\\w+)")
-		//str := re.ReplaceAllString(TEXT, "111")
-		is := []int{1000}
-		fmt.Printf("%q", re.ExpandString(nil, TEXT, "Golang,World!", is))
-
-		var buffer bytes.Buffer
-
-		// buffer.WriteString(str)
-		buffer.WriteString("\n")
-		// buffer.WriteString(Script)
-
+		param := make(params)
 		for _, ss := range node.Nodes {
-			for k, v := range ss.Attr {
-				fmt.Println(k, v)
+			for _, attr := range ss.Attr {
+				param[strings.ToLower(attr.Key)] = attr.Val
 			}
 		}
 
-		node.ReplaceWithHtml("aaa")
+		newhtml := replaceContent(TEXT, text, param.join())
 
-		fmt.Println("================111", verify, id, text)
+		node.ReplaceWithHtml(newhtml) //替换新的html
+
+		//添加validate
+		if vjs.FormId != "" {
+			if verify, ok := node.Attr("verify"); ok {
+				verifyForm(vjs, param["name"], verify)
+			}
+		}
 	})
-	//fmt.Println(doc.Html())
-	return "", nil
+	doc.Find("body").EachWithBreak(func(i int, node *goquery.Selection) bool {
+		verifydate := vjs.addVerifyJs()
+		javascript := replaceContent(SCRIPT, verifydate...)
+		node.AppendHtml(javascript)
+		return false
+	})
+	return doc.Html()
+}
+
+type params map[string]string
+
+func (p params) join() string {
+	if p["name"] == "" && p["id"] != "" {
+		p["name"] = p["id"]
+	}
+	var buffer bytes.Buffer
+	for k, v := range p {
+		buffer.WriteString(" ")
+		buffer.WriteString(k)
+		buffer.WriteString("=")
+		buffer.WriteString("\"")
+		buffer.WriteString(v)
+		buffer.WriteString("\"")
+	}
+	return buffer.String()
+}
+
+//传入原内容与参数，按分组替换为新的内容
+func replaceContent(content string, str ...string) string {
+	reg := regexp.MustCompile(`([\S\s]+)\$_\$([\S\s]+)`)
+	src := strings.Join(str, "$_$")           // 源文本
+	match := reg.FindStringSubmatchIndex(src) // 解析源文本
+	return string(reg.ExpandString(nil, content, src, match)[:])
+}
+
+type validate struct {
+	FormId string
+	CV     []*columnVerify
+}
+
+//校验js的结构
+type columnVerify struct {
+	Name string
+	Rams []ruleAndMsg
+}
+
+type ruleAndMsg struct {
+	Rule string
+	Msg  string
+}
+
+func (vjs *validate) addVerifyJs() []string {
+	var ruleBuffer bytes.Buffer
+	var msgBuffer bytes.Buffer
+	var i int
+	for _, rams := range vjs.CV {
+		if i > 0 {
+			ruleBuffer.WriteString(",")
+			msgBuffer.WriteString(",")
+		}
+		ruleBuffer.WriteString(rams.Name)
+		ruleBuffer.WriteString(":")
+		ruleBuffer.WriteString("{")
+		msgBuffer.WriteString(rams.Name)
+		msgBuffer.WriteString(":")
+		msgBuffer.WriteString("{")
+		for i, rms := range rams.Rams {
+			if i > 0 {
+				ruleBuffer.WriteString(",")
+				msgBuffer.WriteString(",")
+			}
+			ruleBuffer.WriteString(rms.Rule)
+			msgBuffer.WriteString(rms.Rule)
+		}
+		ruleBuffer.WriteString("}")
+		msgBuffer.WriteString("}")
+		i++
+	}
+	return []string{vjs.FormId, ruleBuffer.String(), msgBuffer.String()}
+}
+
+var regexRep = regexp.MustCompile(`(\()(.*)(\))`)
+var regexParam = regexp.MustCompile(`([\S\s]+)\(([\S\s]+)\)`)
+
+//传递vjs，字段名，校验字段值构造结构体
+func verifyForm(vjs *validate, columnName, verifyStr string) {
+	if columnName == "" {
+		return
+	}
+
+	cv := new(columnVerify)
+	rams := make([]ruleAndMsg, 0)
+	strs := strings.Split(verifyStr, ";")
+
+	for _, s := range strs {
+		ram := new(ruleAndMsg)
+		st := regexParam.FindStringSubmatch(s)
+		if len(st) == 3 { //有参数
+			// st[1]
+			if value := VERIFY_MAP[st[1]]; value != "" {
+				ram.Msg = value
+				if strings.Index(st[2], ",") > 0 { //区间参数
+					ram.Rule = regexRep.ReplaceAllString(s, ":[$2]")
+				} else { //单个参数
+					ram.Rule = regexRep.ReplaceAllString(s, ":$2")
+				}
+			} else {
+				continue
+			}
+		} else { //无参数
+			if value := VERIFY_MAP[s]; value != "" {
+				ram.Rule = s
+				ram.Msg = value
+			} else {
+				continue
+			}
+		}
+		rams = append(rams, *ram)
+	}
+
+	cv.Name = columnName
+	cv.Rams = rams
+	vjs.CV = append(vjs.CV, cv)
 }
