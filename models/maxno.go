@@ -1,7 +1,5 @@
 package models
 
-import "github.com/astaxie/beego/orm"
-
 /**
 *	pk		主键
 *	auto 		自增值（限数值）
@@ -28,5 +26,5 @@ func (m *MaxNo) TableName() string {
 }
 
 func init() {
-	orm.RegisterModel(new(MaxNo))
+	// orm.RegisterModel(new(MaxNo))
 }

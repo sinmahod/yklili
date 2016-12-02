@@ -13,7 +13,10 @@
         <script src="../static/js/gl.bootstrap-dialog.extend.js"></script>
 
         <!-- formverify -->
+        <script src="../static/js/bootstrapValidator.js"></script>
+        <!--
         <script src="../static/js/jquery.validate.min.js"></script>
+        -->
 
         <!-- ace scripts -->
         <script src="../static/js/ace-elements.min.js"></script>

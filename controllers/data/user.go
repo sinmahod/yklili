@@ -51,7 +51,7 @@ func (c *UserController) InitPage() {
 		c.Data["User"] = user
 	}
 
-	c.TplName = "platform/user/userDialog.html"
+	c.TplName = "platform/user/test.html"
 	c.addScript()
 }
 

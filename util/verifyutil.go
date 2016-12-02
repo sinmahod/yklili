@@ -123,9 +123,9 @@ func AnalysisGoTag(html string) (string, error) {
 	})
 	doc.Find("body").EachWithBreak(func(i int, node *goquery.Selection) bool {
 		if vjs.FormId != "" {
-			verifydate := vjs.addVerifyJs()
-			javascript := replaceContent(SCRIPT, verifydate...)
-			node.AppendHtml(javascript)
+			// verifydate := vjs.addVerifyJs()
+			// javascript := replaceContent(SCRIPT, verifydate...)
+			// node.AppendHtml(javascript)
 		}
 		return false
 	})
