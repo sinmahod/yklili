@@ -1,9 +1,8 @@
 package data
 
 import (
-	"net/http"
-
 	"beegostudy/util"
+	"net/http"
 
 	"github.com/astaxie/beego"
 )
@@ -68,7 +67,7 @@ func (c *DataController) addScript() error {
 		return err
 	}
 
-	//替换标签
+	//替换标签 增加校验
 	html, err := util.AnalysisGoTag(string(rb))
 
 	if err != nil {

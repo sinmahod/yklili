@@ -145,6 +145,9 @@
        }
 
         function save(bf,but){ //默认接收两个参数，1 BootFrame ，2 当前按钮
+            if (!bf.verifyForm()){
+                return;
+            }
             but.disable();  //禁止点击按钮
             but.spin();     //增加按钮等待图标
             SendData.Post("/data/menu/Save",bf.getFormData(),function(response){

@@ -3,59 +3,21 @@
 			<form class="form-horizontal" id="userform" role="form">
 				<input type="hidden" id="Id" value="{{.User.Id}}" />
 				{{if .User.Id}}
-				<div class="form-group">
-					<label class="col-sm-3 control-label no-padding-right" for="form-field-6">
-					用户名称
-					</label>
-					<div class="col-sm-9">				
-						<input  type="text" data-placement="bottom" readonly="readonly" id="UserName" value="{{.User.UserName}}"  />
-					</div>
-				</div>
+				<gotext data-rel="tooltip" type="text" placeholder="请输入用户名称" title="2-10个字母或数字" data-placement="bottom" readonly="readonly" id="UserName" value="{{.User.UserName}}" verify="required" >用户名称</gotext>
 				{{else}}
-				<div class="form-group">
-					<label class="col-sm-3 control-label no-padding-right" for="form-field-6">
-					用户名称
-					</label>
-					<div class="col-sm-9">				
-						<input data-rel="tooltip" type="text" placeholder="请输入用户名称" title="4-18个字母或数字" data-placement="bottom" id="UserName" value="{{.User.UserName}}" verify="required" />
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-sm-3 control-label no-padding-right" for="form-field-6">
-					密码
-					</label>
-					<div class="col-sm-9">				
-						<input data-rel="tooltip" type="password" placeholder="请输入密码" title="4-18个字符" data-placement="bottom" id="Password" value="{{.User.Password}}" style="width: 200px;" />
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-sm-3 control-label no-padding-right" for="form-field-6">
-					重复密码
-					</label>
-					<div class="col-sm-9">				
-						<input data-rel="tooltip" type="text" placeholder="请输入用户名称" title="4-18个字符" data-placement="bottom" id="RePassword" value="" />
-					</div>
-				</div>
+
+				<gotext data-rel="tooltip" type="text" placeholder="请输入用户名称" title="2-10个字母或数字" data-placement="bottom" id="UserName"  value="{{.User.UserName}}" verify="required" >用户名称</gotext>
+				
+				<gotext data-rel="tooltip" type="password" placeholder="请输入密码" title="4-18个字符" data-placement="bottom" id="Password" verify="required" value="{{.User.Password}}" style="width: 200px;">密码</gotext>
+				
+				<gotext data-rel="tooltip" type="password" placeholder="请重复输入密码" title="4-18个字符" data-placement="bottom" id="RePassword" verify="required;equalTo('#Password')" style="width: 200px;">重复密码</gotext>
 				{{end}}
 
-				<goinput data-rel="tooltip" type="text" placeholder="请输入真实姓名" title="2-10个汉字或字母" data-placement="bottom" id="RealName"  value="{{.User.RealName}}" verify="required" >真实姓名</goinput>
+				<gotext data-rel="tooltip" type="text" placeholder="请输入真实姓名" title="2-10个汉字或字母" data-placement="bottom" id="RealName"  value="{{.User.RealName}}" verify="required" >真实姓名</gotext>
 
-				<div class="form-group">
-					<label class="col-sm-3 control-label no-padding-right" for="form-field-6">
-					电子邮箱
-					</label>
-					<div class="col-sm-9">
-						<input data-rel="tooltip" type="text" placeholder="请输入电子邮箱" title="请输入电子邮箱" data-placement="bottom" id="Email" value="{{.User.Email}}" />
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-sm-3 control-label no-padding-right" for="form-field-6">
-					联系电话
-					</label>
-					<div class="col-sm-9">				
-						<input data-rel="tooltip" type="text" placeholder="请输入联系电话" title="请输入联系电话" data-placement="bottom" id="Phone" value="{{.User.Phone}}" />
-					</div>
-				</div>
+				<gotext data-rel="tooltip" type="text" placeholder="请输入电子邮箱" title="请输入电子邮箱" data-placement="bottom" id="Email" value="{{.User.Email}}" verify="email" >电子邮箱</goinput>
+
+				<gotext data-rel="tooltip" type="text" placeholder="请输入联系电话" title="请输入联系电话" data-placement="bottom" id="Phone" value="{{.User.Phone}}" verify="maxlength(11);minlength(11)" >联系电话</gotext>
 			</form>
 		</div>
 	</div>

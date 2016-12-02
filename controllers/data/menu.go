@@ -40,6 +40,8 @@ func (c *MenuController) List() {
 func (c *MenuController) InitPage() {
 	idStr := c.GetString("Id")
 
+	var menus []models.MenuSelectInit
+
 	if idStr != "" {
 		id, _ := strconv.Atoi(idStr)
 
@@ -50,19 +52,16 @@ func (c *MenuController) InitPage() {
 		}
 		c.Data["Menu"] = menu
 
-		menus, err := models.GetTopMenus(menu.GetPid())
-		if err != nil {
-			beego.Error(err)
-			return
-		}
-		c.Data["ParentMenus"] = menus
+		menus, _ = models.GetTopMenus(menu.GetPid())
+	} else {
+		menus, _ = models.GetTopMenus(0)
 	}
-
+	c.Data["ParentMenus"] = menus
 	c.TplName = "platform/menu/menuDialog.html"
 	c.addScript()
 }
 
-//保持数据
+//保存数据
 func (c *MenuController) Save() {
 	if len(c.RequestData) > 0 {
 		menu := new(models.Menu)

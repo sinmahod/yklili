@@ -144,7 +144,7 @@ func GetUserByEmail(email string) (*User, error) {
 *	ordercolumn	排序字段
 *	orderby		升降序:desc\asc
 **/
-func GetUsersPage(size, index int, ordercolumn, orderby string) (*DataGrid, error) {
+func GetUsersPage(size, index int, ordercolumn, orderby string, data map[string]interface{}) (*DataGrid, error) {
 
 	if ordercolumn == "" {
 		ordercolumn = "addtime"
@@ -154,11 +154,14 @@ func GetUsersPage(size, index int, ordercolumn, orderby string) (*DataGrid, erro
 
 	var users []*User
 	o := orm.NewOrm()
-
-	_, err := o.QueryTable("user").OrderBy(ordercolumn).Limit(size, (index-1)*size).All(&users)
+	qt := o.QueryTable("user")
+	if data["UserName"] != nil {
+		qt = qt.Filter("UserName__icontains", data["UserName"])
+	}
+	_, err := qt.OrderBy(ordercolumn).Limit(size, (index-1)*size).All(&users, "Id", "UserName", "RealName", "Email", "Phone", "AddTime", "AddUser")
 
 	if err == nil {
-		cnt, err := o.QueryTable("user").Count()
+		cnt, err := qt.Count()
 
 		pagetotal := cnt / int64(size)
 

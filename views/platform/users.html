@@ -23,50 +23,36 @@
                             <div class="row">
                                 <div class="profile-user-info profile-user-info-striped">
                                     <div class="search-form col-md-4 col-sm-6">
-                                        <div class="search-title"> 菜单名称 </div>
+                                        <div class="search-title"> 用户名 </div>
                                         <div class="search-value">
-                                            <input type="text" id="form-field-1" placeholder="Username" class="search-text">
+                                            <input type="text" placeholder="请输入用户名" id="UserName" class="search-text">
                                         </div>
                                     </div>
 
                                     <div class="search-form col-md-4 col-sm-6">
-                                        <div class="search-title"> 链接地址 </div>
+                                        <div class="search-title"> 真实姓名 </div>
                                         <div class="search-value">
-                                            <input type="text" id="form-field-1" placeholder="Username" class="search-text">
+                                            <input type="text" placeholder="请输入真实姓名" id="RealName" class="search-text">
                                         </div>
                                     </div>
 
                                      <div class="search-form col-md-4 col-sm-6">
-                                        <div class="search-title"> 创建时间 </div>
+                                        <div class="search-title"> 电子邮箱 </div>
                                         <div class="search-value">
-                                            <input type="text" id="form-field-1" placeholder="Username" class="search-text">
+                                            <input type="text" placeholder="请输入电子邮箱" id="Email" class="search-text">
                                         </div>
                                     </div>
 
                                      <div class="search-form col-md-4 col-sm-6">
-                                        <div class="search-title"> Username </div>
+                                        <div class="search-title"> 联系电话 </div>
                                         <div class="search-value">
-                                            <input type="text" id="form-field-1" placeholder="Username" class="search-text">
-                                        </div>
-                                    </div>
-
-                                     <div class="search-form col-md-4 col-sm-6">
-                                        <div class="search-title"> Username </div>
-                                        <div class="search-value">
-                                            <input type="text" id="form-field-1" placeholder="Username" class="search-text">
-                                        </div>
-                                    </div>
-
-                                     <div class="search-form col-md-4 col-sm-6">
-                                        <div class="search-title"> Username </div>
-                                        <div class="search-value">
-                                            <input type="text" id="form-field-1" placeholder="Username" class="search-text">
+                                            <input type="text" placeholder="请输入联系电话" id="Phone" class="search-text">
                                         </div>
                                     </div>
 
                                     <div class="search-form col-md-12 right">
                                     <div class="search-title">
-                                        <button type="button" class="btn btn-sm btn-success">
+                                        <button type="button" class="btn btn-sm btn-success" onclick="doSearch()">
                                             查询
                                             <i class="ace-icon fa fa-arrow-right icon-on-right bigger-110"></i>
                                         </button>
@@ -146,22 +132,24 @@
        }
 
         function save(bf,but){ //默认接收两个参数，1 BootFrame ，2 当前按钮
-            bf.verifyForm();
-            // but.disable();  //禁止点击按钮
-            // but.spin();     //增加按钮等待图标
-            // SendData.Post("/data/user/Save",bf.getFormData(),function(response){
-            //     if ( response.STATUS==1){
-            //         BootFrame.alert(response.MESSAGE,function(){
-            //             DataGrid.loadData('datatable');
-            //             bf.close()
-            //         });
-            //     }else{
-            //         BootFrame.alert(response.MESSAGE,function(){
-            //             but.enable();   //解除按钮点击
-            //             but.stopSpin(); //清楚等待图标
-            //         },"操作失败",true);
-            //     }
-            // });
+            if (!bf.verifyForm()){
+                return;
+            }
+            but.disable();  //禁止点击按钮
+            but.spin();     //增加按钮等待图标
+            SendData.Post("/data/user/Save",bf.getFormData(),function(response){
+                if ( response.STATUS==1){
+                    BootFrame.alert(response.MESSAGE,function(){
+                        DataGrid.loadData('datatable');
+                        bf.close()
+                    });
+                }else{
+                    BootFrame.alert(response.MESSAGE,function(){
+                        but.enable();   //解除按钮点击
+                        but.stopSpin(); //清楚等待图标
+                    },"操作失败",true);
+                }
+            });
         }
 
         function delUser(){
@@ -184,6 +172,14 @@
                 }
             });
             });
+        }
+
+        function doSearch(){
+            DataGrid.setParams("datatable","UserName",$("#UserName").val());
+            DataGrid.setParams("datatable","RealName",$("#RealName").val());
+            DataGrid.setParams("datatable","Email",$("#Email").val());
+            DataGrid.setParams("datatable","Phone",$("#Phone").val());
+            DataGrid.loadData('datatable');
         }
              
         </script>

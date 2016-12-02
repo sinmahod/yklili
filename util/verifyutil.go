@@ -20,6 +20,7 @@ const (
 	RANGE        = "range"       //数值区间
 	MAX          = "max"         //最大数值
 	MIN          = "min"         //最小数值
+	EQUALTO      = "equalTo"     //两次密码输入不一致 equalTo("#ID")
 )
 
 var VERIFY_MAP = map[string]string{
@@ -34,13 +35,14 @@ var VERIFY_MAP = map[string]string{
 	RANGE:        "请输入范围在 {0} 到 {1} 之间的数值",
 	MAX:          "请输入不大于 {0} 的数值",
 	MIN:          "请输入不小于 {0} 的数值",
+	EQUALTO:      "两次密码输入不一致",
 }
 
 const (
 	//1 Form的ID
 	//2 rules
 	//3 messages
-	SCRIPT = "<script>jQuery(function($){$('$1').validate({errorClass: 'help-block',focusInvalid: false," +
+	SCRIPT = "<script>jQuery(function($){$('#$1').validate({errorClass: 'help-block',focusInvalid: false," +
 		"rules:{$2},messages:{$3}," +
 		"highlight: function (e) {" +
 		"$(e).closest('.form-group').removeClass('has-info').addClass('has-error');" +
@@ -99,7 +101,7 @@ func AnalysisGoTag(html string) (string, error) {
 		return true
 	})
 
-	doc.Find("goinput").Each(func(i int, node *goquery.Selection) {
+	doc.Find("gotext").Each(func(i int, node *goquery.Selection) {
 		text, _ := node.Html()
 		param := make(params)
 		for _, ss := range node.Nodes {
@@ -120,9 +122,11 @@ func AnalysisGoTag(html string) (string, error) {
 		}
 	})
 	doc.Find("body").EachWithBreak(func(i int, node *goquery.Selection) bool {
-		verifydate := vjs.addVerifyJs()
-		javascript := replaceContent(SCRIPT, verifydate...)
-		node.AppendHtml(javascript)
+		if vjs.FormId != "" {
+			verifydate := vjs.addVerifyJs()
+			javascript := replaceContent(SCRIPT, verifydate...)
+			node.AppendHtml(javascript)
+		}
 		return false
 	})
 	return doc.Html()
@@ -148,7 +152,14 @@ func (p params) join() string {
 
 //传入原内容与参数，按分组替换为新的内容
 func replaceContent(content string, str ...string) string {
-	reg := regexp.MustCompile(`([\S\s]+)\$_\$([\S\s]+)`)
+	var regstr bytes.Buffer
+	for i, _ := range str {
+		if i > 0 {
+			regstr.WriteString(`\$_\$`)
+		}
+		regstr.WriteString(`([\S\s]+)`)
+	}
+	reg := regexp.MustCompile(regstr.String())
 	src := strings.Join(str, "$_$")           // 源文本
 	match := reg.FindStringSubmatchIndex(src) // 解析源文本
 	return string(reg.ExpandString(nil, content, src, match)[:])
@@ -191,7 +202,7 @@ func (vjs *validate) addVerifyJs() []string {
 				msgBuffer.WriteString(",")
 			}
 			ruleBuffer.WriteString(rms.Rule)
-			msgBuffer.WriteString(rms.Rule)
+			msgBuffer.WriteString(rms.Msg)
 		}
 		ruleBuffer.WriteString("}")
 		msgBuffer.WriteString("}")
@@ -217,21 +228,21 @@ func verifyForm(vjs *validate, columnName, verifyStr string) {
 		ram := new(ruleAndMsg)
 		st := regexParam.FindStringSubmatch(s)
 		if len(st) == 3 { //有参数
-			// st[1]
 			if value := VERIFY_MAP[st[1]]; value != "" {
-				ram.Msg = value
+				ram.Msg = st[1] + `:"` + value + `"`
 				if strings.Index(st[2], ",") > 0 { //区间参数
 					ram.Rule = regexRep.ReplaceAllString(s, ":[$2]")
 				} else { //单个参数
 					ram.Rule = regexRep.ReplaceAllString(s, ":$2")
 				}
+
 			} else {
 				continue
 			}
 		} else { //无参数
 			if value := VERIFY_MAP[s]; value != "" {
-				ram.Rule = s
-				ram.Msg = value
+				ram.Rule = s + ":true"
+				ram.Msg = s + `:"` + value + `"`
 			} else {
 				continue
 			}

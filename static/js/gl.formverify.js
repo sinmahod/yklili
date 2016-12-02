@@ -9,7 +9,7 @@
     return {
         //hasError
         hasError: function(formid){
-           var s = $("#"+id );
+           var s = $("#"+formid );
                     if (s.length == 0) {
                         BootFrame.alert("未找到form");
                         return false;
@@ -19,13 +19,9 @@
                         return false;
                     }
 
-                    var a = s[0];
-                    for (var i = 0 ; i < a.length; i ++){
-                        //判断表单类型
-                        var _ver = $(a[i]).attr('verify');
-                        if (_ver == 'notnull') {
-                            
-                        }
+                    if (!s.valid()){
+                        BootFrame.alert("请按照规则输入表单");
+                        return false;
                     }
                     return true;
         }//<! hasError >

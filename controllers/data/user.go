@@ -28,7 +28,7 @@ func (c *UserController) Get() {
 
 //DataGrid列表数据加载
 func (c *UserController) List() {
-	if datagrid, err := models.GetUsersPage(c.PageSize, c.PageIndex, c.OrderColumn, c.OrderSord); err != nil {
+	if datagrid, err := models.GetUsersPage(c.PageSize, c.PageIndex, c.OrderColumn, c.OrderSord, c.RequestData); err != nil {
 		beego.Error(err)
 	} else {
 		c.Data["json"] = datagrid

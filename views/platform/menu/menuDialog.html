@@ -17,31 +17,13 @@
 						</div>
 					</div>
 				</div>
-				<div class="form-group">
-					<label class="col-sm-3 control-label no-padding-right" for="form-field-6">
-					菜单名称
-					</label>
-					<div class="col-sm-9">				
-						<input data-rel="tooltip" type="text" placeholder="请输入菜单名称" title="2-6个汉字或2-12个字母" data-placement="bottom" id="MenuName" value="{{.Menu.MenuName}}" />
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-sm-3 control-label no-padding-right" for="form-field-6">
-					图标
-					</label>
-					<div class="col-sm-9">				
-						<input data-rel="tooltip" type="text" placeholder="请选择图标" title="请选择图标" data-placement="bottom" id="Icon" value="{{.Menu.Icon}}" onclick="openIcon()" />
-					</div>
-				</div>
 
-				<div class="form-group">
-					<label class="col-sm-3 control-label no-padding-right" for="form-field-6">
-					链接
-					</label>
-					<div class="col-sm-9">				
-						<input data-rel="tooltip" type="text" placeholder="请输入链接页面" title="请输入链接页面" data-placement="bottom" id="Link" value="{{.Menu.Link}}" />
-					</div>
-				</div>
+				<gotext data-rel="tooltip" type="text" placeholder="请输入菜单名称" title="2-6个汉字或2-12个字母" data-placement="bottom" id="MenuName"  value="{{.Menu.MenuName}}" verify="required" >菜单名称</gotext>
+
+				<gotext data-rel="tooltip" type="text" placeholder="请选择图标" title="请选择图标" data-placement="bottom" id="Icon" value="{{.Menu.Icon}}" onclick="openIcon()"  verify="required" >图标</gotext>
+
+				<gotext data-rel="tooltip" type="text" placeholder="请输入链接页面" title="请输入链接页面" data-placement="bottom" id="Link" value="{{.Menu.Link}}" verify="url" >链接</gotext>
+
 			</form>
 		</div>
 	</div>
