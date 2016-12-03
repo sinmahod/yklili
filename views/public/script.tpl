@@ -14,6 +14,7 @@
 
         <!-- formverify -->
         <script src="../static/js/bootstrapValidator.js"></script>
+        <script src="../static/js/gl.validate.js"></script>
         <!--
         <script src="../static/js/jquery.validate.min.js"></script>
         -->

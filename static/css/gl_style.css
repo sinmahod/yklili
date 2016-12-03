@@ -3,6 +3,24 @@ body {
     font-family: "Microsoft Yahei", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+html {
+  overflow-y: scroll;
+}
+
+:root {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+:root body {
+  position: absolute;
+}
+
+body {
+  width: 100vw;
+  overflow: hidden;
+}
+
 @media (min-width: 768px)
 .modal-dialog {
     margin-top: 10%;
@@ -24,6 +42,10 @@ body {
 }
 .ui-th-div {
     text-align: center;
+}
+
+.glyphicon {
+    left: 180px;
 }
 
 /* positioning */
@@ -82,7 +104,7 @@ input[type=text]:hover,select:hover{
 
 /* dialog框增加滚动条 */
 .modal-body {
-    overflow: auto;
+    overflow-y: scroll;
 }
 
 /*  dialog宽度，只有在大屏时才生效 */

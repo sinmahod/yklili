@@ -125,14 +125,19 @@
 						b.push(bt);
 					}
 				  	dobj = BootstrapDialog.show({
-			  			   id: diaid,
+			  			      id: diaid,
 					                title: t,
 					                message: m,
 					                cssClass: 'dialog-'+w+' dialog-h-'+h,
 					                type: p,
+					                closeByBackdrop: false,   //点击空白位置关闭窗口失效
 					                draggable: true,
-					                buttons: b
-				            });
+					                buttons: b,
+					                onshown:function(){  //增加verify属性检查(注册校验)
+					                	BValidate({dialogId:this.id});
+					                }
+				           });
+
 				  	id = dobj.$modal[0].id;
 				},
 				verifyForm: function(){
@@ -145,8 +150,9 @@
 						BootFrame.alert("form中不存在表单");
 						return false;
 					}
-
-					if (!s.valid()){
+					
+					if (!s.data('bootstrapValidator').isValid()){
+						s.data('bootstrapValidator').validate();
 						BootFrame.alert("请按照规则输入表单");
 						return false;
 					}
@@ -163,7 +169,7 @@
 						return;
 					}
 					var a = s[0];
-					var $map = new Map();    
+					var $map = new Map();
 					for (var i = 0 ; i < a.length; i ++){
 						//判断表单类型
 						var elementid = a[i].id;
