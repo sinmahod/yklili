@@ -143,17 +143,17 @@
 				verifyForm: function(){
 					var s = $("#"+id + " form");
 					if (s.length == 0) {
-						BootFrame.alert("未找到form标签");
+						BootFrame.alert("未找到form标签",null,"警告",true);
 						return false;
 					}
 					if (s[0].length == 0 ){
-						BootFrame.alert("form中不存在表单");
+						BootFrame.alert("form中不存在表单",null,"警告",true);
 						return false;
 					}
 					
 					if (!s.data('bootstrapValidator').isValid()){
 						s.data('bootstrapValidator').validate();
-						BootFrame.alert("请按照规则输入表单");
+						BootFrame.alert("请按照规则输入表单",null,"校验错误",true);
 						return false;
 					}
 					return true;
@@ -161,15 +161,15 @@
 				getFormData: function(){
 					var s = $("#"+id + " form");
 					if (s.length == 0) {
-						BootFrame.alert("未找到form标签");
+						BootFrame.alert("未找到form标签",null,"警告",true);
 						return;
 					}
 					if (s[0].length == 0 ){
-						BootFrame.alert("form中不存在表单");
+						BootFrame.alert("form中不存在表单",null,"警告",true);
 						return;
 					}
 					var a = s[0];
-					var $map = new Map();
+					var $json = {};
 					for (var i = 0 ; i < a.length; i ++){
 						//判断表单类型
 						var elementid = a[i].id;
@@ -178,13 +178,13 @@
 						}
 						if (a[i].type == "radio"){ 
 							if(a[i].checked == true){
-								$map.put(elementid , a[i].value);
+								$json[elementid] = a[i].value;
 							}
 						}else{
-							$map.put(elementid , a[i].value);
+							$json[elementid] = a[i].value;
 						}
 					}
-					return $map;
+					return $json;
 				},
 				close: function(){
 					dobj.close();

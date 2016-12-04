@@ -4,7 +4,7 @@ body {
 }
 
 html {
-  overflow-y: scroll;
+  overflow-y: overlay;
 }
 
 :root {
@@ -104,7 +104,7 @@ input[type=text]:hover,select:hover{
 
 /* dialog框增加滚动条 */
 .modal-body {
-    overflow-y: scroll;
+    overflow-y: overlay;
 }
 
 /*  dialog宽度，只有在大屏时才生效 */
