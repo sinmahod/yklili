@@ -52,7 +52,8 @@
                 emailAddress : "请输入正确的邮箱地址",
                 stringLength : "输入的字符长度至少{0}位，最多{1}位",
                 phone : "请输入正确的手机号码",
-                regexp : "输入不合法"
+                regexp : "输入不合法",
+                remote : "远程校验不合法"
           }
           
           if(options == undefined || options["dialogId"] == undefined){
@@ -61,7 +62,7 @@
                 form = "#" + options.dialogId + " form";
           }
 
-	$(form).each(function(){
+            $(form).each(function(){
 		f = $(this).attr("id");  					                    //form id
 		if (f != undefined){
 			$(this).find("[verify]").each(function(){
@@ -113,11 +114,20 @@
                         }else{
                             t = vm[0];
                         }
-                        if (t == 'phone'){
+
+                         switch (t) {
+                             case 'remote':
+                                var urth = p.split(",");
+                                validators["threshold"] = urth[1];
+                                validators[t] = verifyRule(t,urth[0],m);
+                                break;
+                             case 'phone':
                                 validators["regexp"] = verifyRule(t,p,m);
-                        }else{
+                                break;
+                             default:
                                 validators[t] = verifyRule(t,p,m);    
-                        }
+                                break;
+                         }
                     }
                     verifyjson["validators"] = validators;
                     return verifyjson;
@@ -138,6 +148,14 @@
                 } 
                 if (param){        //包含()的
                         switch (type) {
+                             case 'remote':
+                                verifyType["url"] = param;
+                                verifyType["delay"] = 2000;  //每输入一个字符，就发ajax请求，服务器压力还是太大，设置2秒发送一次ajax（默认输入一个字符，提交一次，服务器压力太大）
+                                verifyType["type"] = "POST";
+                                if (verifyType["message"]  == undefined){
+                                    verifyType["message"] = varMsg[type];
+                                }
+                                break;
                              case 'regexp':
                                 verifyType["regexp"] = eval(param) ;
                                 if (verifyType["message"]  == undefined){

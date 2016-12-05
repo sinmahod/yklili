@@ -22,14 +22,14 @@
 
 				<gotext data-rel="tooltip" type="text" placeholder="请选择图标" title="请选择图标" data-placement="bottom" id="Icon" value="{{.Menu.Icon}}" onclick="openIcon()"  verify="notEmpty" >图标</gotext>
 
-				<gotext data-rel="tooltip" type="text" placeholder="请输入链接页面" title="请输入链接页面" data-placement="bottom" id="Link" value="{{.Menu.Link}}" verify="uri" >链接</gotext>
+				<gotext data-rel="tooltip" type="text" placeholder="请输入链接页面" title="请输入链接页面" data-placement="bottom" id="Link" value="{{.Menu.Link}}" >链接</gotext>
 
 			</form>
 		</div>
 	</div>
 <script>
 function openIcon(){
-	 var bf = BootFrame.dialog();
+	var bf = BootFrame.dialog();
             bf.title("选择图标");
             bf.url('/platform/icon/icon.dml');
             bf.type('type-success');
@@ -39,11 +39,11 @@ function openIcon(){
             bf.show();
 }
 function selectIcon(bf,btn){
-	var mp = bf.getFormData();
-	if (mp.size() == 0){
+	var $json = bf.getFormData();
+	if ($json.length == 0){
 		BootFrame.alert("请选择一个图标");
 	}else{
-		$('#Icon').val(mp.get('icon-value'));
+		$('#Icon').val($json["icon-value"]);
 		bf.close();
 	}
 }

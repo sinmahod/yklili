@@ -160,9 +160,8 @@
                 return;
             }
             BootFrame.confirm("您确定要删除这些用户吗？", function(){
-                var map = new Map();
-                map.put("Ids", ids)
-                SendData.Post("/data/user/Del",map,function(response){
+                var data = {Ids: ids.join()};
+                SendData.Post("/data/user/Del",data,function(response){
                 if ( response.STATUS==1){
                     BootFrame.alert(response.MESSAGE,function(){
                         DataGrid.loadData('datatable');

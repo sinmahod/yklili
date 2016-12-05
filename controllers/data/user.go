@@ -111,3 +111,25 @@ func (c *UserController) Del() {
 	}
 	c.ServeJSON()
 }
+
+//验证用户名是否存在 true不存在,false存在
+func (c *UserController) VerifyUserName() {
+	username := c.GetString("UserName")
+	if models.UserExists(username) == 0 {
+		c.Data["json"] = Validator{true}
+	} else {
+		c.Data["json"] = Validator{false}
+	}
+	c.ServeJSON()
+}
+
+//验证邮箱是否存在 true不存在,false存在
+func (c *UserController) VerifyEmail() {
+	email := c.GetString("Email")
+	if models.EmailExists(email) == 0 {
+		c.Data["json"] = Validator{true}
+	} else {
+		c.Data["json"] = Validator{false}
+	}
+	c.ServeJSON()
+}

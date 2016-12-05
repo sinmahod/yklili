@@ -26,7 +26,7 @@
 		//选择框
 		confirm: function (message,fn,falsefn){
 			BootstrapDialog.confirm({
-			            title: '请选择',
+			            title: '确认操作',
 			            message: message,
 			            type: BootstrapDialog.TYPE_WARNING, // <-- Default value is BootstrapDialog.TYPE_PRIMARY
 			            closable: true, // <-- Default value is false
@@ -150,9 +150,8 @@
 						BootFrame.alert("form中不存在表单",null,"警告",true);
 						return false;
 					}
-					
+					s.data('bootstrapValidator').validate();
 					if (!s.data('bootstrapValidator').isValid()){
-						s.data('bootstrapValidator').validate();
 						BootFrame.alert("请按照规则输入表单",null,"校验错误",true);
 						return false;
 					}

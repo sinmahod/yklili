@@ -44,7 +44,7 @@ body {
     text-align: center;
 }
 
-.glyphicon {
+.glyphicon-remove,.glyphicon-ok,.glyphicon-refresh {
     left: 180px;
 }
 
