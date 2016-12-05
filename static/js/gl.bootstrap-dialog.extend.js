@@ -140,7 +140,7 @@
 
 				  	id = dobj.$modal[0].id;
 				},
-				verifyForm: function(){
+				verifyForm: function(warn){
 					var s = $("#"+id + " form");
 					if (s.length == 0) {
 						BootFrame.alert("未找到form标签",null,"警告",true);
@@ -152,7 +152,9 @@
 					}
 					s.data('bootstrapValidator').validate();
 					if (!s.data('bootstrapValidator').isValid()){
-						BootFrame.alert("请按照规则输入表单",null,"校验错误",true);
+						if(warn){
+							BootFrame.alert("请按照规则输入表单",null,"校验错误",true);
+						}
 						return false;
 					}
 					return true;

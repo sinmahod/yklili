@@ -150,7 +150,7 @@
                         switch (type) {
                              case 'remote':
                                 verifyType["url"] = param;
-                                verifyType["delay"] = 2000;  //每输入一个字符，就发ajax请求，服务器压力还是太大，设置2秒发送一次ajax（默认输入一个字符，提交一次，服务器压力太大）
+                                verifyType["delay"] = 500;  //每输入一个字符，就发ajax请求，服务器压力还是太大，设置2秒发送一次ajax（默认输入一个字符，提交一次，服务器压力太大）
                                 verifyType["type"] = "POST";
                                 if (verifyType["message"]  == undefined){
                                     verifyType["message"] = varMsg[type];

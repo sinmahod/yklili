@@ -15,5 +15,5 @@ func init() {
 
 func Test_GetMaxNo(t *testing.T) {
 	orm.Debug = true
-	t.Fatal(models.GetMaxNo("menu", "0003", 4))
+	t.Fatal(models.GetMaxNo("menu", "", 4))
 }

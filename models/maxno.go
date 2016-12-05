@@ -64,8 +64,10 @@ func GetMaxNo(noname, notype string, length int) string {
 		if !strings.EqualFold(notype, "SN") {
 			maxno = notype + maxno
 		}
-		no := MaxNo{NoName: noname, NoType: notype, NoValue: v, NoLength: length}
-		o.Update(&no)
+		_, err := o.Raw("UPDATE maxno SET novalue = ?, nolength = ? WHERE noname = ? and notype = ?", v, length, noname, notype).Exec()
+		if err != nil {
+			beego.Error("错误：操作数据库错误")
+		}
 	}
 	return maxno
 }
@@ -82,6 +84,6 @@ func getNoValue(noname, notype string) (int, error) {
 		// 没有找到记录
 		return 0, nil
 	}
-
+	beego.Info(maxno.NoValue)
 	return maxno.NoValue, err
 }

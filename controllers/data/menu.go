@@ -84,7 +84,7 @@ func (c *MenuController) Save() {
 					menu.SetInnerCode(models.GetMaxNo("menu", "", 4))
 				} else {
 					menu.SetLevel(2)
-					menu.SetInnerCode(models.GetMaxNo("menu", "", 4))
+					menu.SetInnerCode(models.GetMaxNo("menu", models.GetInnerCode(pid), 4))
 				}
 				menu.SetCurrentTime()
 				sysuser := c.GetSession("User").(*models.User)
