@@ -26,36 +26,30 @@ type MainController struct {
 
 func (this *MainController) Get() {
 	this.Data["UserName"] = "HHHHH"
-	this.Data["Test"] = TestStatic
-	ss := Crontab.Entries()
-	for _, s := range ss {
-		nextS := s.Job
-		//上一次执行时间（本次）
-		prevTime := s.Prev.Format("2006-01-02 15:04:05")
-		//下一次执行时间
-		nextTime := s.Next.Format("2006-01-02 15:04:05")
-		fmt.Printf("%T\n", nextS)
-		fmt.Println(nextS, prevTime, nextTime)
+	eid := this.GetString("EID")
+	sid := this.GetString("SID")
+	cron.ReadTaskFile()
+	if eid != "" {
+		cron.StopTask(eid)
 	}
+	if sid != "" {
+		cron.StartTask(sid)
+	}
+
 	this.TplName = "test.html"
 }
 
-var TestStatic int
-var Crontab = cron.New()
-
 func TestCron() {
-	spec := "*/3, *, *, *, *, *"
-	//c := cron.New()
-	Crontab.AddFunc(spec, func() {
-		fmt.Println("-----------哈哈------")
-		TestStatic++
-	})
-	spec2 := "*/8, *, *, *, *, *"
-	Crontab.AddFunc(spec2, func() {
-		fmt.Println("-----------哈哈22------")
-		TestStatic++
-	})
-	Crontab.Start()
+
+	cron.Task("Test", "*/3, *, *, *, *, *", func() {
+		fmt.Println("-----------哈哈3------")
+	}, "测试定时任务3秒一次")
+	cron.Task("Test2", "*/5, *, *, *, *, *", func() {
+		fmt.Println("-----------哈哈5------")
+	}, "测试定时任务5秒一次")
+
+	cron.StartTasks()
+
 	select {}
 }
 

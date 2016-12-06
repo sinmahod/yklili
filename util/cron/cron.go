@@ -146,6 +146,10 @@ func (c *Cron) Start() {
 	go c.run()
 }
 
+func (c *Cron) Status() bool {
+	return c.running
+}
+
 func (c *Cron) runWithRecovery(j Job) {
 	defer func() {
 		if r := recover(); r != nil {
