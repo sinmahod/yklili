@@ -127,6 +127,24 @@ func GetUser(username string) (*User, error) {
 	return &user, nil
 }
 
+//用户是否存在
+func UserExists(username string) int64 {
+	o := orm.NewOrm()
+	qt := o.QueryTable("user")
+	qt = qt.Filter("UserName", username)
+	cnt, _ := qt.Count()
+	return cnt
+}
+
+//邮箱是否存在
+func EmailExists(email string) int64 {
+	o := orm.NewOrm()
+	qt := o.QueryTable("user")
+	qt = qt.Filter("Email", email)
+	cnt, _ := qt.Count()
+	return cnt
+}
+
 //根据邮箱得到用户信息
 func GetUserByEmail(email string) (*User, error) {
 	user := User{Email: email}

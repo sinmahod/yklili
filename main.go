@@ -4,6 +4,7 @@ import (
 	"beegostudy/controllers/data"
 	"beegostudy/controllers/dml"
 	"beegostudy/controllers/platform"
+	"beegostudy/util/cron"
 
 	"fmt"
 
@@ -25,10 +26,35 @@ type MainController struct {
 
 func (this *MainController) Get() {
 	this.Data["UserName"] = "HHHHH"
+	eid := this.GetString("EID")
+	sid := this.GetString("SID")
+	cron.ReadTaskFile()
+	if eid != "" {
+		cron.StopTask(eid)
+	}
+	if sid != "" {
+		cron.StartTask(sid)
+	}
+
 	this.TplName = "test.html"
 }
 
+func TestCron() {
+
+	cron.Task("Test", "*/3, *, *, *, *, *", func() {
+		fmt.Println("-----------哈哈3------")
+	}, "测试定时任务3秒一次")
+	cron.Task("Test2", "*/5, *, *, *, *, *", func() {
+		fmt.Println("-----------哈哈5------")
+	}, "测试定时任务5秒一次")
+
+	cron.StartTasks()
+
+	select {}
+}
+
 func main() {
+	go TestCron()
 	orm.Debug = true                                 //ORM调试模式打开
 	beego.BConfig.WebConfig.Session.SessionOn = true //启用Session
 
@@ -73,4 +99,5 @@ func main() {
 
 	beego.InsertFilter("/platform/*", beego.BeforeRouter, FilterUser)
 	beego.Run()
+
 }

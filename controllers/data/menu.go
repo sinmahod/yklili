@@ -5,7 +5,6 @@ import (
 	"beegostudy/models/orm"
 	"beegostudy/util"
 	"reflect"
-	"strconv"
 	"strings"
 
 	"github.com/astaxie/beego"
@@ -38,12 +37,10 @@ func (c *MenuController) List() {
 
 //修改/新建初始化
 func (c *MenuController) InitPage() {
-	idStr := c.GetString("Id")
-
 	var menus []models.MenuSelectInit
 
-	if idStr != "" {
-		id, _ := strconv.Atoi(idStr)
+	if util.IsNumber(c.RequestData["Id"]) {
+		id := util.Atoi(c.RequestData["Id"])
 
 		menu, err := models.GetMenu(id)
 		if err != nil {
@@ -52,9 +49,9 @@ func (c *MenuController) InitPage() {
 		}
 		c.Data["Menu"] = menu
 
-		menus, _ = models.GetTopMenus(menu.GetPid())
+		menus, _ = models.GetTopMenus(menu.GetPid(), id)
 	} else {
-		menus, _ = models.GetTopMenus(0)
+		menus, _ = models.GetTopMenus(0, 0)
 	}
 	c.Data["ParentMenus"] = menus
 	c.TplName = "platform/menu/menuDialog.html"
@@ -66,26 +63,49 @@ func (c *MenuController) Save() {
 	if len(c.RequestData) > 0 {
 		menu := new(models.Menu)
 		tran := new(orm.Transaction)
+		pid := util.Atoi(c.RequestData["Pid"])
+
+		isNewParent := false
+
 		if util.IsNumber(c.RequestData["Id"]) {
 			menu.SetId(c.RequestData["Id"])
 			menu.Fill()
+			isNewParent = pid != menu.GetPid()
 		}
+
 		if err := menu.SetValue(c.RequestData); err != nil {
 			beego.Warn("请确认参数是否传递正确", err)
 			c.fail("操作失败，请确认参数是否传递正确")
+			goto END
 		} else {
 			if !util.IsNumber(c.RequestData["Id"]) {
-				pid := util.Atoi(c.RequestData["Pid"])
 				if pid == 0 {
 					menu.SetLevel(1)
+					menu.SetInnerCode(models.GetMaxNo("menu", "", 4))
 				} else {
 					menu.SetLevel(2)
+					menu.SetInnerCode(models.GetMaxNo("menu", models.GetInnerCode(pid), 4))
 				}
 				menu.SetCurrentTime()
 				sysuser := c.GetSession("User").(*models.User)
 				menu.SetAddUser(sysuser.GetUserName())
 				tran.Add(menu, orm.INSERT)
 			} else {
+				if isNewParent {
+					if pid != 0 {
+						//如果不是叶子节点则不允许改变父级ID
+						if !menu.GetIsLeaf() {
+							c.fail("操作失败，当前菜单存在子级菜单，请先清空子级菜单")
+							goto END
+						}
+						menu.SetLevel(2)
+						pcode := models.GetInnerCode(pid)
+						menu.SetInnerCode(models.GetMaxNo("menu", pcode, 4))
+					} else {
+						menu.SetLevel(1)
+						menu.SetInnerCode(models.GetMaxNo("menu", "", 4))
+					}
+				}
 				tran.Add(menu, orm.UPDATE)
 			}
 
@@ -99,6 +119,7 @@ func (c *MenuController) Save() {
 	} else {
 		c.fail("操作失败，传递参数为空")
 	}
+END:
 	c.ServeJSON()
 }
 

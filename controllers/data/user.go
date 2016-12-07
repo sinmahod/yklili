@@ -51,7 +51,7 @@ func (c *UserController) InitPage() {
 		c.Data["User"] = user
 	}
 
-	c.TplName = "platform/user/test.html"
+	c.TplName = "platform/user/userDialog.html"
 	c.addScript()
 }
 
@@ -108,6 +108,28 @@ func (c *UserController) Del() {
 
 	} else {
 		c.fail("操作失败，传递参数为空")
+	}
+	c.ServeJSON()
+}
+
+//验证用户名是否存在 true不存在,false存在
+func (c *UserController) VerifyUserName() {
+	username := c.GetString("UserName")
+	if models.UserExists(username) == 0 {
+		c.Data["json"] = Validator{true}
+	} else {
+		c.Data["json"] = Validator{false}
+	}
+	c.ServeJSON()
+}
+
+//验证邮箱是否存在 true不存在,false存在
+func (c *UserController) VerifyEmail() {
+	email := c.GetString("Email")
+	if models.EmailExists(email) == 0 {
+		c.Data["json"] = Validator{true}
+	} else {
+		c.Data["json"] = Validator{false}
 	}
 	c.ServeJSON()
 }

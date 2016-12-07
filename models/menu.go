@@ -70,6 +70,14 @@ func (menu *Menu) SetLevel(l int) {
 	menu.Level = l
 }
 
+func (menu *Menu) SetInnerCode(code string) {
+	menu.InnerCode = code
+}
+
+func (menu *Menu) GetInnerCode() string {
+	return menu.InnerCode
+}
+
 //是否为叶子节点
 func (menu *Menu) GetIsLeaf() bool {
 	o := orm.NewOrm()
@@ -142,6 +150,18 @@ func GetMenu(id int) (*Menu, error) {
 	return &menu, nil
 }
 
+//得到父级InnerCode
+func GetInnerCode(id int) string {
+	o := orm.NewOrm()
+	var menu Menu
+	err := o.QueryTable("menu").Filter("Id", id).One(&menu, "innercode")
+	if err == orm.ErrNoRows {
+		// 没有找到记录
+		return ""
+	}
+	return menu.InnerCode
+}
+
 //得到所有的菜单
 func GetMenus() ([]*Menu, error) {
 	var menus []*Menu
@@ -154,24 +174,21 @@ func GetMenus() ([]*Menu, error) {
 func GetMenusLevel(url string) ([]*Menu, error) {
 	menus, err := GetMenus()
 	if err == nil && menus != nil {
-		var menuslevel []*Menu = make([]*Menu, len(menus), cap(menus))
+		var menuslevel []*Menu = make([]*Menu, 0)
 		//用来记录menuslevel的当前位置
-		idx := 0
+		idx := -1
 		//线型遍历一遍
 		for _, menu := range menus {
 			menu.IsLeaf = true //默认全部是叶子节点
 			if strings.EqualFold(menu.Link, url) {
 				menu.Checked = true
 			}
-			if menuslevel[idx] == nil {
-				menuslevel[idx] = menu
-				continue
-			}
 			if menu.Pid == 0 {
 				idx++
-				menuslevel[idx] = menu
+				menuslevel = append(menuslevel, menu)
 				continue
 			}
+
 			if menu.Pid == menuslevel[idx].Id {
 				//如果当前元素是menuslevel第idx个元素的子集时就放入ChildNode中
 				if menu.Checked {
@@ -182,7 +199,7 @@ func GetMenusLevel(url string) ([]*Menu, error) {
 			}
 			//循环到了这里的元素都是找不到父级的元素这里直接丢弃
 		}
-		return menuslevel[:idx+1], nil
+		return menuslevel, nil
 	}
 	return menus, err
 }
@@ -195,32 +212,39 @@ func GetMenusLevel(url string) ([]*Menu, error) {
 *	orderby		升降序:desc\asc
 **/
 func GetMenusPage(size, index int, ordercolumn, orderby string) (*DataGrid, error) {
-
 	if ordercolumn == "" {
 		ordercolumn = "innercode"
 	} else if strings.EqualFold(orderby, "desc") {
 		ordercolumn = "-" + ordercolumn
 	}
-
 	var menus []*Menu
 	o := orm.NewOrm()
-
 	_, err := o.QueryTable("menu").OrderBy(ordercolumn).Limit(size, (index-1)*size).All(&menus)
-
 	if err == nil {
 		cnt, err := o.QueryTable("menu").Count()
-
 		pagetotal := cnt / int64(size)
-
 		if cnt%int64(size) > 0 {
 			pagetotal++
 		}
-
-		for _, menu := range menus {
+		var tempmenus []*Menu = make([]*Menu, len(menus))
+		for i, menu := range menus {
+			//展开节点
 			menu.Expanded = true
+			//设置默认都是叶子节点
+			menu.IsLeaf = true
+			tempmenus[i] = menu
+
+			if menu.Level == 2 {
+				for j := i - 1; j >= 0; j-- {
+					if menu.Pid == tempmenus[j].Id {
+						tempmenus[j].IsLeaf = false //如果有子级则不为叶子节点
+						break
+					}
+				}
+			}
 		}
 
-		return GetDataGrid(menus, index, int(pagetotal), cnt), err
+		return GetDataGrid(tempmenus, index, int(pagetotal), cnt), err
 	}
 
 	return nil, err
@@ -239,20 +263,25 @@ type MenuSelectInit struct {
 	Select string
 }
 
-//返回所有顶级菜单，并指定当前父级
-func GetTopMenus(pid int) ([]MenuSelectInit, error) {
+//返回所有顶级菜单，并指定当前父级和去掉自身
+func GetTopMenus(pid, self int) ([]MenuSelectInit, error) {
 	menus, err := GetMenusByLevel(1)
 	if err != nil {
 		return nil, err
 	}
 
-	menuselectinit := make([]MenuSelectInit, len(menus))
-	for i, menu := range menus {
-		menuselectinit[i].Menu.Id = menu.Id
-		menuselectinit[i].Menu.MenuName = menu.MenuName
-		if menu.Id == pid {
-			menuselectinit[i].Select = "selected"
+	menuselectinit := make([]MenuSelectInit, 0)
+	for _, menu := range menus {
+		if menu.Id == self {
+			continue
 		}
+		selectInit := new(MenuSelectInit)
+		selectInit.Menu.Id = menu.Id
+		selectInit.Menu.MenuName = menu.MenuName
+		if menu.Id == pid {
+			selectInit.Select = "selected"
+		}
+		menuselectinit = append(menuselectinit, *selectInit)
 	}
 	return menuselectinit, nil
 }

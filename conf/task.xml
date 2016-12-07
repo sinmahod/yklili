@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<tasks>
+	<task id="Test">
+	<Status>false</Status>
+	</task>
+	<task id="Test2">
+	<Status>false</Status>
+	</task>
+	</tasks>

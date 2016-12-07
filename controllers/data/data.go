@@ -113,3 +113,7 @@ func (c *DataController) ServeJSON(encoding ...bool) {
 	}
 	c.Ctx.Output.JSON(c.Data["json"], hasIndent, hasEncoding)
 }
+
+type Validator struct {
+	Valid bool `json:"valid"`
+}

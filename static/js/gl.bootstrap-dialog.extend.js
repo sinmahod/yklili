@@ -26,7 +26,7 @@
 		//选择框
 		confirm: function (message,fn,falsefn){
 			BootstrapDialog.confirm({
-			            title: '请选择',
+			            title: '确认操作',
 			            message: message,
 			            type: BootstrapDialog.TYPE_WARNING, // <-- Default value is BootstrapDialog.TYPE_PRIMARY
 			            closable: true, // <-- Default value is false
@@ -125,29 +125,36 @@
 						b.push(bt);
 					}
 				  	dobj = BootstrapDialog.show({
-			  			   id: diaid,
+			  			      id: diaid,
 					                title: t,
 					                message: m,
 					                cssClass: 'dialog-'+w+' dialog-h-'+h,
 					                type: p,
+					                closeByBackdrop: false,   //点击空白位置关闭窗口失效
 					                draggable: true,
-					                buttons: b
-				            });
+					                buttons: b,
+					                onshown:function(){  //增加verify属性检查(注册校验)
+					                	BValidate({dialogId:this.id});
+					                }
+				           });
+
 				  	id = dobj.$modal[0].id;
 				},
-				verifyForm: function(){
+				verifyForm: function(warn){
 					var s = $("#"+id + " form");
 					if (s.length == 0) {
-						BootFrame.alert("未找到form标签");
+						BootFrame.alert("未找到form标签",null,"警告",true);
 						return false;
 					}
 					if (s[0].length == 0 ){
-						BootFrame.alert("form中不存在表单");
+						BootFrame.alert("form中不存在表单",null,"警告",true);
 						return false;
 					}
-
-					if (!s.valid()){
-						BootFrame.alert("请按照规则输入表单");
+					s.data('bootstrapValidator').validate();
+					if (!s.data('bootstrapValidator').isValid()){
+						if(warn){
+							BootFrame.alert("请按照规则输入表单",null,"校验错误",true);
+						}
 						return false;
 					}
 					return true;
@@ -155,15 +162,15 @@
 				getFormData: function(){
 					var s = $("#"+id + " form");
 					if (s.length == 0) {
-						BootFrame.alert("未找到form标签");
+						BootFrame.alert("未找到form标签",null,"警告",true);
 						return;
 					}
 					if (s[0].length == 0 ){
-						BootFrame.alert("form中不存在表单");
+						BootFrame.alert("form中不存在表单",null,"警告",true);
 						return;
 					}
 					var a = s[0];
-					var $map = new Map();    
+					var $json = {};
 					for (var i = 0 ; i < a.length; i ++){
 						//判断表单类型
 						var elementid = a[i].id;
@@ -172,13 +179,13 @@
 						}
 						if (a[i].type == "radio"){ 
 							if(a[i].checked == true){
-								$map.put(elementid , a[i].value);
+								$json[elementid] = a[i].value;
 							}
 						}else{
-							$map.put(elementid , a[i].value);
+							$json[elementid] = a[i].value;
 						}
 					}
-					return $map;
+					return $json;
 				},
 				close: function(){
 					dobj.close();
