@@ -4,7 +4,7 @@ import (
 	"beegostudy/controllers/data"
 	"beegostudy/controllers/dml"
 	"beegostudy/controllers/platform"
-	"beegostudy/util/cron"
+	"beegostudy/service/cron"
 
 	"fmt"
 
@@ -16,9 +16,12 @@ import (
 
 func init() {
 	orm.RegisterDriver("mysql", orm.DRMySQL)
-
 	orm.RegisterDataBase("default", "mysql", "root:qweqwe@tcp(60.205.164.3:3306)/beestudy?charset=utf8")
+
+	go cron.RunCron()
 }
+
+var Crontab = cron.New()
 
 type MainController struct {
 	beego.Controller
@@ -26,35 +29,12 @@ type MainController struct {
 
 func (this *MainController) Get() {
 	this.Data["UserName"] = "HHHHH"
-	eid := this.GetString("EID")
-	sid := this.GetString("SID")
-	cron.ReadTaskFile()
-	if eid != "" {
-		cron.StopTask(eid)
-	}
-	if sid != "" {
-		cron.StartTask(sid)
-	}
 
 	this.TplName = "test.html"
 }
 
-func TestCron() {
-
-	cron.Task("Test", "*/3, *, *, *, *, *", func() {
-		fmt.Println("-----------哈哈3------")
-	}, "测试定时任务3秒一次")
-	cron.Task("Test2", "*/5, *, *, *, *, *", func() {
-		fmt.Println("-----------哈哈5------")
-	}, "测试定时任务5秒一次")
-
-	cron.StartTasks()
-
-	select {}
-}
-
 func main() {
-	go TestCron()
+
 	orm.Debug = true                                 //ORM调试模式打开
 	beego.BConfig.WebConfig.Session.SessionOn = true //启用Session
 
@@ -76,6 +56,7 @@ func main() {
 	models := map[string]beego.ControllerInterface{
 		"menu": &data.MenuController{},
 		"user": &data.UserController{},
+		"cron": &data.CronController{},
 	}
 
 	for name, controller := range models {

@@ -3,6 +3,7 @@
 package cron
 
 import (
+	"fmt"
 	"log"
 	"runtime"
 	"sort"
@@ -17,6 +18,9 @@ type Cron struct {
 	stop     chan struct{}
 	add      chan *Entry
 	snapshot chan []*Entry
+	stopent  chan string //暂停
+	startent chan string //恢复
+	execute  chan string //执行
 	running  bool
 	ErrorLog *log.Logger
 	location *time.Location
@@ -49,6 +53,12 @@ type Entry struct {
 
 	// The Job to run.
 	Job Job
+
+	//TaskId
+	Id string
+
+	//Status  true = runing
+	Status bool
 }
 
 // byTime is a wrapper for sorting the entry array by time
@@ -82,6 +92,9 @@ func NewWithLocation(location *time.Location) *Cron {
 		add:      make(chan *Entry),
 		stop:     make(chan struct{}),
 		snapshot: make(chan []*Entry),
+		stopent:  make(chan string),
+		startent: make(chan string),
+		execute:  make(chan string),
 		running:  false,
 		ErrorLog: nil,
 		location: location,
@@ -94,50 +107,111 @@ type FuncJob func()
 func (f FuncJob) Run() { f() }
 
 // AddFunc adds a func to the Cron to be run on the given schedule.
-func (c *Cron) AddFunc(spec string, cmd func()) error {
-	return c.AddJob(spec, FuncJob(cmd))
+func (c *Cron) AddFunc(id, spec string, cmd func()) error {
+	return c.AddJob(id, spec, FuncJob(cmd))
 }
 
 // AddJob adds a Job to the Cron to be run on the given schedule.
-func (c *Cron) AddJob(spec string, cmd Job) error {
+func (c *Cron) AddJob(id, spec string, cmd Job) error {
 	schedule, err := Parse(spec)
 	if err != nil {
 		return err
 	}
-	c.Schedule(schedule, cmd)
-	return nil
+	return c.Schedule(id, schedule, cmd)
 }
 
 // Schedule adds a Job to the Cron to be run on the given schedule.
-func (c *Cron) Schedule(schedule Schedule, cmd Job) {
+func (c *Cron) Schedule(id string, schedule Schedule, cmd Job) error {
+	//检查ID是否存在
+	for _, e := range c.entries {
+		if id == e.Id {
+			return fmt.Errorf("这个任务已经存在: %s", id)
+		}
+	}
 	entry := &Entry{
 		Schedule: schedule,
 		Job:      cmd,
+		Id:       id,
+		Status:   true,
 	}
 	if !c.running {
 		c.entries = append(c.entries, entry)
-		return
+		return nil
 	}
 
 	c.add <- entry
+	return nil
 }
 
-// Entries returns a snapshot of the cron entries.
-func (c *Cron) Entries() []*Entry {
-	if c.running {
-		c.snapshot <- nil
-		x := <-c.snapshot
-		return x
+// 暂停某个定时任务
+func (c *Cron) StopFunc(id string) {
+	if !c.running {
+		for _, e := range c.entries {
+			if id == e.Id {
+				e.Status = false
+				return
+			}
+		}
+	} else {
+		c.stopent <- id
 	}
-	return c.entrySnapshot()
 }
+
+// 启动某个定时任务
+func (c *Cron) StartFunc(id string) {
+	if !c.running {
+		for _, e := range c.entries {
+			if id == e.Id {
+				e.Status = true
+				return
+			}
+		}
+	}
+
+	c.startent <- id
+}
+
+// 执行某个定时任务
+func (c *Cron) ExecFunc(id string) error {
+	if !c.running {
+		return fmt.Errorf("主线程已经停止无法执行任务")
+	}
+	c.execute <- id
+	return nil
+}
+
+// 查询某个定时任务当前运行状态
+func (c *Cron) FuncStatus(id string) bool {
+	if !c.running {
+		return false
+	}
+	c.snapshot <- nil
+	entries := <-c.snapshot
+	for _, e := range entries {
+		if e.Id == id {
+			return e.Status
+		}
+	}
+	return false
+}
+
+// 不需要对外开放
+// Entries returns a snapshot of the cron entries.
+// func (c *Cron) Entries() []*Entry {
+// 	if c.running {
+// 		c.snapshot <- nil
+// 		x := <-c.snapshot
+// 		return x
+// 	}
+// 	return c.entrySnapshot()
+// }
 
 // Location gets the time zone location
 func (c *Cron) Location() *time.Location {
 	return c.location
 }
 
-// Start the cron scheduler in its own go-routine, or no-op if already started.
+// 启动线程
 func (c *Cron) Start() {
 	if c.running {
 		return
@@ -146,6 +220,7 @@ func (c *Cron) Start() {
 	go c.run()
 }
 
+// 总线程状态
 func (c *Cron) Status() bool {
 	return c.running
 }
@@ -190,7 +265,7 @@ func (c *Cron) run() {
 			now = now.In(c.location)
 			// Run every entry whose next time was this effective time.
 			for _, e := range c.entries {
-				if e.Next != effective {
+				if e.Next != effective || !e.Status {
 					break
 				}
 				go c.runWithRecovery(e.Job)
@@ -200,8 +275,41 @@ func (c *Cron) run() {
 			continue
 
 		case newEntry := <-c.add:
+			fmt.Println("Add")
 			c.entries = append(c.entries, newEntry)
 			newEntry.Next = newEntry.Schedule.Next(time.Now().In(c.location))
+
+		//暂停任务
+		case stopEntry := <-c.stopent:
+			fmt.Println(stopEntry)
+			for _, e := range c.entries {
+				if e.Id == stopEntry {
+					e.Status = false
+					t, _ := time.Parse("2006-01-02 15:04:05", "2222-02-22 22:22:22")
+					e.Next = e.Schedule.Next(t)
+					break
+				}
+			}
+
+		//恢复任务
+		case startEntry := <-c.startent:
+			for _, e := range c.entries {
+				if e.Id == startEntry {
+					e.Status = true
+					e.Next = e.Schedule.Next(time.Now().In(c.location))
+					break
+				}
+			}
+
+		//立即执行
+		case exeEntryId := <-c.execute:
+			for _, e := range c.entries {
+				if e.Id == exeEntryId {
+					go c.runWithRecovery(e.Job)
+					e.Prev = effective
+					break
+				}
+			}
 
 		case <-c.snapshot:
 			c.snapshot <- c.entrySnapshot()
@@ -226,7 +334,7 @@ func (c *Cron) logf(format string, args ...interface{}) {
 	}
 }
 
-// Stop stops the cron scheduler if it is running; otherwise it does nothing.
+// 停止线程
 func (c *Cron) Stop() {
 	if !c.running {
 		return
@@ -244,6 +352,8 @@ func (c *Cron) entrySnapshot() []*Entry {
 			Next:     e.Next,
 			Prev:     e.Prev,
 			Job:      e.Job,
+			Id:       e.Id,
+			Status:   e.Status,
 		})
 	}
 	return entries
