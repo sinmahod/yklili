@@ -2,7 +2,7 @@ package platform
 
 import (
 	"beegostudy/models"
-	"beegostudy/util"
+	"beegostudy/util/pwdutil"
 	"fmt"
 
 	"github.com/astaxie/beego"
@@ -47,7 +47,7 @@ func (c *LoginController) Post() {
 		jsondata = result{0, fmt.Sprintf("%s", err), ""}
 	} else {
 		//用户存在则校验用户密码是否正确
-		if util.VerifyPWD(p, user.GetPassword()) {
+		if pwdutil.VerifyPWD(p, user.GetPassword()) {
 			jsondata = result{1, "", "./platform/users"}
 			c.SetSession("User", user)
 		} else {

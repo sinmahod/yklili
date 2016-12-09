@@ -1,7 +1,7 @@
 package models
 
 import (
-	"beegostudy/util"
+	"beegostudy/util/modelutil"
 	"encoding/json"
 	"fmt"
 	"strconv"
@@ -99,7 +99,7 @@ func (menu *Menu) SetAddUser(uname string) {
 }
 
 func (menu *Menu) SetValue(data map[string]interface{}) error {
-	return util.FillStruct(data, menu)
+	return modelutil.FillStruct(data, menu)
 }
 
 //查询数据库

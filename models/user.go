@@ -1,7 +1,7 @@
 package models
 
 import (
-	"beegostudy/util"
+	"beegostudy/util/modelutil"
 	"encoding/json"
 	"fmt"
 	"strconv"
@@ -77,7 +77,7 @@ func (user *User) SetCurrentTime() {
 }
 
 func (user *User) SetValue(data map[string]interface{}) error {
-	return util.FillStruct(data, user)
+	return modelutil.FillStruct(data, user)
 }
 
 func init() {
