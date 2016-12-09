@@ -3,6 +3,7 @@
 package cron
 
 import (
+	"encoding/xml"
 	"fmt"
 	"log"
 	"runtime"
@@ -13,17 +14,18 @@ import (
 // Cron keeps track of any number of entries, invoking the associated func as
 // specified by the schedule. It may be started, stopped, and the entries may
 // be inspected while running.
-type Cron struct {
-	entries  []*Entry
-	stop     chan struct{}
-	add      chan *Entry
-	snapshot chan []*Entry
-	stopent  chan string //暂停
-	startent chan string //恢复
-	execute  chan string //执行
-	running  bool
-	ErrorLog *log.Logger
-	location *time.Location
+type cron struct {
+	XMLName  xml.Name       `xml:"TaskList"`
+	Entries  []*Entry       `xml:"task"`
+	stop     chan struct{}  `xml:"-"`
+	add      chan *Entry    `xml:"-"`
+	snapshot chan []*Entry  `xml:"-"`
+	stopent  chan string    `xml:"-"` //暂停
+	startent chan string    `xml:"-"` //恢复
+	execute  chan string    `xml:"-"` //执行
+	running  bool           `xml:"-"`
+	ErrorLog *log.Logger    `xml:"-"`
+	location *time.Location `xml:"-"`
 }
 
 // Job is an interface for submitted cron jobs.
@@ -40,25 +42,33 @@ type Schedule interface {
 
 // Entry consists of a schedule and the func to execute on that schedule.
 type Entry struct {
+	//xml节点标签名称
+	XMLName xml.Name `xml:"task"`
+
+	//任务ID
+	Id string `xml:"id,attr"`
+
+	//任务状态
+	Status bool `xml:"status,attr"`
+
+	//描述
+	Desc string `xml:",innerxml"`
+
+	Type string `xml:"type,attr"`
+
 	// The schedule on which this job should be run.
-	Schedule Schedule
+	schedule Schedule `xml:"-"`
+
+	// The Job to run.
+	job Job `xml:"-"`
 
 	// The next time the job will run. This is the zero time if Cron has not been
 	// started or this entry's schedule is unsatisfiable
-	Next time.Time
+	Next time.Time `xml:"-"`
 
 	// The last time this job was run. This is the zero time if the job has never
 	// been run.
-	Prev time.Time
-
-	// The Job to run.
-	Job Job
-
-	//TaskId
-	Id string
-
-	//Status  true = runing
-	Status bool
+	Prev time.Time `xml:"-"`
 }
 
 // byTime is a wrapper for sorting the entry array by time
@@ -81,14 +91,14 @@ func (s byTime) Less(i, j int) bool {
 }
 
 // New returns a new Cron job runner, in the Local time zone.
-func New() *Cron {
+func New() *cron {
 	return NewWithLocation(time.Now().Location())
 }
 
 // NewWithLocation returns a new Cron job runner.
-func NewWithLocation(location *time.Location) *Cron {
-	return &Cron{
-		entries:  nil,
+func NewWithLocation(location *time.Location) *cron {
+	return &cron{
+		Entries:  nil,
 		add:      make(chan *Entry),
 		stop:     make(chan struct{}),
 		snapshot: make(chan []*Entry),
@@ -107,35 +117,38 @@ type FuncJob func()
 func (f FuncJob) Run() { f() }
 
 // AddFunc adds a func to the Cron to be run on the given schedule.
-func (c *Cron) AddFunc(id, spec string, cmd func()) error {
-	return c.AddJob(id, spec, FuncJob(cmd))
+func (c *cron) addFunc(id, spec string, cmd func(), isrun bool) error {
+	return c.addJob(id, "", "", spec, FuncJob(cmd), isrun)
 }
 
 // AddJob adds a Job to the Cron to be run on the given schedule.
-func (c *Cron) AddJob(id, spec string, cmd Job) error {
+func (c *cron) addJob(id, ttype, desc, spec string, cmd Job, isrun bool) error {
 	schedule, err := Parse(spec)
 	if err != nil {
 		return err
 	}
-	return c.Schedule(id, schedule, cmd)
+	return c.schedule(id, ttype, desc, schedule, cmd, isrun)
 }
 
 // Schedule adds a Job to the Cron to be run on the given schedule.
-func (c *Cron) Schedule(id string, schedule Schedule, cmd Job) error {
+func (c *cron) schedule(id, ttype, desc string, schedule Schedule, cmd Job, isrun bool) error {
 	//检查ID是否存在
-	for _, e := range c.entries {
+	for _, e := range c.Entries {
 		if id == e.Id {
 			return fmt.Errorf("这个任务已经存在: %s", id)
 		}
 	}
+
 	entry := &Entry{
-		Schedule: schedule,
-		Job:      cmd,
+		schedule: schedule,
+		job:      cmd,
 		Id:       id,
-		Status:   true,
+		Status:   isrun,
+		Type:     ttype,
+		Desc:     desc,
 	}
 	if !c.running {
-		c.entries = append(c.entries, entry)
+		c.Entries = append(c.Entries, entry)
 		return nil
 	}
 
@@ -144,9 +157,9 @@ func (c *Cron) Schedule(id string, schedule Schedule, cmd Job) error {
 }
 
 // 暂停某个定时任务
-func (c *Cron) StopFunc(id string) {
+func (c *cron) stopFunc(id string) {
 	if !c.running {
-		for _, e := range c.entries {
+		for _, e := range c.Entries {
 			if id == e.Id {
 				e.Status = false
 				return
@@ -154,13 +167,14 @@ func (c *Cron) StopFunc(id string) {
 		}
 	} else {
 		c.stopent <- id
+		<-c.stopent
 	}
 }
 
 // 启动某个定时任务
-func (c *Cron) StartFunc(id string) {
+func (c *cron) startFunc(id string) {
 	if !c.running {
-		for _, e := range c.entries {
+		for _, e := range c.Entries {
 			if id == e.Id {
 				e.Status = true
 				return
@@ -169,19 +183,21 @@ func (c *Cron) StartFunc(id string) {
 	}
 
 	c.startent <- id
+	<-c.startent
 }
 
 // 执行某个定时任务
-func (c *Cron) ExecFunc(id string) error {
+func (c *cron) execFunc(id string) error {
 	if !c.running {
 		return fmt.Errorf("主线程已经停止无法执行任务")
 	}
 	c.execute <- id
+	<-c.execute
 	return nil
 }
 
 // 查询某个定时任务当前运行状态
-func (c *Cron) FuncStatus(id string) bool {
+func (c *cron) funcStatus(id string) bool {
 	if !c.running {
 		return false
 	}
@@ -195,24 +211,23 @@ func (c *Cron) FuncStatus(id string) bool {
 	return false
 }
 
-// 不需要对外开放
-// Entries returns a snapshot of the cron entries.
-// func (c *Cron) Entries() []*Entry {
-// 	if c.running {
-// 		c.snapshot <- nil
-// 		x := <-c.snapshot
-// 		return x
-// 	}
-// 	return c.entrySnapshot()
-// }
+// 任务列表
+func (c *cron) EntryList() []*Entry {
+	if c.running {
+		c.snapshot <- nil
+		x := <-c.snapshot
+		return x
+	}
+	return c.entrySnapshot()
+}
 
 // Location gets the time zone location
-func (c *Cron) Location() *time.Location {
+func (c *cron) Location() *time.Location {
 	return c.location
 }
 
 // 启动线程
-func (c *Cron) Start() {
+func (c *cron) Start() {
 	if c.running {
 		return
 	}
@@ -221,11 +236,11 @@ func (c *Cron) Start() {
 }
 
 // 总线程状态
-func (c *Cron) Status() bool {
+func (c *cron) status() bool {
 	return c.running
 }
 
-func (c *Cron) runWithRecovery(j Job) {
+func (c *cron) runWithRecovery(j Job) {
 	defer func() {
 		if r := recover(); r != nil {
 			const size = 64 << 10
@@ -239,24 +254,29 @@ func (c *Cron) runWithRecovery(j Job) {
 
 // Run the scheduler.. this is private just due to the need to synchronize
 // access to the 'running' state variable.
-func (c *Cron) run() {
+func (c *cron) run() {
 	// Figure out the next activation times for each entry.
 	now := time.Now().In(c.location)
-	for _, entry := range c.entries {
-		entry.Next = entry.Schedule.Next(now)
+	for _, entry := range c.Entries {
+		if !entry.Status {
+			t, _ := time.Parse("2006-01-02 15:04:05", "2222-02-22 22:22:22")
+			entry.Next = entry.schedule.Next(t)
+		} else {
+			entry.Next = entry.schedule.Next(now)
+		}
 	}
 
 	for {
 		// Determine the next entry to run.
-		sort.Sort(byTime(c.entries))
+		sort.Sort(byTime(c.Entries))
 
 		var effective time.Time
-		if len(c.entries) == 0 || c.entries[0].Next.IsZero() {
+		if len(c.Entries) == 0 || c.Entries[0].Next.IsZero() {
 			// If there are no entries yet, just sleep - it still handles new entries
 			// and stop requests.
 			effective = now.AddDate(10, 0, 0)
 		} else {
-			effective = c.entries[0].Next
+			effective = c.Entries[0].Next
 		}
 
 		timer := time.NewTimer(effective.Sub(now))
@@ -264,52 +284,60 @@ func (c *Cron) run() {
 		case now = <-timer.C:
 			now = now.In(c.location)
 			// Run every entry whose next time was this effective time.
-			for _, e := range c.entries {
+			for _, e := range c.Entries {
 				if e.Next != effective || !e.Status {
 					break
 				}
-				go c.runWithRecovery(e.Job)
+				go c.runWithRecovery(e.job)
 				e.Prev = e.Next
-				e.Next = e.Schedule.Next(now)
+				e.Next = e.schedule.Next(now)
 			}
 			continue
 
 		case newEntry := <-c.add:
-			fmt.Println("Add")
-			c.entries = append(c.entries, newEntry)
-			newEntry.Next = newEntry.Schedule.Next(time.Now().In(c.location))
+			c.Entries = append(c.Entries, newEntry)
+			if newEntry.Status {
+				t, _ := time.Parse("2006-01-02 15:04:05", "2222-02-22 22:22:22")
+				newEntry.Next = newEntry.schedule.Next(t)
+			} else {
+				newEntry.Next = newEntry.schedule.Next(time.Now().In(c.location))
+			}
 
 		//暂停任务
 		case stopEntry := <-c.stopent:
-			fmt.Println(stopEntry)
-			for _, e := range c.entries {
+			for _, e := range c.Entries {
 				if e.Id == stopEntry {
 					e.Status = false
 					t, _ := time.Parse("2006-01-02 15:04:05", "2222-02-22 22:22:22")
-					e.Next = e.Schedule.Next(t)
+					e.Next = e.schedule.Next(t)
+					go c.saveTaskFile()
 					break
 				}
 			}
+			c.stopent <- ""
 
 		//恢复任务
 		case startEntry := <-c.startent:
-			for _, e := range c.entries {
+			for _, e := range c.Entries {
 				if e.Id == startEntry {
 					e.Status = true
-					e.Next = e.Schedule.Next(time.Now().In(c.location))
+					e.Next = e.schedule.Next(time.Now().In(c.location))
+					go c.saveTaskFile()
 					break
 				}
 			}
+			c.startent <- ""
 
 		//立即执行
 		case exeEntryId := <-c.execute:
-			for _, e := range c.entries {
+			for _, e := range c.Entries {
 				if e.Id == exeEntryId {
-					go c.runWithRecovery(e.Job)
+					go c.runWithRecovery(e.job)
 					e.Prev = effective
 					break
 				}
 			}
+			c.execute <- ""
 
 		case <-c.snapshot:
 			c.snapshot <- c.entrySnapshot()
@@ -326,7 +354,7 @@ func (c *Cron) run() {
 }
 
 // Logs an error to stderr or to the configured error log
-func (c *Cron) logf(format string, args ...interface{}) {
+func (c *cron) logf(format string, args ...interface{}) {
 	if c.ErrorLog != nil {
 		c.ErrorLog.Printf(format, args...)
 	} else {
@@ -335,7 +363,7 @@ func (c *Cron) logf(format string, args ...interface{}) {
 }
 
 // 停止线程
-func (c *Cron) Stop() {
+func (c *cron) Stop() {
 	if !c.running {
 		return
 	}
@@ -344,16 +372,19 @@ func (c *Cron) Stop() {
 }
 
 // entrySnapshot returns a copy of the current cron entry list.
-func (c *Cron) entrySnapshot() []*Entry {
+func (c *cron) entrySnapshot() []*Entry {
 	entries := []*Entry{}
-	for _, e := range c.entries {
+	for _, e := range c.Entries {
 		entries = append(entries, &Entry{
-			Schedule: e.Schedule,
+			XMLName:  e.XMLName,
+			schedule: e.schedule,
 			Next:     e.Next,
 			Prev:     e.Prev,
-			Job:      e.Job,
+			job:      e.job,
 			Id:       e.Id,
 			Status:   e.Status,
+			Type:     e.Type,
+			Desc:     e.Desc,
 		})
 	}
 	return entries

@@ -22,7 +22,8 @@ func (c *CronController) Get() {
 }
 
 func (c *CronController) List() {
-
+	c.Data["json"] = cron.GetTaskList()
+	c.ServeJSON()
 }
 
 func (c *CronController) Run() {

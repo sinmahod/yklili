@@ -6,16 +6,23 @@ import (
 )
 
 func init() {
-	// cron.Task("Test", "*/2	*	*	*	*	*", Test)
-	// cron.Task("Test2", "*/3	*	*	*	*	*", Test2)
-	cron.Inter("asd", "qweqwe")
-	fmt.Println("asd-------------------")
+	cron.RegisterTask(&TestTask{})
 }
 
-func Test() {
-	fmt.Println("------------asdasd-------------")
+type TestTask struct{}
+
+func (t *TestTask) GetId() string {
+	return "Test"
 }
 
-func Test2() {
-	fmt.Println("------------123123-------------")
+func (t *TestTask) GetSpec() string {
+	return "*/3  *  *  *  *  *"
+}
+
+func (t *TestTask) GetDesc() string {
+	return "测试任务（每3秒执行一次）"
+}
+
+func (t *TestTask) Execute() {
+	fmt.Println("------------测试任务（每3秒执行一次）-------------")
 }

@@ -5,41 +5,57 @@
 package cron
 
 import (
-	"beegostudy/util"
+	"beegostudy/util/fileutil"
 	"encoding/xml"
 	"fmt"
-	"strings"
 
 	"github.com/astaxie/beego"
 )
 
-var crontab *Cron
+var crontab *cron
 
 func init() {
 	crontab = New()
-}
-
-var sss = make(map[string]string)
-
-func Inter(id, value string) {
-	sss[id] = value
+	readTaskFile()
 }
 
 /**
- *   新创建任务
- *   id 		任务ID
- *   spec 	crontab表达式 ： 3  *  *  *  *  *
- *   fc		函数值
- *   desc 	任务描述
+ *   任务接口
  */
-func Task(id, spec string, fc func(), desc ...string) {
-	crontab.AddFunc(id, spec, fc)
+type TaskInterface interface {
+	// 任务ID，唯一
+	GetId() string
+	// crontab 表达式(秒 分 时 日 月 周)
+	GetSpec() string
+	// 任务描述
+	GetDesc() string
+	// 定时执行的任务
+	Execute()
+}
+
+var taskstatus map[string]bool
+
+/**
+ *   注册任务
+ *   task 		任务接口实现
+ */
+func RegisterTask(task TaskInterface) {
+	if status, ok := taskstatus[task.GetId()]; ok {
+		if status {
+			crontab.addTask(task, true)
+		} else {
+			crontab.addTask(task, false)
+		}
+	} else {
+		crontab.addTask(task, true)
+	}
 }
 
 /**
  *   启动线程
  */
 func RunCron() {
+	crontab.saveTaskFile()
 	crontab.Start()
 }
 
@@ -54,7 +70,7 @@ func StopCron() {
  *   线程运行状态
  */
 func CronStatus() bool {
-	return crontab.Status()
+	return crontab.status()
 }
 
 /**
@@ -62,63 +78,60 @@ func CronStatus() bool {
  *   id	任务id
  */
 func TaskStatus(id string) bool {
-	return crontab.FuncStatus(id)
+	return crontab.funcStatus(id)
 }
 
 /**
  *   运行任务
  */
 func TaskStart(id string) {
-	crontab.StartFunc(id)
+	crontab.startFunc(id)
 }
 
 /**
  *   停止任务
  */
 func TaskStop(id string) {
-	crontab.StopFunc(id)
+	crontab.stopFunc(id)
 }
 
 /**
  *   执行任务
  */
 func TaskExecute(id string) {
-	crontab.ExecFunc(id)
+	crontab.execFunc(id)
 }
 
-type TaskXml struct {
-	XMLName xml.Name   `xml:"tasks"`
-	Node    []TaskNode `xml:"task"`
+/**
+ *   获取所有任务列表
+ */
+func GetTaskList() []*Entry {
+	return crontab.EntryList()
 }
 
-type TaskNode struct {
-	XMLName xml.Name `xml:"task"`
-	Id      string   `xml:"id,attr"`
-	Status  bool     `xml:",innerxml"`
-}
+var taskFile = beego.AppPath + "/conf/task.xml"
 
-func ReadTaskFile() {
-	var result TaskXml
-	//读
-	err := util.XMLToStruct(beego.AppPath+"/conf/task.xml", &result)
-	fmt.Println(err)
-	fmt.Println(result)
-	fmt.Println(result.Node)
-	for _, o := range result.Node {
-		fmt.Println(o.Id+"===", o.Status)
-	}
-
-	//写
-	for i, line := range result.Node {
-		//修改ApplicationName节点的内部文本innerText
-		if strings.EqualFold(line.Id, "ApplicationName") {
-			//注意修改的不是line对象，而是直接使用result中的真实对象
-			result.Node[i].Status = false
+// 读取定时任务配置文件
+func readTaskFile() {
+	taskstatus = make(map[string]bool)
+	var t *cron
+	if fileutil.Exist(taskFile) {
+		fileutil.XMLToStruct(taskFile, &t)
+		for _, entry := range t.Entries {
+			taskstatus[entry.Id] = entry.Status
 		}
 	}
-	util.XMLStructToFile(beego.AppPath+"/conf/task.xml", &result)
 }
 
-func createTaskXML() {
+// 添加任务
+func (c *cron) addTask(task TaskInterface, run bool) {
+	c.addJob(task.GetId(), fmt.Sprintf("%T", task), task.GetDesc(), task.GetSpec(), FuncJob(task.Execute), run)
+}
 
+// 保存到文件
+func (c *cron) saveTaskFile() {
+	t := &cron{}
+	t.XMLName = xml.Name{"", "TaskList"}
+	t.Entries = c.EntryList() //得到最新的
+	fileutil.XMLStructToFile(taskFile, t)
 }

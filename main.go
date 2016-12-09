@@ -5,6 +5,7 @@ import (
 	"beegostudy/controllers/dml"
 	"beegostudy/controllers/platform"
 	"beegostudy/service/cron"
+	_ "beegostudy/task"
 
 	"fmt"
 
