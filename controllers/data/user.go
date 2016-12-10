@@ -3,7 +3,7 @@ package data
 import (
 	"beegostudy/models"
 	"beegostudy/models/orm"
-	"beegostudy/util"
+	"beegostudy/util/numberutil"
 	"reflect"
 	"strconv"
 	"strings"
@@ -60,7 +60,7 @@ func (c *UserController) Save() {
 	if len(c.RequestData) > 0 {
 		user := new(models.User)
 		tran := new(orm.Transaction)
-		if util.IsNumber(c.RequestData["Id"]) {
+		if numberutil.IsNumber(c.RequestData["Id"]) {
 			user.SetId(c.RequestData["Id"])
 			user.Fill()
 		}
@@ -68,7 +68,7 @@ func (c *UserController) Save() {
 			beego.Warn("请确认参数是否传递正确", err)
 			c.fail("操作失败，请确认参数是否传递正确")
 		} else {
-			if !util.IsNumber(c.RequestData["Id"]) {
+			if !numberutil.IsNumber(c.RequestData["Id"]) {
 				user.SetCurrentTime()
 				sysuser := c.GetSession("User").(*models.User)
 				user.SetAddUser(sysuser.GetUserName())

@@ -1,6 +1,8 @@
-package util
+package pwdutil
 
 import (
+	"beegostudy/util/numberutil"
+	"beegostudy/util/stringutil"
 	"strconv"
 	"strings"
 )
@@ -10,9 +12,9 @@ import (
 //生成随机的盐密码：按指定规则改变md5，可局部反向
 func GeneratePWD(password string) string {
 
-	salt := LeftPad(strconv.Itoa(RandInt(99999999)), '0', 8) + LeftPad(strconv.Itoa(RandInt(99999999)), '0', 8)
+	salt := stringutil.LeftPad(strconv.Itoa(numberutil.RandInt(99999999)), '0', 8) + stringutil.LeftPad(strconv.Itoa(numberutil.RandInt(99999999)), '0', 8)
 
-	password = MD5Hex(password + salt)
+	password = stringutil.MD5Hex(password + salt)
 	ss := []rune(salt)
 	ps := []rune(password)
 	cs := make([]rune, 48)
@@ -42,5 +44,5 @@ func VerifyPWD(password, md5 string) bool {
 		cs2[i/3] = md5rune[i+1]
 	}
 	salt := string(cs2)
-	return strings.EqualFold(MD5Hex(password+salt), string(cs1))
+	return strings.EqualFold(stringutil.MD5Hex(password+salt), string(cs1))
 }

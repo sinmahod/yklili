@@ -1,9 +1,13 @@
-package util
+package stringutil
 
 import (
 	"bytes"
 	"crypto/md5"
 	"fmt"
+)
+
+const (
+	TimeLayout = "2006-01-02 15:04:05"
 )
 
 //左补齐字符串：原字符串不足n位则在左侧用c补齐至n位，如原字符串超过n位则直接返回

@@ -2,7 +2,7 @@ package platform
 
 import (
 	"beegostudy/models"
-	"beegostudy/util"
+	"beegostudy/util/pwdutil"
 
 	"github.com/astaxie/beego"
 )
@@ -36,7 +36,7 @@ func (c *RegisterController) Post() {
 		return
 	}
 
-	if _, err := models.InsertUser(u, util.GeneratePWD(p), e, phone); err != nil {
+	if _, err := models.InsertUser(u, pwdutil.GeneratePWD(p), e, phone); err != nil {
 		jsondata = result{0, "数据库操作失败！", ""}
 	} else {
 		jsondata = result{1, "注册成功", ""}

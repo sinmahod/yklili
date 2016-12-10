@@ -3,7 +3,7 @@ package data
 import (
 	"beegostudy/models"
 	"beegostudy/models/orm"
-	"beegostudy/util"
+	"beegostudy/util/numberutil"
 	"reflect"
 	"strings"
 
@@ -39,8 +39,8 @@ func (c *MenuController) List() {
 func (c *MenuController) InitPage() {
 	var menus []models.MenuSelectInit
 
-	if util.IsNumber(c.RequestData["Id"]) {
-		id := util.Atoi(c.RequestData["Id"])
+	if numberutil.IsNumber(c.RequestData["Id"]) {
+		id := numberutil.Atoi(c.RequestData["Id"])
 
 		menu, err := models.GetMenu(id)
 		if err != nil {
@@ -63,11 +63,11 @@ func (c *MenuController) Save() {
 	if len(c.RequestData) > 0 {
 		menu := new(models.Menu)
 		tran := new(orm.Transaction)
-		pid := util.Atoi(c.RequestData["Pid"])
+		pid := numberutil.Atoi(c.RequestData["Pid"])
 
 		isNewParent := false
 
-		if util.IsNumber(c.RequestData["Id"]) {
+		if numberutil.IsNumber(c.RequestData["Id"]) {
 			menu.SetId(c.RequestData["Id"])
 			menu.Fill()
 			isNewParent = pid != menu.GetPid()
@@ -78,7 +78,7 @@ func (c *MenuController) Save() {
 			c.fail("操作失败，请确认参数是否传递正确")
 			goto END
 		} else {
-			if !util.IsNumber(c.RequestData["Id"]) {
+			if !numberutil.IsNumber(c.RequestData["Id"]) {
 				if pid == 0 {
 					menu.SetLevel(1)
 					menu.SetInnerCode(models.GetMaxNo("menu", "", 4))

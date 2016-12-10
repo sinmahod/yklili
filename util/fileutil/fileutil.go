@@ -1,4 +1,4 @@
-package util
+package fileutil
 
 import (
 	"encoding/xml"
@@ -6,9 +6,14 @@ import (
 	"os"
 )
 
-/**
- *   读取文件内容
- */
+// 检查文件或目录是否存在
+// 如果由 filename 指定的文件或目录存在则返回 true，否则返回 false
+func Exist(filename string) bool {
+	_, err := os.Stat(filename)
+	return err == nil || os.IsExist(err)
+}
+
+// 读取文件内容
 func FileToString(filepath string) string {
 	fi, err := os.Open(filepath)
 	if err != nil {
@@ -19,9 +24,7 @@ func FileToString(filepath string) string {
 	return string(fd)
 }
 
-/**
- *   读取XML到结构
- */
+// 读取XML到结构
 func XMLToStruct(filepath string, result interface{}) error {
 	content, err := ioutil.ReadFile(filepath)
 	if err != nil {
@@ -55,7 +58,7 @@ func XMLToStruct(filepath string, result interface{}) error {
  */
 func XMLStructToFile(filepath string, result interface{}) error {
 	//保存修改后的内容
-	xmlOutPut, err := xml.MarshalIndent(result, "\t", "")
+	xmlOutPut, err := xml.MarshalIndent(result, "    ", "")
 	if err != nil {
 		return err
 	}

@@ -1,7 +1,7 @@
 package models
 
 import (
-	"beegostudy/util"
+	"beegostudy/util/stringutil"
 	"strconv"
 	"strings"
 	"sync"
@@ -52,7 +52,7 @@ func GetMaxNo(noname, notype string, length int) string {
 	o := orm.NewOrm()
 	var maxno string
 	if v, _ := getNoValue(noname, notype); v == 0 {
-		maxno = util.LeftPad("1", '0', length)
+		maxno = stringutil.LeftPad("1", '0', length)
 		if !strings.EqualFold(notype, "SN") {
 			maxno = notype + maxno
 		}
@@ -60,7 +60,7 @@ func GetMaxNo(noname, notype string, length int) string {
 		o.Insert(&no)
 	} else {
 		v++
-		maxno = util.LeftPad(strconv.Itoa(v), '0', length)
+		maxno = stringutil.LeftPad(strconv.Itoa(v), '0', length)
 		if !strings.EqualFold(notype, "SN") {
 			maxno = notype + maxno
 		}
