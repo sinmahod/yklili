@@ -8,6 +8,8 @@ import (
 	"beegostudy/util/fileutil"
 	"encoding/xml"
 	"fmt"
+	"sort"
+	"strings"
 
 	"github.com/astaxie/beego"
 )
@@ -98,15 +100,20 @@ func TaskStop(id string) {
 /**
  *   执行任务
  */
-func TaskExecute(id string) {
-	crontab.execFunc(id)
+func TaskExecute(ids string) {
+	idx := strings.Split(ids, ",")
+	for _, id := range idx {
+		crontab.execFunc(id)
+	}
 }
 
 /**
  *   获取所有任务列表
  */
 func GetTaskList() []*Entry {
-	return crontab.EntryList()
+	entries := crontab.EntryList()
+	sort.Sort(byId(entries))
+	return entries
 }
 
 var taskFile = beego.AppPath + "/conf/task.xml"

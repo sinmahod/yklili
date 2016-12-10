@@ -10,6 +10,7 @@
         
         <!-- bootstrapDialog -->
         <script src="../static/js/bootstrap-dialog.min.js"></script>
+        <script src="../static/js/jquery.gritter.min.js"></script>
         <script src="../static/js/gl.bootstrap-dialog.extend.js"></script>
 
         <!-- formverify -->

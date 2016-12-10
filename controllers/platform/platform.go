@@ -37,3 +37,30 @@ func (c *PlatformController) Prepare() {
 		}
 	}
 }
+
+//菜单页面
+type MenusController struct {
+	PlatformController
+}
+
+func (c *MenusController) Page() {
+	c.TplName = "platform/menus.html"
+}
+
+//用户页面
+type UsersController struct {
+	PlatformController
+}
+
+func (c *UsersController) Page() {
+	c.TplName = "platform/users.html"
+}
+
+//定时任务页面
+type CronsController struct {
+	PlatformController
+}
+
+func (c *CronsController) Page() {
+	c.TplName = "platform/crons.html"
+}

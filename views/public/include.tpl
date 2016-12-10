@@ -10,6 +10,9 @@
         <!-- text fonts -->
         <link rel="stylesheet" href="../static/css/fonts.googleapis.com.css" />
 
+        <!-- jquery gritter -->
+        <link rel="stylesheet" href="../static/css/jquery.gritter.min.css" />
+
         <!-- ace styles -->
         <link rel="stylesheet" href="../static/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style" />
 
@@ -21,6 +24,8 @@
 
         <!-- bootstrapDialog -->
         <link rel="stylesheet" href="../static/css/bootstrap-dialog.min.css" />
+
+     
 
         <!--[if lte IE 9]>
           <link rel="stylesheet" href="../static/css/ace-ie.min.css" />

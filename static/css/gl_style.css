@@ -107,6 +107,37 @@ input[type=text]:hover,select:hover{
     overflow-y: overlay;
 }
 
+/* jdGrid 开关大小样式调整 */
+.jqgrow input[type=checkbox].ace.ace-switch+.lbl {
+      min-height: 0px;
+}
+.jqgrow input[type=checkbox].ace.ace-switch.ace-switch-4+.lbl::before, input[type=checkbox].ace.ace-switch.ace-switch-5+.lbl::before{
+    line-height: 18px;
+    height: 20px;
+}
+.jqgrow input[type=checkbox].ace.ace-switch.ace-switch-4+.lbl::after, input[type=checkbox].ace.ace-switch.ace-switch-5+.lbl::after{
+    height: 16px;
+    line-height: 16px
+}
+.jqgrow td>label, th>label {
+    margin-bottom: -4px;
+}
+
+/* jquery gritter 强制居中*/
+#gritter-notice-wrapper {
+    position: fixed;
+    margin: 0 auto;
+    top: 20px;
+    left: 0;
+    right: 0;
+    width: 301px;
+    z-index: 9999;
+}
+.gritter-radius {
+    border-radius:10px;  
+}
+
+
 /*  dialog宽度，只有在大屏时才生效 */
 @media (min-width: 768px) {
 

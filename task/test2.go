@@ -16,13 +16,13 @@ func (t *TestTaskA) GetId() string {
 }
 
 func (t *TestTaskA) GetSpec() string {
-	return "*/5  *  *  *  *  *"
+	return "5  *  *  *  *  *"
 }
 
 func (t *TestTaskA) GetDesc() string {
-	return "测试任务A（每5秒执行一次）"
+	return "测试任务A（每分钟的第5秒执行一次）"
 }
 
 func (t *TestTaskA) Execute() {
-	fmt.Println("------------测试任务A（每5秒执行一次）-------------")
+	fmt.Println("------------测试任务A（每分钟的第5秒执行一次）-------------")
 }

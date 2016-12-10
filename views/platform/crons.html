@@ -1,5 +1,5 @@
                          <div class="page-header">
-                            <button class="btn btn-sm btn-success" onclick="execTask2()">
+                            <button class="btn btn-sm btn-success" onclick="execTask()">
                                 <i class="ace-icon fa fa-rocket bigger-125"></i>
                                 <span class="bigger-115 no-text-shadow">执行任务</span>
                             </button>
@@ -44,7 +44,19 @@
                 });
         }); 
 
-        function execTask2(){
+        function setStatus(ele,id) {
+            var method = "/data/cron/Stop";
+            if (ele.checked) {
+                    method = "/data/cron/Start";
+            }
+            var json = { TaskId : id };
+            SendData.Post(method,json,function(response){
+                    BootFrame.gritter(response.MESSAGE);
+                    DataGrid.loadData("datatable");
+            });
+        }
+
+        function execTask(){
             var ids = DataGrid.getSelectRowIds("datatable");
             
             if (ids.length == 0){
@@ -52,7 +64,7 @@
                 return;
             }
             var json = { TaskIds : ids.join() };
-            SendData.Post("/data/cron/Exec2",json,function(response){
+            SendData.Post("/data/cron/Exec",json,function(response){
                     BootFrame.gritter(response.MESSAGE);
                     DataGrid.loadData("datatable");
             });

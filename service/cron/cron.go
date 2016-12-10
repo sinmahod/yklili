@@ -90,6 +90,15 @@ func (s byTime) Less(i, j int) bool {
 	return s[i].Next.Before(s[j].Next)
 }
 
+//按Id排序任务
+type byId []*Entry
+
+func (s byId) Len() int      { return len(s) }
+func (s byId) Swap(i, j int) { s[i], s[j] = s[j], s[i] }
+func (s byId) Less(i, j int) bool {
+	return s[i].Id < s[j].Id
+}
+
 // New returns a new Cron job runner, in the Local time zone.
 func New() *cron {
 	return NewWithLocation(time.Now().Location())
@@ -333,7 +342,7 @@ func (c *cron) run() {
 			for _, e := range c.Entries {
 				if e.Id == exeEntryId {
 					go c.runWithRecovery(e.job)
-					e.Prev = effective
+					e.Prev = time.Now()
 					break
 				}
 			}

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
     <TaskList>
-    <task id="Test" status="true" type="*task.TestTask">测试任务（每3秒执行一次）</task>
-    <task id="TestA" status="true" type="*task.TestTaskA">测试任务A（每5秒执行一次）</task>
+    <task id="Test" status="true" type="*task.TestTask">测试任务（每30秒执行一次）</task>
+    <task id="TestA" status="false" type="*task.TestTaskA">测试任务A（每分钟的第5秒执行一次）</task>
     </TaskList>

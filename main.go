@@ -47,6 +47,7 @@ func main() {
 	pages := map[string]beego.ControllerInterface{
 		"users": &platform.UsersController{},
 		"menus": &platform.MenusController{},
+		"crons": &platform.CronsController{},
 	}
 
 	for name, controller := range pages {
@@ -58,6 +59,7 @@ func main() {
 		"menu": &data.MenuController{},
 		"user": &data.UserController{},
 		"cron": &data.CronController{},
+		"test": &data.TestController{},
 	}
 
 	for name, controller := range models {
