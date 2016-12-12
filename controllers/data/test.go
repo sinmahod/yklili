@@ -1,6 +1,7 @@
 package data
 
 import (
+	"beegostudy/service/progress"
 	"fmt"
 	"reflect"
 	"time"
@@ -27,56 +28,8 @@ func (c *TestController) Exec() {
 	c.ServeJSON()
 }
 
-func (c *TestController) Stat() {
-	id := c.GetString("Id")
-	if t, ok := threadtask[id]; ok {
-		c.Data["json"] = t.GetPerc()
-	} else {
-		c.Data["json"] = ok
-	}
-
-	c.ServeJSON()
-}
-
-var threadtask = make(map[string]*PercentageTask)
-
-type PercentageTask struct {
-	id   string
-	perc int
-	fc   func()
-}
-
-func (t *PercentageTask) SetTaskId(taskId string) error {
-	t.id = taskId
-	return nil
-}
-
-func (t *PercentageTask) Start() error {
-	if tt, ok := threadtask[t.id]; ok {
-		return fmt.Errorf("任务[%s]已经在执行中，请等待完成，当前进度为(%d%s)", t.id, tt.perc, "%")
-	}
-	go t.fc()
-	threadtask[t.id] = t
-	return nil
-
-}
-
-func (t *PercentageTask) SetFunc(fc func()) {
-	t.fc = fc
-}
-
-// 得到任务当前进度
-func (t *PercentageTask) GetPerc() int {
-	return t.perc
-}
-
-// 得到任务当前进度
-func (t *PercentageTask) SetPerc(perc int) {
-	t.perc = perc
-}
-
 func Test() {
-	pt := new(PercentageTask)
+	pt := new(progress.ProgressTask)
 	pt.SetTaskId("test")
 	pt.SetFunc(func() {
 		for i := 0; i < 100; i++ {

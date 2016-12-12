@@ -48,6 +48,7 @@ func main() {
 		"users": &platform.UsersController{},
 		"menus": &platform.MenusController{},
 		"crons": &platform.CronsController{},
+		"prog":  &platform.ProgController{}, //进度条任务
 	}
 
 	for name, controller := range pages {

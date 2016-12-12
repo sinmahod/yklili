@@ -1,0 +1,12 @@
+<div id="progressbar"></div>
+<script type="text/javascript">
+jQuery(function($){
+	$( "#progressbar" ).progressbar({
+		value: 37,
+		create: function( event, ui ) {
+			$(this).addClass('progress progress-striped active')
+				   .children(0).addClass('progress-bar progress-bar-success');
+		}
+	});
+});
+</script>

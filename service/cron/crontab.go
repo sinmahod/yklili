@@ -124,9 +124,12 @@ func readTaskFile() {
 	var t *cron
 	if fileutil.Exist(taskFile) {
 		fileutil.XMLToStruct(taskFile, &t)
-		for _, entry := range t.Entries {
-			taskstatus[entry.Id] = entry.Status
+		if t != nil {
+			for _, entry := range t.Entries {
+				taskstatus[entry.Id] = entry.Status
+			}
 		}
+
 	}
 }
 

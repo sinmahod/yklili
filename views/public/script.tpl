@@ -17,6 +17,10 @@
         <script src="../static/js/bootstrapValidator.js"></script>
         <script src="../static/js/gl.validate.js"></script>
 
+         <!-- progressbar -->
+        <script src="../static/js/jquery-ui.min.js"></script>
+        <script src="../static/js/jquery.ui.touch-punch.min.js"></script>
+
         <!-- ace scripts -->
         <script src="../static/js/ace-elements.min.js"></script>
         <script src="../static/js/ace.min.js"></script>

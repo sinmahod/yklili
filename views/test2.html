@@ -45,17 +45,22 @@
         }); 
 
         function execTask2(){
-            var ids = DataGrid.getSelectRowIds("datatable");
-            
-            if (ids.length == 0){
-                BootFrame.alert("请选择要执行的任务");
-                return;
-            }
-            var json = { TaskIds : ids.join() };
-            SendData.Post("/data/cron/Exec2",json,function(response){
-                    BootFrame.gritter(response.MESSAGE);
-                    DataGrid.loadData("datatable");
-            });
+            var bf = BootFrame.progressbar();
+            // bf.title("任务正在执行请等待");
+            // bf.url('/platform/progressbar/progressbar.dml');
+            // bf.width(450);
+            // bf.height(80);
+            // bf.addButton("确认",save,null,13);
+            // bf.show();
+            // var json = { TaskIds : ids.join() };
+            // SendData.Post("/data/cron/Exec2",json,function(response){
+            //         BootFrame.gritter(response.MESSAGE);
+            //         DataGrid.loadData("datatable");
+            // });
+        }
+
+        function save(){
+
         }
 
         </script>

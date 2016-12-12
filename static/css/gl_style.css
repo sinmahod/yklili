@@ -137,6 +137,18 @@ input[type=text]:hover,select:hover{
     border-radius:10px;  
 }
 
+/* 进度条 */
+.progress-label {
+    width: 50px;
+    height: 22px;
+    position: absolute;
+    left: 48%;
+    font-weight: bold;
+    text-shadow: 1px 1px 0 #71b565;
+    background-color: initial;
+    color: #337ab7;
+    font-size: 15px;
+}
 
 /*  dialog宽度，只有在大屏时才生效 */
 @media (min-width: 768px) {

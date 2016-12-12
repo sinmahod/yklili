@@ -125,7 +125,7 @@
 						b.push(bt);
 					}
 				  	dobj = BootstrapDialog.show({
-			  			      id: diaid,
+			  			   id: diaid,
 					                title: t,
 					                message: m,
 					                cssClass: 'dialog-'+w+' dialog-h-'+h,
@@ -191,6 +191,43 @@
 					dobj.close();
 				}
 			}//<! return >
+		},//<! dialog >
+		//Dialog
+		progressbar: function(taskid){
+	 		var dialog = new BootstrapDialog({
+		 		message: function(dialogRef){
+		                		var $message = $('<div id="progressbar"><div class="progress-label">加载中...</div></div>');
+		                		return $message;
+		            		},
+		            		title:"任务进行中，请耐心等待",
+		            		draggable: true,
+		            		closable: true,
+		            		cssClass: 'dialog-450 dialog-h-80',
+		            		onshown:function(dialogRef){
+		            			$( "#progressbar" ).progressbar({
+						value: 37,
+						create: function( event, ui ) {
+							var ele = $(this);
+							ele.addClass('progress progress-striped active');
+							$(ele.children(0)[1]).addClass('progress-bar progress-bar-success');
+						},
+						change: function() {
+							$( ".progress-label" ).text( $( "#progressbar" ).progressbar( "value" ) + "%" );
+					     	},
+				      		complete: function() {
+					        		$( ".progress-label" ).text( "完成！" );
+					      	}
+					});
+		            			$.post("/platform/prog",null,function(result){
+						alert(result);
+					}).error(function() { 
+				    		BootFrame.alert("服务器发生错误",null,"错误",true); 
+					});
+		            		}
+			});
+			dialog.realize();
+			dialog.getModalFooter().hide();
+			dialog.open();
 		},//<! dialog >
 		gritter: function (msg,title,time) {
 			$.gritter.add({
