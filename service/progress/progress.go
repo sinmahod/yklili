@@ -4,9 +4,18 @@ import "fmt"
 
 var threadtask = make(map[string]*ProgressTask)
 
+func GetPerc(taskId string) *ProgressTask {
+	if t, ok := threadtask[taskId]; ok {
+		return t
+	} else {
+		return nil
+	}
+}
+
 type ProgressTask struct {
 	id   string
-	perc int
+	Perc int
+	Msg  string
 	fc   func()
 }
 
@@ -21,7 +30,7 @@ func (t *ProgressTask) Start() error {
 
 	}
 	if tt, ok := threadtask[t.id]; ok {
-		return fmt.Errorf("任务[%s]已经在执行中，请等待完成，当前进度为(%d%s)", t.id, tt.perc, "%")
+		return fmt.Errorf("任务[%s]已经在执行中，请等待完成，当前进度为(%d%s)", t.id, tt.Perc, "%")
 	}
 	go t.execute()
 	threadtask[t.id] = t
@@ -39,10 +48,20 @@ func (t *ProgressTask) SetFunc(fc func()) {
 
 // 得到任务当前进度
 func (t *ProgressTask) GetPerc() int {
-	return t.perc
+	return t.Perc
 }
 
 // 得到任务当前进度
 func (t *ProgressTask) SetPerc(perc int) {
-	t.perc = perc
+	t.Perc = perc
+}
+
+// 得到任务当前消息
+func (t *ProgressTask) GetMsg() string {
+	return t.Msg
+}
+
+// 得到任务当前消息
+func (t *ProgressTask) SetMsg(format string, a ...interface{}) {
+	t.Msg = fmt.Sprintf(format, a...)
 }

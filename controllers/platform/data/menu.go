@@ -15,7 +15,7 @@ type MenuController struct {
 }
 
 func (c *MenuController) Get() {
-	//得到方法名，利用反射机制获取机构体
+	//得到方法名，利用反射机制获取结构体
 	value := reflect.ValueOf(c)
 	//判断结构中是否存在方法，存在则执行
 	if v := value.MethodByName(c.MethodName); v.IsValid() {

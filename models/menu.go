@@ -139,6 +139,18 @@ func (menu *Menu) String() string {
 
 //相关函数
 
+//返回第一个url
+func GetIndexLink() string {
+	o := orm.NewOrm()
+	var menu Menu
+	err := o.QueryTable("menu").Exclude("link", "").OrderBy("innercode").One(&menu, "link")
+	if err == orm.ErrNoRows {
+		// 没有找到记录
+		return ""
+	}
+	return menu.Link
+}
+
 //根据ID得到菜单数据
 func GetMenu(id int) (*Menu, error) {
 	menu := Menu{Id: id}

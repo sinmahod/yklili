@@ -45,22 +45,8 @@
         }); 
 
         function execTask2(){
-            var bf = BootFrame.progressbar();
-            // bf.title("任务正在执行请等待");
-            // bf.url('/platform/progressbar/progressbar.dml');
-            // bf.width(450);
-            // bf.height(80);
-            // bf.addButton("确认",save,null,13);
-            // bf.show();
-            // var json = { TaskIds : ids.join() };
-            // SendData.Post("/data/cron/Exec2",json,function(response){
-            //         BootFrame.gritter(response.MESSAGE);
-            //         DataGrid.loadData("datatable");
-            // });
+            SendData.Post("/data/test/Exec",null,function(response){
+                   BootFrame.progressbar(response.TaskId);
+            });
         }
-
-        function save(){
-
-        }
-
         </script>

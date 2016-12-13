@@ -297,6 +297,7 @@ func (c *cron) run() {
 				if e.Next != effective || !e.Status {
 					break
 				}
+				log.Printf("开始执行任务:" + e.Desc)
 				go c.runWithRecovery(e.job)
 				e.Prev = e.Next
 				e.Next = e.schedule.Next(now)

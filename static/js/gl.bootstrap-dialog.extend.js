@@ -202,10 +202,11 @@
 		            		title:"任务进行中，请耐心等待",
 		            		draggable: true,
 		            		closable: true,
+		            		closeByBackdrop: false, 
 		            		cssClass: 'dialog-450 dialog-h-80',
 		            		onshown:function(dialogRef){
 		            			$( "#progressbar" ).progressbar({
-						value: 37,
+						value: 0,
 						create: function( event, ui ) {
 							var ele = $(this);
 							ele.addClass('progress progress-striped active');
@@ -218,11 +219,28 @@
 					        		$( ".progress-label" ).text( "完成！" );
 					      	}
 					});
-		            			$.post("/platform/prog",null,function(result){
-						alert(result);
-					}).error(function() { 
-				    		BootFrame.alert("服务器发生错误",null,"错误",true); 
-					});
+					var interval = setInterval(function(){
+						var data = {"taskId" : taskid}
+			            			$.post("/platform/prog",data,function(result){
+			            				if (result != null){
+								$( "#progressbar" ).progressbar( "value", result.Perc);
+								if (result.Msg){
+									dialog.setTitle(result.Msg);
+								}
+								if (result.Perc >= 100){
+									dialog.setTitle('任务完成');
+									clearInterval(interval);
+								}
+			            				}else{
+			            					dialog.setTitle('任务完成');
+			            					$( "#progressbar" ).progressbar( "value", 100);
+			            					clearInterval(interval);	
+			            				}
+						}).error(function() { 
+							clearInterval(interval);
+					    		BootFrame.alert("服务器发生错误，未获取到数据",null,"错误",true); 
+						});
+					},1000);
 		            		}
 			});
 			dialog.realize();

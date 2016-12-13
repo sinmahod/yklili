@@ -1,9 +1,9 @@
 package main
 
 import (
-	"beegostudy/controllers/data"
-	"beegostudy/controllers/dml"
 	"beegostudy/controllers/platform"
+	"beegostudy/controllers/platform/data"
+	"beegostudy/controllers/template"
 	"beegostudy/service/cron"
 	_ "beegostudy/task"
 
@@ -38,22 +38,11 @@ func main() {
 
 	orm.Debug = true                                 //ORM调试模式打开
 	beego.BConfig.WebConfig.Session.SessionOn = true //启用Session
+	beego.BConfig.Listen.EnableAdmin = true          //启用进程内监控
 
 	beego.Router("/", &MainController{})
 	beego.Router("/login", &platform.LoginController{})
 	beego.Router("/register", &platform.RegisterController{})
-
-	//页面控制器
-	pages := map[string]beego.ControllerInterface{
-		"users": &platform.UsersController{},
-		"menus": &platform.MenusController{},
-		"crons": &platform.CronsController{},
-		"prog":  &platform.ProgController{}, //进度条任务
-	}
-
-	for name, controller := range pages {
-		beego.Router(fmt.Sprintf("/platform/%s", name), controller, "get:Page")
-	}
 
 	//数据控制器
 	models := map[string]beego.ControllerInterface{
@@ -67,7 +56,8 @@ func main() {
 		beego.Router(fmt.Sprintf("/data/%s/:method", name), controller, "*:Get")
 	}
 
-	beego.Router("/platform/test", &platform.TestController{})
+	//测试使用
+	beego.Router("/data/test/:method", &data.TestController{}, "*:Get")
 
 	//校验用户登录：未登录则重定向到login
 	var FilterUser = func(ctx *context.Context) {
@@ -78,9 +68,8 @@ func main() {
 		}
 	}
 
-	//dml格式支持直接预览
-	beego.AddTemplateExt("dml")
-	beego.Router("/:path.dml", &dml.DMLController{})
+	//html格式支持直接预览
+	beego.Router("/:path.html", &template.HTMLController{})
 
 	beego.InsertFilter("/platform/*", beego.BeforeRouter, FilterUser)
 	beego.Run()

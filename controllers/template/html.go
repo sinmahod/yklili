@@ -1,23 +1,32 @@
-package platform
+package template
 
 import (
 	"beegostudy/models"
+	"strings"
 
 	"github.com/astaxie/beego"
 )
 
-type PlatformController struct {
+type HTMLController struct {
 	beego.Controller
+	HTMLPath string
 }
 
 /**
 *   准备方法，初始化页头、页尾、菜单以及样式和脚本模板
 **/
-func (c *PlatformController) Prepare() {
+func (c *HTMLController) Prepare() {
+
+	c.HTMLPath = c.GetString(":path")
+
 	//如果使用pjax的请求则只解析局部模板，反之返回解析全部模板
+	_, action := c.GetControllerAndAction()
+
+	beego.Info(action)
+
 	pjax := c.GetString("_pjax")
 
-	if pjax == "" {
+	if strings.EqualFold(action, "Get") && pjax == "" {
 
 		defer func() {
 			c.Layout = "platform/platform.html"
@@ -38,29 +47,6 @@ func (c *PlatformController) Prepare() {
 	}
 }
 
-//菜单页面
-type MenusController struct {
-	PlatformController
-}
-
-func (c *MenusController) Page() {
-	c.TplName = "platform/menus.html"
-}
-
-//用户页面
-type UsersController struct {
-	PlatformController
-}
-
-func (c *UsersController) Page() {
-	c.TplName = "platform/users.html"
-}
-
-//定时任务页面
-type CronsController struct {
-	PlatformController
-}
-
-func (c *CronsController) Page() {
-	c.TplName = "platform/crons.html"
+func (c *HTMLController) Get() {
+	c.TplName = c.HTMLPath + ".html"
 }

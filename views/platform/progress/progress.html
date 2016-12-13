@@ -1,0 +1,26 @@
+                         <div class="page-header">
+                            <button class="btn btn-sm btn-success" onclick="execTask2()">
+                                <i class="ace-icon fa fa-rocket bigger-125"></i>
+                                <span class="bigger-115 no-text-shadow">执行任务</span>
+                            </button>
+                        </div><!-- /.page-header -->
+                        
+                        <div class="bottom-border"></div>
+
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <!-- PAGE CONTENT BEGINS -->
+                                <table id="datatable" url="" ></table>
+
+                                <!-- PAGE CONTENT ENDS -->
+                            </div><!-- /.col -->
+                        </div><!-- /.row -->
+
+        <!-- jgrid -->
+        <script type="text/javascript">
+        function execTask2(){
+            SendData.Post("/data/test/Exec",null,function(response){
+                   BootFrame.progressbar(response.TaskId);
+            });
+        }
+        </script>

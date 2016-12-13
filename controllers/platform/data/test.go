@@ -2,7 +2,6 @@ package data
 
 import (
 	"beegostudy/service/progress"
-	"fmt"
 	"reflect"
 	"time"
 )
@@ -12,7 +11,7 @@ type TestController struct {
 }
 
 func (c *TestController) Get() {
-	//得到方法名，利用反射机制获取机构体
+	//得到方法名，利用反射机制获取结构体
 	value := reflect.ValueOf(c)
 	//判断结构中是否存在方法，存在则执行
 	if v := value.MethodByName(c.MethodName); v.IsValid() {
@@ -23,20 +22,17 @@ func (c *TestController) Get() {
 }
 
 func (c *TestController) Exec() {
-	Test()
-	c.success("操作完成，任务执行完毕")
-	c.ServeJSON()
-}
-
-func Test() {
 	pt := new(progress.ProgressTask)
 	pt.SetTaskId("test")
 	pt.SetFunc(func() {
 		for i := 0; i < 100; i++ {
-			time.Sleep(time.Second * 1)
-			fmt.Println(i)
+			time.Sleep(100000000)
 			pt.SetPerc(i)
+			pt.SetMsg("任务已执行到了%d%s", i, "%")
 		}
 	})
-	fmt.Println(pt.Start())
+	pt.Start()
+	c.put("TaskId", "test")
+	c.success("任务开始")
+	c.ServeJSON()
 }

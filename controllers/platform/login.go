@@ -17,6 +17,12 @@ type LoginController struct {
 	beego.Controller
 }
 
+type result struct {
+	Status   int    `json:"status"`
+	Messsage string `json:"msg"`
+	Link     string `json:"link"`
+}
+
 func (c *LoginController) Get() {
 	c.TplName = "login.html"
 }
@@ -48,7 +54,12 @@ func (c *LoginController) Post() {
 	} else {
 		//用户存在则校验用户密码是否正确
 		if pwdutil.VerifyPWD(p, user.GetPassword()) {
-			jsondata = result{1, "", "./platform/users"}
+			if link := models.GetIndexLink(); link != "" {
+				jsondata = result{1, "", link}
+			} else {
+				jsondata = result{1, "", "./platform/users"}
+			}
+
 			c.SetSession("User", user)
 		} else {
 			jsondata = result{0, "密码错误请重试！", ""}
