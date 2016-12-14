@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
     <TaskList>
+    <task id="DBConnect" status="true" type="*task.DBConnectTask">保持数据库连接（每1分钟执行一次）</task>
     <task id="Test" status="false" type="*task.TestTask">测试任务（每30秒执行一次）</task>
     <task id="TestA" status="false" type="*task.TestTaskA">测试任务A（每分钟的第5秒执行一次）</task>
     </TaskList>

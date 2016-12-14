@@ -46,10 +46,11 @@ func main() {
 
 	//数据控制器
 	models := map[string]beego.ControllerInterface{
-		"menu": &data.MenuController{},
-		"user": &data.UserController{},
-		"cron": &data.CronController{},
-		"test": &data.TestController{},
+		"menu":  &data.MenuController{},
+		"user":  &data.UserController{},
+		"cron":  &data.CronController{},
+		"image": &data.ImageController{},
+		"test":  &data.TestController{},
 	}
 
 	for name, controller := range models {

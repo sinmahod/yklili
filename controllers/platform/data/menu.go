@@ -4,7 +4,6 @@ import (
 	"beegostudy/models"
 	"beegostudy/models/orm"
 	"beegostudy/util/numberutil"
-	"reflect"
 	"strings"
 
 	"github.com/astaxie/beego"
@@ -12,17 +11,6 @@ import (
 
 type MenuController struct {
 	DataController
-}
-
-func (c *MenuController) Get() {
-	//得到方法名，利用反射机制获取结构体
-	value := reflect.ValueOf(c)
-	//判断结构中是否存在方法，存在则执行
-	if v := value.MethodByName(c.MethodName); v.IsValid() {
-		v.Call(nil)
-	} else {
-		c.methodNotFind()
-	}
 }
 
 //DataGrid列表数据加载

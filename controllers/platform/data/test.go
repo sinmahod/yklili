@@ -2,23 +2,11 @@ package data
 
 import (
 	"beegostudy/service/progress"
-	"reflect"
 	"time"
 )
 
 type TestController struct {
 	DataController
-}
-
-func (c *TestController) Get() {
-	//得到方法名，利用反射机制获取结构体
-	value := reflect.ValueOf(c)
-	//判断结构中是否存在方法，存在则执行
-	if v := value.MethodByName(c.MethodName); v.IsValid() {
-		v.Call(nil)
-	} else {
-		c.methodNotFind()
-	}
 }
 
 func (c *TestController) Exec() {

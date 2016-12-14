@@ -150,6 +150,22 @@ input[type=text]:hover,select:hover{
     font-size: 15px;
 }
 
+/* 上传控件 */
+.dropzone .dz-preview .dz-progress {
+        top: 70% !important;
+}
+.dropzone .dz-preview.dz-image-preview {
+        background: whitesmoke !important;
+}
+.dropzone .dz-preview .dz-error-message:after {
+    top: 30px  !important;
+    border-bottom: inherit !important;
+    border-top: 6px solid #be2626 !important;
+}
+.dropzone .dz-preview .dz-error-message {
+        top: -35px !important;
+}
+
 /*  dialog宽度，只有在大屏时才生效 */
 @media (min-width: 768px) {
 

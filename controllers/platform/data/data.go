@@ -2,7 +2,10 @@ package data
 
 import (
 	"beegostudy/util"
+	"mime/multipart"
 	"net/http"
+	"reflect"
+	"regexp"
 
 	"github.com/astaxie/beego"
 )
@@ -21,8 +24,21 @@ type DataController struct {
 	MethodName string
 	//存放字段和值的数据
 	RequestData map[string]interface{}
+	//存放上传的文件
+	FileMap map[string][]*multipart.FileHeader
 	//返回数据
 	ResponseData map[string]interface{}
+}
+
+func (c *DataController) Get() {
+	//得到方法名，利用反射机制获取结构体
+	value := reflect.ValueOf(c.AppController)
+	//判断结构中是否存在方法，存在则执行
+	if v := value.MethodByName(c.MethodName); v.IsValid() {
+		v.Call(nil)
+	} else {
+		c.methodNotFind()
+	}
 }
 
 /**
@@ -45,6 +61,23 @@ func (c *DataController) Prepare() {
 			c.RequestData[k] = v[0]
 		}
 	}
+
+	//文件上传
+	c.FileMap = make(map[string][]*multipart.FileHeader)
+	if c.Ctx.Request.MultipartForm != nil && c.Ctx.Request.MultipartForm.File != nil {
+		filemap := c.Ctx.Request.MultipartForm.File
+		for k, v := range filemap {
+			reg, _ := regexp.Compile(`\[[\d]+?\]`)
+			k = reg.ReplaceAllString(k, "")
+
+			if files, ok := c.FileMap[k]; ok {
+				c.FileMap[k] = append(files, v...)
+			} else {
+				c.FileMap[k] = v
+			}
+		}
+	}
+
 	c.ResponseData = make(map[string]interface{})
 }
 

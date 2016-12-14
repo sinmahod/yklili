@@ -2,9 +2,67 @@ package fileutil
 
 import (
 	"encoding/xml"
+	"io"
 	"io/ioutil"
 	"os"
+	"path"
 )
+
+// 写入文件
+func WriteFileByReadCloser(filename string, file io.ReadCloser) error {
+	defer file.Close()
+	dstFile, err := os.Create(filename)
+	if err != nil {
+		return err
+	}
+	defer dstFile.Close()
+	_, err = io.Copy(dstFile, file)
+	return err
+}
+
+// 写入文件
+func WriteFileByReader(filename string, file io.Reader) error {
+	dstFile, err := os.Create(filename)
+	if err != nil {
+		return err
+	}
+	defer dstFile.Close()
+	_, err = io.Copy(dstFile, file)
+	return err
+}
+
+// 写入文件
+func WriteFileByByte(filename string, data []byte) error {
+	os.MkdirAll(path.Dir(filename), os.ModePerm)
+	return ioutil.WriteFile(filename, data, 0655)
+}
+
+// 得到文件大小
+func FileSize(file string) (int64, error) {
+	f, err := os.Stat(file)
+	if err != nil {
+		return 0, err
+	}
+	return f.Size(), nil
+}
+
+// 是否是文件
+func IsFile(filePath string) bool {
+	f, e := os.Stat(filePath)
+	if e != nil {
+		return false
+	}
+	return !f.IsDir()
+}
+
+// 是否是文件夹
+func IsDir(dir string) bool {
+	f, e := os.Stat(dir)
+	if e != nil {
+		return false
+	}
+	return f.IsDir()
+}
 
 // 检查文件或目录是否存在
 // 如果由 filename 指定的文件或目录存在则返回 true，否则返回 false
