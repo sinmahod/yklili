@@ -1,0 +1,54 @@
+
+<div>
+    <form  class="dropzone well" id="dropzone"  method="post" enctype="multipart/form-data">
+        <div class="fallback">
+            <input name="filetest" type="file" id="filetest" multiple="" />
+        </div>
+    </form>
+    <button id="submit-all">上传图片</button>
+</div>
+<div id="preview-template" class="hide">
+    <div class="dz-preview dz-file-preview">
+        <div class="dz-image">
+            <img data-dz-thumbnail="" />
+        </div>
+
+        <div class="dz-details">
+            <div class="dz-size">
+                <span data-dz-size=""></span>
+            </div>
+
+            <div class="dz-filename">
+                <span data-dz-name=""></span>
+            </div>
+        </div>
+
+        <div class="dz-progress">
+            <span class="dz-upload" data-dz-uploadprogress=""></span>
+        </div>
+
+        <div class="dz-error-message">
+            <span data-dz-errormessage=""></span>
+        </div>
+
+        <div class="dz-success-mark">
+            <span class="fa-stack fa-lg bigger-150">
+                <i class="fa fa-circle fa-stack-2x white"></i>
+
+                <i class="fa fa-check fa-stack-1x fa-inverse green"></i>
+            </span>
+        </div>
+
+        <div class="dz-error-mark">
+            <span class="fa-stack fa-lg bigger-150">
+                <i class="fa fa-circle fa-stack-2x white"></i>
+
+                <i class="fa fa-remove fa-stack-1x fa-inverse red"></i>
+            </span>
+        </div>
+    </div>
+</div>
+<upload id="asdasd" />
+<script type="text/javascript">
+UploadEx()
+</script>

@@ -9,6 +9,10 @@ type ImageController struct {
 	DataController
 }
 
+func (c *ImageController) UploadTest() {
+	c.TplName = "platform/image/uploadDialog.html"
+}
+
 func (c *ImageController) Upload() {
 	if files, ok := c.FileMap["filetest"]; ok {
 		for _, file := range files {

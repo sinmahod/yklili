@@ -3,6 +3,11 @@
                                 <i class="ace-icon fa fa-rocket bigger-125"></i>
                                 <span class="bigger-115 no-text-shadow">执行任务</span>
                             </button>
+
+                            <button class="btn btn-sm btn-success" onclick="uploadTest()">
+                                <i class="ace-icon fa fa-rocket bigger-125"></i>
+                                <span class="bigger-115 no-text-shadow">上传测试</span>
+                            </button>
                         </div><!-- /.page-header -->
                         
                         <div class="bottom-border"></div>
@@ -22,5 +27,19 @@
             SendData.Post("/data/test/Exec",null,function(response){
                    BootFrame.progressbar(response.TaskId);
             });
+        }
+
+        function uploadTest(){
+            var bf = BootFrame.dialog();
+            bf.title("测试上传");
+            bf.url('/data/image/UploadTest');
+            bf.width(500);
+            bf.height(300);
+            bf.addButton("确认",save,null,13);
+            bf.show();
+        }
+
+        function save(){
+
         }
         </script>
