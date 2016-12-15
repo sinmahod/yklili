@@ -67,6 +67,7 @@ func (c *DataController) Prepare() {
 	if c.Ctx.Request.MultipartForm != nil && c.Ctx.Request.MultipartForm.File != nil {
 		filemap := c.Ctx.Request.MultipartForm.File
 		for k, v := range filemap {
+			beego.Info("===========", k, v)
 			reg, _ := regexp.Compile(`\[[\d]+?\]`)
 			k = reg.ReplaceAllString(k, "")
 

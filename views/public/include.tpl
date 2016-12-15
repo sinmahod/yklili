@@ -25,8 +25,8 @@
         <!-- bootstrapDialog -->
         <link rel="stylesheet" href="/static/css/bootstrap-dialog.min.css" />
 
-        <!-- dropzone -->
-        <link rel="stylesheet" href="/static/css/dropzone.min.css" />
+        <!-- webUploader -->
+        <link rel="stylesheet" href="/static/webuploader/webuploader.css" />
 
         <!--[if lte IE 9]>
           <link rel="stylesheet" href="/static/css/ace-ie.min.css" />

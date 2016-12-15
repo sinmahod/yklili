@@ -9,31 +9,34 @@
 	return {
 		//弹出框
 		alert: function (msg,fn,tle,iswarning) {
-	        	BootstrapDialog.alert({
-		            title: tle ? tle : '提示',
-		            message: msg,
-		            type: iswarning ? BootstrapDialog.TYPE_WARNING : BootstrapDialog.TYPE_PRIMARY, // <-- Default value is BootstrapDialog.TYPE_WARNING
-		            closable: true, // <-- Default value is false
-		            draggable: true, // <-- Default value is false
-		            buttonLabel: '确定', // <-- Default value is 'OK',
-		            callback: function(result) {
-		                 	if (fn && fn instanceof Function) {
-		               		fn();
-	               		}
-		            }
-		        });
+	        		var dobj = BootstrapDialog.alert({
+		            		title: tle ? tle : '提示',
+		            		message: msg,
+		            		type: iswarning ? BootstrapDialog.TYPE_WARNING : BootstrapDialog.TYPE_PRIMARY, // <-- Default value is BootstrapDialog.TYPE_WARNING
+		            		closable: true, // <-- Default value is false
+		            		draggable: true, // <-- Default value is false
+		            		buttonLabel: '确定', // <-- Default value is 'OK',
+		            		callback: function(result) {
+	                 			if (fn && fn instanceof Function) {
+		               			fn();
+	               			}
+		           		}
+		        	});
+		        	dobj.getButton(dobj.getButtons()[0].id).addClass('btn-sm');
+		        	dobj.getModalHeader().css('padding','10px 10px 10px 15px');
+		  	dobj.getModalFooter().css('padding','10px 15px');
 		},
 		//选择框
 		confirm: function (message,fn,falsefn){
-			BootstrapDialog.confirm({
+			var dobj = BootstrapDialog.confirm({
 			            title: '确认操作',
 			            message: message,
-			            type: BootstrapDialog.TYPE_WARNING, // <-- Default value is BootstrapDialog.TYPE_PRIMARY
+			            type: BootstrapDialog.TYPE_SUCCESS, // <-- Default value is BootstrapDialog.TYPE_PRIMARY
 			            closable: true, // <-- Default value is false
 			            draggable: true, // <-- Default value is false
 			            btnCancelLabel: '取消', // <-- Default value is 'Cancel',
 			            btnOKLabel: '确定', // <-- Default value is 'OK',
-			            btnOKClass: 'btn-warning', // <-- If you didn't specify it, dialog type will be used,
+			            btnOKClass: 'btn-success', // <-- If you didn't specify it, dialog type will be used,
 			            callback: function(result) {
 					if(result) {
 					   	if (fn && fn instanceof Function) {
@@ -46,6 +49,10 @@
 					}
 			             }
 		        	});
+			dobj.getButton(dobj.getButtons()[0].id).addClass('btn-sm');
+			dobj.getButton(dobj.getButtons()[1].id).addClass('btn-sm');
+			dobj.getModalHeader().css('padding','10px 10px 10px 15px');
+	  		dobj.getModalFooter().css('padding','10px 15px');
 		},
 		//Dialog
 		dialog: function(){
@@ -89,7 +96,7 @@
 					if (jQuery.isEmptyObject(b) ) {
 						b = [{
 							label:name,
-							cssClass:css,
+							cssClass:css + ' btn-sm',
 							hotkey:keycode?keycode:0,
 							action:function(){
 								if (fn && fn instanceof Function) {
@@ -100,7 +107,7 @@
 					 }else{
 						var bt = {
 							label:name,
-							cssClass:css,
+							cssClass:css + ' btn-sm',
 							hotkey:keycode?keycode:0,
 							action:function(){
 								if (fn && fn instanceof Function) {
@@ -118,6 +125,7 @@
 					if (!hideclose){
 						var bt = {
 							label: '取消',
+							cssClass: 'btn-success btn-sm',
 					                    	action: function(dialogItself){
 					                        		dialogItself.close();
 					                    	}
@@ -137,7 +145,8 @@
 					                	BValidate({dialogId:this.id});
 					                }
 				           });
-
+				  	dobj.getModalHeader().css('padding','10px 10px 10px 15px');
+				  	dobj.getModalFooter().css('padding','10px 15px');
 				  	id = dobj.$modal[0].id;
 				},
 				verifyForm: function(warn){
@@ -203,7 +212,14 @@
 		            		draggable: true,
 		            		closable: true,
 		            		closeByBackdrop: false, 
-		            		cssClass: 'dialog-450 dialog-h-80',
+		            		cssClass: 'dialog-450 dialog-h-60',
+		            		buttons: [{
+					label: '确定',
+					cssClass: 'btn-primary btn-sm',
+			                    	action: function(dialogItself){
+			                        		dialogItself.close();
+			                    	}
+				}],
 		            		onshown:function(dialogRef){
 		            			$( "#progressbar" ).progressbar({
 						value: 0,
@@ -229,21 +245,26 @@
 								}
 								if (result.Perc >= 100){
 									dialog.setTitle('任务完成');
+									dialog.getModalFooter().show();
 									clearInterval(interval);
 								}
 			            				}else{
 			            					dialog.setTitle('任务完成');
+			            					dialog.getModalFooter().show();
 			            					$( "#progressbar" ).progressbar( "value", 100);
 			            					clearInterval(interval);	
 			            				}
 						}).error(function() { 
 							clearInterval(interval);
+							dialog.getModalFooter().show();
 					    		BootFrame.alert("服务器发生错误，未获取到数据",null,"错误",true); 
 						});
 					},1000);
 		            		}
 			});
 			dialog.realize();
+			dialog.getModalHeader().css('padding','10px 10px 10px 15px');
+			dialog.getModalFooter().css('padding','10px 15px');
 			dialog.getModalFooter().hide();
 			dialog.open();
 		},//<! dialog >

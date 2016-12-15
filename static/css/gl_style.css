@@ -138,6 +138,9 @@ input[type=text]:hover,select:hover{
 }
 
 /* 进度条 */
+.progress {
+    margin-bottom: 0px;
+}
 .progress-label {
     width: 65px;
     height: 22px;
@@ -150,20 +153,60 @@ input[type=text]:hover,select:hover{
     font-size: 15px;
 }
 
+/* 表单 */
+.form-group {
+    height: 34px;
+}
+
 /* 上传控件 */
+.dropzone.well {
+    background-color: #b3e1ff;
+    border: 1px dashed #333bb7;
+}
 .dropzone .dz-preview .dz-progress {
-        top: 70% !important;
+        top: 65% ;
+        left: 55%;
+        width: 70px;
 }
 .dropzone .dz-preview.dz-image-preview {
-        background: whitesmoke !important;
+        background: #b3e1ff ;
 }
 .dropzone .dz-preview .dz-error-message:after {
-    top: 30px  !important;
-    border-bottom: inherit !important;
-    border-top: 6px solid #be2626 !important;
+    top: 28px ;
+    border-bottom: inherit ;
+    border-top: 6px solid #be2626 ;
+    left: 45px;
 }
 .dropzone .dz-preview .dz-error-message {
-        top: -35px !important;
+        top: -33px ;
+        padding: 5px;
+        width: 100px;
+        text-align: center;
+}
+.dropzone .dz-message {
+    margin: auto;
+    padding-bottom: 20px;
+}
+.dropzone .dz-preview .dz-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+}
+.dropzone .dz-preview .dz-success-mark, .dropzone .dz-preview .dz-error-mark {
+    left: 60%;
+}
+.dropzone .dz-preview .dz-details .dz-filename span, .dropzone .dz-preview .dz-details .dz-size span {
+    padding: 0;
+}
+.dropzone .dz-preview .dz-details {
+    padding: 10px;
+}
+.dropzone .dz-preview .dz-details .dz-size {
+    margin-bottom: 5px;
+}
+.well {
+    min-height:0px;
+    padding: 20px 20px 0px 20px;
 }
 
 /*  dialog宽度，只有在大屏时才生效 */

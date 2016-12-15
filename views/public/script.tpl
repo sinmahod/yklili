@@ -17,9 +17,8 @@
         <script src="/static/js/bootstrapValidator.js"></script>
         <script src="/static/js/gl.validate.js"></script>
 
-        <!-- dropzone and Ex -->
-        <script src="/static/js/dropzone.min.js"></script>
-        <script src="/static/js/gl.dropzone.extend.js"></script>
+        <!-- webUploader -->
+        <script src="/static/webuploader/webuploader.nolog.min.js"></script>
 
          <!-- progressbar -->
         <script src="/static/js/jquery-ui.min.js"></script>

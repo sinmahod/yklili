@@ -1,172 +1,203 @@
+<div class="row">
+    <div class="col-xs-12">
 
-<div>
-	<form  class="dropzone well" id="dropzone"  method="post" enctype="multipart/form-data">
-		<div class="fallback">
-			<input name="filetest" type="file" id="filetest" multiple="" />
-		</div>
-	</form>
-	<button id="submit-all">上传图片</button>
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right">链接</label>
+        <div class="col-sm-9">
+            <input data-placement="bottom" id="Link" value="/platform/progress/progress.html" name="Link" data-rel="tooltip" type="text" placeholder="请输入链接页面" title="请输入链接页面">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right">链接</label>
+        <div class="col-sm-9">
+            <input data-placement="bottom" id="Link" value="/platform/progress/progress.html" name="Link" data-rel="tooltip" type="text" placeholder="请输入链接页面" title="请输入链接页面">
+        </div>
+      </div>
+
+    <form  class="dropzone well" id="dropzone"  method="post" enctype="multipart/form-data" >
+        <div class="fallback">
+            <input name="filetest" type="file" id="filetest" multiple="" />
+        </div>
+    </form>
+    <button id="submit-all">上传图片</button>
+
+      <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right">链接</label>
+        <div class="col-sm-9">
+            <input data-placement="bottom" id="Link" value="/platform/progress/progress.html" name="Link" data-rel="tooltip" type="text" placeholder="请输入链接页面" title="请输入链接页面">
+        </div>
+      </div>
+
+    </div>
 </div>
+
+
 <div id="preview-template" class="hide">
-	<div class="dz-preview dz-file-preview">
-		<div class="dz-image">
-			<img data-dz-thumbnail="" />
-		</div>
+    <div class="dz-preview dz-file-preview">
+        <div class="dz-image" >
+            <img data-dz-thumbnail="" />
+        </div>
 
-		<div class="dz-details">
-			<div class="dz-size">
-				<span data-dz-size=""></span>
-			</div>
+        <div class="dz-details">
+            <div class="dz-size">
+                <span data-dz-size=""></span>
+            </div>
 
-			<div class="dz-filename">
-				<span data-dz-name=""></span>
-			</div>
-		</div>
+            <div class="dz-filename">
+                <span data-dz-name=""></span>
+            </div>
+        </div>
 
-		<div class="dz-progress">
-			<span class="dz-upload" data-dz-uploadprogress=""></span>
-		</div>
+        <div class="dz-progress">
+            <span class="dz-upload" data-dz-uploadprogress=""></span>
+        </div>
 
-		<div class="dz-error-message">
-			<span data-dz-errormessage=""></span>
-		</div>
+        <div class="dz-error-message">
+            <span data-dz-errormessage=""></span>
+        </div>
 
-		<div class="dz-success-mark">
-			<span class="fa-stack fa-lg bigger-150">
-				<i class="fa fa-circle fa-stack-2x white"></i>
+        <div class="dz-success-mark">
+            <span class="fa-stack fa-lg bigger-150">
+                <i class="fa fa-circle fa-stack-2x white"></i>
+                <i class="fa fa-check fa-stack-1x fa-inverse green"></i>
+            </span>
+        </div>
 
-				<i class="fa fa-check fa-stack-1x fa-inverse green"></i>
-			</span>
-		</div>
-
-		<div class="dz-error-mark">
-			<span class="fa-stack fa-lg bigger-150">
-				<i class="fa fa-circle fa-stack-2x white"></i>
-
-				<i class="fa fa-remove fa-stack-1x fa-inverse red"></i>
-			</span>
-		</div>
-	</div>
+        <div class="dz-error-mark">
+            <span class="fa-stack fa-lg bigger-150">
+                <i class="fa fa-circle fa-stack-2x white"></i>
+                <i class="fa fa-remove fa-stack-1x fa-inverse red"></i>
+            </span>
+        </div>
+    </div>
 </div>
 <script type="text/javascript">
 jQuery(function($) {
-	try {
-		Dropzone.autoDiscover = false;
+    try {
+        Dropzone.autoDiscover = false;
 
-		var myDropzone = new Dropzone('#dropzone', {
-			url: "/data/image/Upload",
-			previewTemplate: $('#preview-template').html(),
-			paramName: "filetest", //上传域name
-			thumbnailHeight: 120,
-			thumbnailWidth: 120,
-			maxFilesize: 0.5,	//上传文件不能超过N(m)
-			addRemoveLinks : true,	//添加移除文件
-		 	autoProcessQueue: false,	//取消自动上传
-		 	acceptedFiles: ".jpg,.png,.jpeg,.gif,.bmp" ,  //允许上传的类型
-			parallelUploads:5,	//每次最多上传数量
-			maxFiles: 5,	//最多可以添加数量
-			uploadMultiple: true,  //一次提交多个文件
-			init: function() {
-				var submitButton = document.querySelector("#submit-all")
-				myDropzone = this; // closure
+        var myDropzone = new Dropzone('#dropzone', {
+            url: "/data/image/Upload",
+            previewTemplate: $('#preview-template').html(),
+            paramName: "filetest", //上传域name
+            thumbnailHeight: 80,
+            thumbnailWidth: 80,
+            maxFilesize: 0.5,   //上传文件不能超过N(m)
+            addRemoveLinks : true,  //添加移除文件
+            autoProcessQueue: false,    //取消自动上传
+            acceptedFiles: ".jpg,.png,.jpeg,.gif,.bmp" ,  //允许上传的类型
+            parallelUploads:5,  //每次最多上传数量
+            maxFiles: 5,    //最多可以添加数量
+            uploadMultiple: true,  //一次提交多个文件
+            init: function() {
+                var submitButton = document.querySelector("#submit-all")
+                myDropzone = this; // closure
 
-				submitButton.addEventListener("click", function() {
-					myDropzone.processQueue(); // 手动上传
-				});
+                submitButton.addEventListener("click", function() {
+                    myDropzone.processQueue(); // 手动上传
+                });
 
-				// You might want to show the submit button only when 
-				this.on("sendingmultiple", function(files, xhr, formData) {
-					formData.append("id", "test");
-                            		});
-                        			this.on("successmultiple", function(files, response) {
-                        				alert("1"+response)
-                            		});
-                            		this.on("errormultiple", function(files, response) {
-                            			alert("2"+response)
-                            		});
-			},
+ 
 
-			//addRemoveLinks : true,
-			//dictRemoveFile: 'Remove',
+                // You might want to show the submit button only when 
+                this.on("sendingmultiple", function(files, xhr, formData) {
+                        formData.append("id", "test");
+                });
+                this.on("successmultiple", function(files, response) {
+                    $.each(files,function(n,file){
+                        file._removeLink.remove();
+                    });
+                });
+                // 上传类型错误
+                this.on("errormultiple", function(files, response) {
+                });
+                this.on("addedfile", function(file) {
+                     alert($(".bv-form").width())
+                });
+                alert($(".bv-form").width())
+            },
 
-			dictDefaultMessage: '<span class="bigger-150 bolder"><i class="ace-icon fa fa-caret-right red"></i> 点击此处或将要上传的图片拖放到此处<br /> \
-			<i class="upload-icon ace-icon fa fa-cloud-upload blue fa-3x"></i>',
-			dictFallbackMessage: 'Fallback 情况下的提示文本。', 
-			dictInvalidInputType: '文件类型被拒绝 ',
-			dictFileTooBig: '文件大小过大 ',
-			dictCancelUpload: '取消上传 ',
-			dictCancelUploadConfirmation: '取消上传确认 ',
-			dictRemoveFile: '移除文件 ',
-			dictMaxFilesExceeded: '超过最大文件数 ',
+            //addRemoveLinks : true,
+            //dictRemoveFile: 'Remove',
 
-			thumbnail: function(file, dataUrl) {
-				if (file.previewElement) {
-					$(file.previewElement).removeClass("dz-file-preview");
-					var images = $(file.previewElement).find("[data-dz-thumbnail]").each(function() {
-						var thumbnailElement = this;
-						thumbnailElement.alt = file.name;
-						thumbnailElement.src = dataUrl;
-					});
-					setTimeout(function() {
-						$(file.previewElement).addClass("dz-image-preview");
-					}, 1);
-				}
-			}
-		});
+            dictDefaultMessage: '<i class="ace-icon fa fa-caret-right red"></i> 将文件拖拽至此处或点击上传<br />',
+            dictFallbackMessage: 'Fallback 情况下的提示文本。', 
+            dictInvalidFileType: '文件类型错误 ',
+            dictFileTooBig: '文件大小过大 ',
+            dictCancelUpload: '取消上传 ',
+            dictCancelUploadConfirmation: '取消上传确认 ',
+            dictRemoveFile: '移除文件 ',
+            dictMaxFilesExceeded: '上传数量超出 ',
 
-		//simulating upload progress
-		var minSteps = 6,
-			maxSteps = 60,
-			timeBetweenSteps = 100,
-			bytesPerStep = 100000;
+            thumbnail: function(file, dataUrl) {
+                if (file.previewElement) {
+                    $(file.previewElement).removeClass("dz-file-preview");
+                    var images = $(file.previewElement).find("[data-dz-thumbnail]").each(function() {
+                        var thumbnailElement = this;
+                        thumbnailElement.alt = file.name;
+                        thumbnailElement.src = dataUrl;
+                    });
+                    setTimeout(function() {
+                        $(file.previewElement).addClass("dz-image-preview");
+                    }, 1);
+                }
+            }
+        });
 
-		
+        //simulating upload progress
+        // var minSteps = 6,
+        //  maxSteps = 60,
+        //  timeBetweenSteps = 100,
+        //  bytesPerStep = 100000;
 
-		//删除文件
-		// myDropzone.on("complete", function(file) {
-		// 	myDropzone.removeFile(file);
-		// });
+        
 
-		// myDropzone.uploadFiles = function(files) {
-		// 	var self = this;
+        //删除文件
+        // myDropzone.on("complete", function(file) {
+        //  myDropzone.removeFile(file);
+        // });
 
-		// 	for (var i = 0; i < files.length; i++) {
-		// 		var file = files[i];
+        // myDropzone.uploadFiles = function(files) {
+        //  var self = this;
 
-		// 		totalSteps = Math.round(Math.min(maxSteps, Math.max(minSteps, file.size / bytesPerStep)));
-		// 		for (var step = 0; step < totalSteps; step++) {
-		// 			var duration = timeBetweenSteps * (step + 1);
-		// 			setTimeout(function(file, totalSteps, step) {
-		// 				return function() {
-		// 					file.upload = {
-		// 						progress: 100 * (step + 1) / totalSteps,
-		// 						total: file.size,
-		// 						bytesSent: (step + 1) * file.size / totalSteps
-		// 					};
+        //  for (var i = 0; i < files.length; i++) {
+        //      var file = files[i];
 
-		// 					self.emit('uploadprogress', file, file.upload.progress, file.upload.bytesSent);
-		// 					if (file.upload.progress == 100) {
-		// 						file.status = Dropzone.SUCCESS;
-		// 						self.emit("success", file, 'success', null);
-		// 						self.emit("complete", file);
-		// 						self.processQueue();
-		// 					}
-		// 				};
-		// 			}(file, totalSteps, step), duration);
-		// 		}
-		// 	}
-		// }
+        //      totalSteps = Math.round(Math.min(maxSteps, Math.max(minSteps, file.size / bytesPerStep)));
+        //      for (var step = 0; step < totalSteps; step++) {
+        //          var duration = timeBetweenSteps * (step + 1);
+        //          setTimeout(function(file, totalSteps, step) {
+        //              return function() {
+        //                  file.upload = {
+        //                      progress: 100 * (step + 1) / totalSteps,
+        //                      total: file.size,
+        //                      bytesSent: (step + 1) * file.size / totalSteps
+        //                  };
+
+        //                  self.emit('uploadprogress', file, file.upload.progress, file.upload.bytesSent);
+        //                  if (file.upload.progress == 100) {
+        //                      file.status = Dropzone.SUCCESS;
+        //                      self.emit("success", file, 'success', null);
+        //                      self.emit("complete", file);
+        //                      self.processQueue();
+        //                  }
+        //              };
+        //          }(file, totalSteps, step), duration);
+        //      }
+        //  }
+        // }
 
 
-		//remove dropzone instance when leaving this page in ajax mode
-		// $(document).one('ajaxloadstart.page', function(e) {
-		// 	try {
-		// 		myDropzone.destroy();
-		// 	} catch (e) {}
-		// });
-
-	} catch (e) {
-		alert('Dropzone.js does not support older browsers!');
-	}
+        //remove dropzone instance when leaving this page in ajax mode
+        // $(document).one('ajaxloadstart.page', function(e) {
+        //  alert(222);
+        //  try {
+        //      myDropzone.destroy();
+        //  } catch (e) {}
+        // });
+ 
+    } catch (e) {
+        alert('Dropzone.js does not support older browsers!');
+    }
 });
 </script>
