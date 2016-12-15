@@ -1,4 +1,4 @@
-<div id="uploader" class="wu-example">
+<div id="uploader" class="uploader-dialog">
     <!--用来存放文件信息-->
     <div id="thelist" class="uploader-list"></div>
     <div class="btns">
@@ -8,8 +8,15 @@
 </div>
 
 <script type="text/javascript">
+
+var uploader;
+
+function del(id){
+        uploader.removeFile(id,true);
+}
+
 jQuery(function($) {
-    var uploader = WebUploader.create({
+    uploader = WebUploader.create({
 
         // swf文件路径
         swf: '/static/webuploader/Uploader.swf',
@@ -21,7 +28,8 @@ jQuery(function($) {
 
         // 选择文件的按钮。可选。
         // 内部根据当前运行是创建，可能是input元素，也可能是flash.
-        pick: '#picker',
+        // mutiple 是否允许多选文件上传
+        pick: {id:'#picker',multiple: false},
 
         // 不压缩image, 默认如果是jpeg，文件上传前会压缩一把再上传！
         resize: false
@@ -29,15 +37,38 @@ jQuery(function($) {
 
     // 当有文件被添加进队列的时候
     uploader.on( 'fileQueued', function( file ) {
-        $(".uploader-list").append( '<div id="' + file.id + '" class="item">' +
-            '<h4 class="info">' + file.name + '</h4>' +
-            '<p class="state">等待上传...</p>' +
-        '</div>' );
+          var icon = 'fa-picture-o file-image';
+          if ( file.type.indexOf('image') == -1 ) {
+                icon = 'fa-file';
+          }
+          $(".uploader-list").append('<div id="' + file.id + '" class="ace-file-input item">'+
+            '<span id="span' + file.id + '" class="ace-file-container selected" data-title="待上传">'+
+                '<div class="progress progress-striped active" style="height:28px;background: #ffffff;">'+
+                '<div class="progress-bar" role="progressbar" style="width: 0%">' +
+                '<span class="ace-file-name" style="display:inherit;position: absolute;" data-title="' + file.name + '">'+
+                    '<i class=" ace-icon fa ' + icon + '"></i>'+
+                '</span>'+
+                '</div>'+
+                '</div>'+
+            '</span>'+
+            '<a id="a' + file.id + '" class="remove" href="#;" onclick="del(\''+file.id+'\')">'+
+                '<i class=" ace-icon fa fa-times"></i>'+
+            '</a>'+
+        '</div>');
+        // $(".uploader-list").append( '<div id="' + file.id + '" class="item">' +
+        //     '<h4 class="info">' + file.name + '</h4>' +
+        //     '<p class="state">等待上传...</p>' +
+        // '</div>' );
+    });
+
+    // 文件被移除
+    uploader.on( 'fileDequeued',function( file ){
+        $('div#'+file.id).remove();
     });
 
     // 文件上传过程中创建进度条实时显示。
     uploader.on( 'uploadProgress', function( file, percentage ) {
-        var $li = $( '#'+file.id ),
+        var $li = $( '#span'+file.id ),
             $percent = $li.find('.progress .progress-bar');
 
         // 避免重复创建
@@ -48,24 +79,27 @@ jQuery(function($) {
             '</div>').appendTo( $li ).find('.progress-bar');
         }
 
-        $li.find('p.state').text('上传中');
+       $( '#span'+file.id ).attr('data-title','上传中');
 
         $percent.css( 'width', percentage * 100 + '%' );
     });
 
     // 文件上传成功
     uploader.on( 'uploadSuccess', function( file ) {
-        $( '#'+file.id ).find('p.state').text('已上传');
+        $( '#span'+file.id ).attr('data-title','已上传');
+        $( '#span'+file.id ).addClass('uploader-state-success');
+        $( '#a'+file.id ).remove();
     });
 
     // 文件上传失败
     uploader.on( 'uploadError', function( file ) {
-        $( '#'+file.id ).find('p.state').text('上传出错');
+        $( '#span'+file.id ).attr('data-title','有错误');
+        $( '#span'+file.id ).addClass('uploader-state-error');
     });
 
     // 文件上传完成（不管成功失败）
     uploader.on( 'uploadComplete', function( file ) {
-        $( '#'+file.id ).find('.progress').fadeOut();
+        //$( '#'+file.id ).find('.progress').fadeOut();
     });
 
     $('#ctlBtn').click(function(){
