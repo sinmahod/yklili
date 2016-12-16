@@ -57,7 +57,7 @@
 		//Dialog
 		dialog: function(){
 			var t,m;
-			var b = {};
+			var b = [];
 			var hideclose = false;
 			var w = 600;
 			var h = 150;
@@ -275,7 +275,162 @@
 				class_name: 'gritter-info gritter-radius',
 				time:time?time:2000
 			});
-		}//<! gritter >
+		},//<! gritter >
+		uploader: function(){
+			var p,u,l;
+			var t = '';
+			var t2 = '';
+			var s = 10;
+			var b = [];
+			var hideclose = false;
+			var w = 600;
+			var h = 150;
+			var dobj;
+			return{
+				url: function(url){
+					l = url;
+				},
+				fileSize: function(size){
+					s = size;
+				},
+				fileType: function(type){
+					if (type=='image'){
+						t = 'gif,jpg,jpeg,bmp,png';
+						t2 = 'image/*';
+					}
+				},
+				show: function(){
+					if (!hideclose){
+						var bt = {
+							label: '取消',
+							cssClass: 'btn-success btn-sm',
+					                    	action: function(dialogItself){
+					                        		dialogItself.close();
+					                    	}
+						};
+						b.push(bt);
+					}
+				  	dobj = BootstrapDialog.show({
+					                title: '文件上传',
+					                message: '<div id="uploader" class="uploader-dialog">'+
+											    '<div id="thelist" class="uploader-list"></div>'+
+											    '<div class="btns">'+
+											        '<div id="picker">选择文件</div>'+
+											        '<button id="ctlBtn" class="btn btn-default">开始上传</button>'+
+											    '</div>'+
+											'</div>',
+					                cssClass: 'dialog-'+w+' dialog-h-'+h,
+					                closeByBackdrop: false,   //点击空白位置关闭窗口失效
+					                draggable: true,
+					                buttons: b,
+					                onshown:function(){
+					                	 u = WebUploader.create({
+
+									        // swf文件路径
+									        swf: '/static/webuploader/Uploader.swf',
+
+									        // 文件接收服务端。
+									        server: '/data/image/Upload',
+
+									        fileVal :'fileupload' ,
+
+									        // 选择文件的按钮。可选。
+									        // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+									        // mutiple 是否允许多选文件上传
+									        pick: {id:'#picker',multiple: false},
+
+									        //可上传的文件数量
+									        fileNumLimit: s,
+
+									        // 不压缩image, 默认如果是jpeg，文件上传前会压缩一把再上传！
+									        resize: false,
+									        // 只允许选择的文件，可选。
+									        accept: {
+									            title: '文件',
+									            extensions: t,
+									            mimeTypes: t2
+									        }
+									    });
+					                	// 当有文件被添加进队列的时候
+									    u.on( 'fileQueued', function( file ) {
+									          var icon = 'fa-picture-o file-image';
+									          if ( file.type.indexOf('image') == -1 ) {
+									                icon = 'fa-file';
+									          }
+									          $(".uploader-list").append('<div id="' + file.id + '" class="ace-file-input item">'+
+									            '<span id="span' + file.id + '" class="ace-file-container selected" data-title="待上传">'+
+									                '<div class="progress progress-striped active" style="height:28px;background: #ffffff;">'+
+									                '<div class="progress-bar" role="progressbar" style="width: 0%">' +
+									                '<span class="ace-file-name" style="display:inherit;position: absolute;" data-title="' + file.name + '">'+
+									                    '<i class=" ace-icon fa ' + icon + '"></i>'+
+									                '</span>'+
+									                '</div>'+
+									                '</div>'+
+									            '</span>'+
+									            '<a id="a' + file.id + '" class="remove" href="#;" onclick="del(\''+file.id+'\')">'+
+									                '<i class=" ace-icon fa fa-times"></i>'+
+									            '</a>'+
+									        '</div>');
+									        // $(".uploader-list").append( '<div id="' + file.id + '" class="item">' +
+									        //     '<h4 class="info">' + file.name + '</h4>' +
+									        //     '<p class="state">等待上传...</p>' +
+									        // '</div>' );
+									    });
+
+									    // 文件被移除
+									    u.on( 'fileDequeued',function( file ){
+									        $('div#'+file.id).remove();
+									    });
+
+									    // 文件上传过程中创建进度条实时显示。
+									    u.on( 'uploadProgress', function( file, percentage ) {
+									        var $li = $( '#span'+file.id ),
+									            $percent = $li.find('.progress .progress-bar');
+
+									        // 避免重复创建
+									        if ( !$percent.length ) {
+									            $percent = $('<div class="progress progress-striped active">' +
+									              '<div class="progress-bar" role="progressbar" style="width: 0%">' +
+									              '</div>' +
+									            '</div>').appendTo( $li ).find('.progress-bar');
+									        }
+
+									       $( '#span'+file.id ).attr('data-title','上传中');
+
+									        $percent.css( 'width', percentage * 100 + '%' );
+									    });
+
+									    // 文件上传成功
+									    u.on( 'uploadSuccess', function( file ) {
+									        $( '#span'+file.id ).attr('data-title','已上传');
+									        $( '#span'+file.id ).addClass('uploader-state-success');
+									        $( '#a'+file.id ).remove();
+									    });
+
+									    // 文件上传失败
+									    u.on( 'uploadError', function( file ) {
+									        $( '#span'+file.id ).attr('data-title','有错误');
+									        $( '#span'+file.id ).addClass('uploader-state-error');
+									    });
+
+									    // 文件上传完成（不管成功失败）
+									    u.on( 'uploadComplete', function( file ) {
+									        //$( '#'+file.id ).find('.progress').fadeOut();
+									    });
+
+									    $('#ctlBtn').click(function(){
+									        u.upload();
+									    });
+					                }
+				           });
+				  	dobj.getModalHeader().css('padding','10px 10px 10px 15px');
+				  	dobj.getModalFooter().css('padding','10px 15px');
+				},
+				del: function(id){
+					u.removeFile(id,true);
+				}
+			}
+		}
 	}//<! return >
    }();
 

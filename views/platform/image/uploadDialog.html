@@ -31,8 +31,20 @@ jQuery(function($) {
         // mutiple 是否允许多选文件上传
         pick: {id:'#picker',multiple: false},
 
+        //开启同时上传多个文件的功能
+        threads: true,
+
+        //可上传的文件数量
+        fileNumLimit: 10,
+
         // 不压缩image, 默认如果是jpeg，文件上传前会压缩一把再上传！
-        resize: false
+        resize: false,
+        // 只允许选择文件，可选。
+        accept: {
+            title: 'Images',
+            extensions: 'gif,jpg,jpeg,bmp,png',
+            mimeTypes: 'image/png/gif'
+        }
     });
 
     // 当有文件被添加进队列的时候
