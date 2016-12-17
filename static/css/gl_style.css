@@ -44,10 +44,6 @@ body {
     text-align: center;
 }
 
-.glyphicon-remove,.glyphicon-ok,.glyphicon-refresh {
-    left: 180px;
-}
-
 /* positioning */
 
 .ui-icon-triangle-1-n {background-image: url(/static/images/ui-icons_256x240.png); background-position: 0 -16px; }
@@ -153,14 +149,29 @@ input[type=text]:hover,select:hover{
     font-size: 15px;
 }
 
-/* 表单 */
-.form-group {
-    height: 34px;
-}
-
 /* 上传控件 */
-.uploader-dialog {
-    width: 95%;
+.btns{
+    float: left;
+    height: 36px;
+    width: 66px;
+}
+.webuploader-pick {
+    padding: 5px;
+}
+.uploader-list {
+    float: left;
+    padding-right: 15px;
+    margin-left: 5px;
+    min-height: 30px;
+    width: 75%;
+    border: 1px dashed #6fb3e0;
+    background-color: #ebfbff;
+}
+.ace-file-input.item{
+    margin:1px;
+}
+.ace-file-input .success {
+    background-color: #87b87f;
 }
 
 /*  dialog宽度，只有在大屏时才生效 */

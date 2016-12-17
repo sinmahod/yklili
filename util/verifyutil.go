@@ -14,7 +14,9 @@ const (
 		"$1" +
 		"</label>" +
 		"<div class=\"col-sm-9\">" +
+		"<span class=\"input-icon input-icon-right\">" +
 		"<input $2 />" +
+		"</div>" +
 		"</div>" +
 		"</div>"
 )

@@ -89,9 +89,9 @@
 	options = $.extend({
             message: '表单验证',
             feedbackIcons: {
-                valid: 'glyphicon glyphicon-ok',
-                invalid: 'glyphicon glyphicon-remove',
-                validating: 'glyphicon glyphicon-refresh'
+                valid: 'ace-icon glyphicon glyphicon-ok',
+                invalid: 'ace-icon glyphicon glyphicon-remove',
+                validating: 'ace-icon glyphicon glyphicon-refresh'
             },
             fields: fields
             }, options);

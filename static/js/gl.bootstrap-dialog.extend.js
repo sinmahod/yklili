@@ -8,11 +8,14 @@
     window.BootFrame = function (e) {
 	return {
 		//弹出框
-		alert: function (msg,fn,tle,iswarning) {
+		alert: function (msg,fn,tle,iswarning,h,w) {
+			h = h ? h : 60;
+			w = w ? w : 350;
 	        		var dobj = BootstrapDialog.alert({
 		            		title: tle ? tle : '提示',
 		            		message: msg,
 		            		type: iswarning ? BootstrapDialog.TYPE_WARNING : BootstrapDialog.TYPE_PRIMARY, // <-- Default value is BootstrapDialog.TYPE_WARNING
+		            		cssClass: 'dialog-'+w+' dialog-h-'+h,
 		            		closable: true, // <-- Default value is false
 		            		draggable: true, // <-- Default value is false
 		            		buttonLabel: '确定', // <-- Default value is 'OK',
@@ -284,7 +287,7 @@
 			var b = [];
 			var hideclose = false;
 			var w = 600;
-			var h = 150;
+			var h = 100;
 			var dobj;
 			return{
 				url: function(url){
@@ -305,43 +308,51 @@
 							label: '取消',
 							cssClass: 'btn-success btn-sm',
 					                    	action: function(dialogItself){
-					                        		dialogItself.close();
+				                        		dialogItself.close();
 					                    	}
 						};
+						var sc = {
+							label: '开始上传',
+							cssClass: 'btn-primary btn-sm',
+					                    	action: function(dialogItself){
+					                    		var s = u.getFiles();
+					                    		for (var i= 0 ; i < s.length ; i++){
+					                    			if (s[i].getStatus() == 'inited' ){
+					                    				u.upload();	
+					                    				return;	
+					                    			}
+					                    		}
+					                    		BootFrame.alert("请选择要上传文件的文件",null,null,true,null,200);
+					                    	}
+						};
+						b.push(sc);
 						b.push(bt);
 					}
 				  	dobj = BootstrapDialog.show({
 					                title: '文件上传',
 					                message: '<div id="uploader" class="uploader-dialog">'+
-											    '<div id="thelist" class="uploader-list"></div>'+
-											    '<div class="btns">'+
-											        '<div id="picker">选择文件</div>'+
-											        '<button id="ctlBtn" class="btn btn-default">开始上传</button>'+
-											    '</div>'+
-											'</div>',
+				                					 	'<div class="btns">'+
+											        '<div id="picker" class="webuploader-container">选择文件</div>'+
+										    	'</div>'+
+										    	'<div id="thelist" class="uploader-list"></div>'+
+										'</div>',
 					                cssClass: 'dialog-'+w+' dialog-h-'+h,
 					                closeByBackdrop: false,   //点击空白位置关闭窗口失效
 					                draggable: true,
 					                buttons: b,
 					                onshown:function(){
 					                	 u = WebUploader.create({
-
 									        // swf文件路径
 									        swf: '/static/webuploader/Uploader.swf',
-
 									        // 文件接收服务端。
 									        server: '/data/image/Upload',
-
 									        fileVal :'fileupload' ,
-
 									        // 选择文件的按钮。可选。
 									        // 内部根据当前运行是创建，可能是input元素，也可能是flash.
 									        // mutiple 是否允许多选文件上传
 									        pick: {id:'#picker',multiple: false},
-
 									        //可上传的文件数量
 									        fileNumLimit: s,
-
 									        // 不压缩image, 默认如果是jpeg，文件上传前会压缩一把再上传！
 									        resize: false,
 									        // 只允许选择的文件，可选。
@@ -351,7 +362,7 @@
 									            mimeTypes: t2
 									        }
 									    });
-					                	// 当有文件被添加进队列的时候
+				                				// 当有文件被添加进队列的时候
 									    u.on( 'fileQueued', function( file ) {
 									          var icon = 'fa-picture-o file-image';
 									          if ( file.type.indexOf('image') == -1 ) {
@@ -367,14 +378,13 @@
 									                '</div>'+
 									                '</div>'+
 									            '</span>'+
-									            '<a id="a' + file.id + '" class="remove" href="#;" onclick="del(\''+file.id+'\')">'+
+									            '<a id="a' + file.id + '" class="remove" href="#;">'+
 									                '<i class=" ace-icon fa fa-times"></i>'+
 									            '</a>'+
 									        '</div>');
-									        // $(".uploader-list").append( '<div id="' + file.id + '" class="item">' +
-									        //     '<h4 class="info">' + file.name + '</h4>' +
-									        //     '<p class="state">等待上传...</p>' +
-									        // '</div>' );
+									          $('#a'+file.id).click(function(){
+									       		 u.removeFile(file.id,true);
+									   	 });
 									    });
 
 									    // 文件被移除
@@ -386,7 +396,6 @@
 									    u.on( 'uploadProgress', function( file, percentage ) {
 									        var $li = $( '#span'+file.id ),
 									            $percent = $li.find('.progress .progress-bar');
-
 									        // 避免重复创建
 									        if ( !$percent.length ) {
 									            $percent = $('<div class="progress progress-striped active">' +
@@ -394,33 +403,27 @@
 									              '</div>' +
 									            '</div>').appendTo( $li ).find('.progress-bar');
 									        }
-
-									       $( '#span'+file.id ).attr('data-title','上传中');
-
+									        $( '#span'+file.id ).attr('data-title','上传中');
 									        $percent.css( 'width', percentage * 100 + '%' );
 									    });
 
 									    // 文件上传成功
 									    u.on( 'uploadSuccess', function( file ) {
 									        $( '#span'+file.id ).attr('data-title','已上传');
-									        $( '#span'+file.id ).addClass('uploader-state-success');
-									        $( '#a'+file.id ).remove();
+									        $( '#a'+file.id ).addClass( "success" );
+									        $( '#a'+file.id ).unbind( "click" );
+									        $( '#a'+file.id ).children("i").removeClass('fa-times').addClass('fa-check');
 									    });
 
 									    // 文件上传失败
 									    u.on( 'uploadError', function( file ) {
 									        $( '#span'+file.id ).attr('data-title','有错误');
-									        $( '#span'+file.id ).addClass('uploader-state-error');
 									    });
 
 									    // 文件上传完成（不管成功失败）
 									    u.on( 'uploadComplete', function( file ) {
 									        //$( '#'+file.id ).find('.progress').fadeOut();
-									    });
-
-									    $('#ctlBtn').click(function(){
-									        u.upload();
-									    });
+									    });									    
 					                }
 				           });
 				  	dobj.getModalHeader().css('padding','10px 10px 10px 15px');

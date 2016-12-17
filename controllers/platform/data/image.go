@@ -15,7 +15,7 @@ func (c *ImageController) UploadTest() {
 }
 
 func (c *ImageController) Upload() {
-	if files, ok := c.FileMap["filetest"]; ok {
+	if files, ok := c.FileMap["fileupload"]; ok {
 		fmt.Println("================================")
 		for _, file := range files {
 			path := "C:\\" + file.Filename
