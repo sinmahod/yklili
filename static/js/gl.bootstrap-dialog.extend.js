@@ -285,6 +285,7 @@
 			var t2 = '';
 			var s = 10;
 			var b = [];
+			var f = [];
 			var hideclose = false;
 			var w = 600;
 			var h = 100;
@@ -302,7 +303,7 @@
 						t2 = 'image/*';
 					}
 				},
-				show: function(){
+				show: function(fn){
 					if (!hideclose){
 						var bt = {
 							label: '取消',
@@ -408,11 +409,19 @@
 									    });
 
 									    // 文件上传成功
-									    u.on( 'uploadSuccess', function( file ) {
+									    u.on( 'uploadSuccess', function( file ,response) {
+									    	if (response.STATUS == 1){
+									    		f.push(response.File);
+									    	}
 									        $( '#span'+file.id ).attr('data-title','已上传');
 									        $( '#a'+file.id ).addClass( "success" );
 									        $( '#a'+file.id ).unbind( "click" );
 									        $( '#a'+file.id ).children("i").removeClass('fa-times').addClass('fa-check');
+									    });
+
+									    // 所有文件上传完成
+									    u.on( 'uploadFinished', function(){
+									    	fn(f)
 									    });
 
 									    // 文件上传失败
@@ -428,9 +437,6 @@
 				           });
 				  	dobj.getModalHeader().css('padding','10px 10px 10px 15px');
 				  	dobj.getModalFooter().css('padding','10px 15px');
-				},
-				del: function(id){
-					u.removeFile(id,true);
 				}
 			}
 		}

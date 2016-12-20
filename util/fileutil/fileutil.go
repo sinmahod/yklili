@@ -46,6 +46,11 @@ func FileSize(file string) (int64, error) {
 	return f.Size(), nil
 }
 
+//递归创建目录
+func CreateDir(path string) error {
+	return os.MkdirAll(path, os.ModePerm)
+}
+
 // 是否是文件
 func IsFile(filePath string) bool {
 	f, e := os.Stat(filePath)

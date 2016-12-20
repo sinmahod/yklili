@@ -53,9 +53,16 @@
 
         }
 
-         function uploadTest2(){
+        function uploadTest2(){
             var bf = BootFrame.uploader();
-            bf.show();
+            bf.show(test);
+        }
+
+        function test(fs){
+            alert(fs.length)
+            for (var i = 0 ; i < fs.length ; i++){
+                alert(fs[i].Name);
+            }
         }
 
         function commm(){
