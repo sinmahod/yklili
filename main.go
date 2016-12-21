@@ -73,6 +73,9 @@ func main() {
 	beego.Router("/:path.html", &template.HTMLController{})
 
 	beego.InsertFilter("/platform/*", beego.BeforeRouter, FilterUser)
+
+	//附件默认目录
+	beego.SetStaticPath("/upload", "upload")
 	beego.Run()
 
 }

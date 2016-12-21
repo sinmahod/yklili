@@ -240,30 +240,30 @@
 					});
 					var interval = setInterval(function(){
 						var data = {"taskId" : taskid}
-			            			$.post("/platform/prog",data,function(result){
-			            				if (result != null){
-								$( "#progressbar" ).progressbar( "value", result.Perc);
-								if (result.Msg){
-									dialog.setTitle(result.Msg);
-								}
-								if (result.Perc >= 100){
-									dialog.setTitle('任务完成');
-									dialog.getModalFooter().show();
-									clearInterval(interval);
-								}
-			            				}else{
-			            					dialog.setTitle('任务完成');
-			            					dialog.getModalFooter().show();
-			            					$( "#progressbar" ).progressbar( "value", 100);
-			            					clearInterval(interval);	
-			            				}
-						}).error(function() { 
-							clearInterval(interval);
-							dialog.getModalFooter().show();
-					    		BootFrame.alert("服务器发生错误，未获取到数据",null,"错误",true); 
-						});
+	            			$.post("/platform/prog",data,function(result){
+	            				if (result != null){
+									$( "#progressbar" ).progressbar( "value", result.Perc);
+									if (result.Msg){
+										dialog.setTitle(result.Msg);
+									}
+									if (result.Perc >= 100){
+										dialog.setTitle('任务完成');
+										dialog.getModalFooter().show();
+										clearInterval(interval);
+									}
+	            				}else{
+	            					dialog.setTitle('任务完成');
+	            					dialog.getModalFooter().show();
+	            					$( "#progressbar" ).progressbar( "value", 100);
+	            					clearInterval(interval);	
+	            				}
+							}).error(function() { 
+								clearInterval(interval);
+								dialog.getModalFooter().show();
+						    		BootFrame.alert("服务器发生错误，未获取到数据",null,"错误",true); 
+							});
 					},1000);
-		            		}
+        		}
 			});
 			dialog.realize();
 			dialog.getModalHeader().css('padding','10px 10px 10px 15px');

@@ -1,6 +1,7 @@
 package data
 
 import (
+	"beegostudy/models"
 	"beegostudy/util/dateutil"
 	"beegostudy/util/fileutil"
 	"beegostudy/util/stringutil"
@@ -18,41 +19,39 @@ func (c *ImageController) UploadTest() {
 	c.addScript()
 }
 
-type File struct {
-	//文件名称
-	Name string
-	//文件路径
-	Path string
-	//文件大小
-	Size int64
-	//文件类型
-	Type string
-}
-
 func (c *ImageController) Upload() {
 
 	if files, ok := c.FileMap["fileupload"]; ok {
-		fs := new(File)
 		for _, file := range files {
-			filepath := beego.AppPath + "/upload/"
+
+			filepath := "/upload/"
 
 			filepath += dateutil.GetYMDPathString()
 
 			//检查目录是否存在，不存在则创建
-			if !fileutil.IsDir(filepath) {
-				fileutil.CreateDir(filepath)
+			if !fileutil.IsDir(beego.AppPath + filepath) {
+				fileutil.CreateDir(beego.AppPath + filepath)
 			}
 
-			filepath += stringutil.GetUUID() + path.Ext(file.Filename)
+			newfilename := stringutil.GetUUID() + path.Ext(file.Filename)
 
 			if f, err := file.Open(); err == nil {
-				fileutil.WriteFileByReadCloser(filepath, f)
-				fs.Name = file.Filename
-				fs.Path = filepath
-				fs.Size, _ = c.GetInt64("size")
-				fs.Type = c.GetString("type")
-				c.put("File", fs)
+				err = fileutil.WriteFileByReadCloser(beego.AppPath+filepath+newfilename, f)
+				if err != nil {
+					fmt.Println(err)
+					c.fail("上传失败")
+					c.ServeJSON()
+					return
+				}
+
+				filesize, _ := c.GetInt64("size")
+
+				sysuser := c.GetSession("User").(*models.User)
+
+				m := models.AddAttachment(file.Filename, newfilename, filepath, c.GetString("type"), filesize, sysuser.GetUserName())
+				c.put("File", m)
 				c.success("上传成功")
+
 			} else {
 				fmt.Println(err)
 				c.fail("上传失败")
@@ -60,4 +59,15 @@ func (c *ImageController) Upload() {
 		}
 	}
 	c.ServeJSON()
+}
+
+//DataGrid列表数据加载
+func (c *ImageController) List() {
+	c.RequestData["filetype"] = "image/*"
+	if datagrid, err := models.GetAttchmentsPage(c.PageSize, c.PageIndex, c.OrderColumn, c.OrderSord, c.RequestData); err != nil {
+		beego.Error(err)
+	} else {
+		c.Data["json"] = datagrid
+		c.ServeJSON()
+	}
 }

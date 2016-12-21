@@ -2,7 +2,9 @@ package test
 
 import (
 	"beegostudy/models"
-	"beegostudy/util"
+	"beegostudy/util/numberutil"
+	"beegostudy/util/pwdutil"
+	"beegostudy/util/stringutil"
 	"fmt"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
@@ -31,10 +33,10 @@ func Test_UserString(t *testing.T) {
 }
 
 func Test_LeftPad(t *testing.T) {
-	s := util.LeftPad("aa", 'c', 8)
+	s := stringutil.LeftPad("aa", 'c', 8)
 	t.Fatal(s)
-	t.Fatal(util.RandInt(1))
-	fmt.Println(util.GeneratePWD("qweqwe"))
+	t.Fatal(numberutil.RandInt(1))
+	fmt.Println(pwdutil.GeneratePWD("qweqwe"))
 	t.Fatal("qweqwe")
 }
 
