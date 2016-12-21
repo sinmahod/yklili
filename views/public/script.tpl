@@ -25,6 +25,8 @@
         <script src="/static/js/jquery.ui.touch-punch.min.js"></script>
 
         <!-- image view -->
+        <script src="/static/js/jquery.lazyload.js"></script>
+
         <!-- page specific plugin scripts -->
         <script src="/static/js/jquery.colorbox.min.js"></script>
 

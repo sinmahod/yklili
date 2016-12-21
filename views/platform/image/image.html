@@ -10,13 +10,9 @@
                         <div class="row">
                             <div>
                                     <ul class="ace-thumbnails clearfix">
-                                        <list id="list1" dataurl="/data/image/List" page="true" size="10">
-                                        <li>
+                                        <li id="list1" list="true" dataurl="/data/image/List" page="true" size="10">
                                             <a href="${FilePath}${FileNewName}" data-rel="colorbox">
-                                                <img width="150" height="150" alt="150x150" src="${FilePath}${FileNewName}" />
-                                                <div class="text">
-                                                    <div class="inner">${FileName}</div>
-                                                </div>
+                                                <img width="150" height="150" class="lazy" data-original="${FilePath}${FileNewName}" />
                                             </a>
 
                                             <div class="tools tools-bottom">
@@ -37,7 +33,6 @@
                                                 </a>
                                             </div>
                                         </li>
-                                        </list>
                                     </ul>
 
                                 </div><!-- PAGE CONTENT ENDS -->
@@ -95,18 +90,17 @@
                 next:'<i class="ace-icon fa fa-arrow-right"></i>',
                 close:'&times;',
                 current:'{current} of {total}',
-                maxWidth:'20%',
-                maxHeight:'20%',
-                width:"20%",
+                maxWidth:'800',
+                maxHeight:'500',
                 onOpen:function(){
-                    $overflow = document.body.style.overflow;
-                    document.body.style.overflow = 'hidden';
+                    //$overflow = document.body.style.overflow;
+                    //document.body.style.overflow = 'hidden';
                 },
                 onClosed:function(){
-                    document.body.style.overflow = $overflow;
+                   // document.body.style.overflow = $overflow;
                 },
                 onComplete:function(){
-                    $.colorbox.resize();
+                   // $.colorbox.resize();
                 }
             };
 
@@ -119,13 +113,15 @@
             });
 
 
-            $("list").each(function(){
+            $("[list='true']").each(function(){
                 var list = $(this);
                 var id = list.attr("id");
                 var url = list.attr("dataurl");
                 var page = list.attr("page");
                 var size = list.attr("size");
-                var html = list.html();
+                var html = this.outerHTML;
+
+                
 
                 if (!page || page=="false"){
                     size = 10000;
@@ -138,14 +134,15 @@
                         if (result["records"] > 0){
                             var reg = /\${([^{}]+)}/g;
                             var tempArr = [];
-                            $.each(result["rows"],function(){
-                                var data = this;
-                                html = html.replace(reg, function (match, name) {
+                            $.each(result["rows"],function(idx,data){
+                                var tempHtml = html.replace(reg, function (match, name) {
                                     return data[name];
                                 });
-                                tempArr.push(html);
+                                tempArr.push(tempHtml);
                             });
                             list.replaceWith(tempArr.join('')); 
+
+                            $("img.lazy").lazyload();
                         }
                     }else{
                           BootFrame.alert("服务器发生错误，未获取到数据",null,"错误",true);   
@@ -155,8 +152,7 @@
                 });
                 
             });
-
-
+            
         });
 
         function uploadImage(){
