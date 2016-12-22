@@ -17,6 +17,10 @@
         <script src="/static/js/bootstrapValidator.js"></script>
         <script src="/static/js/gl.validate.js"></script>
 
+        <!-- pagebar -->
+        <script src="/static/js/bootstrap-paginator.min.js"></script>
+        <script src="/static/js/gl.paginator.extend.js"></script>
+
         <!-- webUploader -->
         <script src="/static/webuploader/webuploader.js"></script>
 
@@ -26,8 +30,6 @@
 
         <!-- image view -->
         <script src="/static/js/jquery.lazyload.js"></script>
-
-        <!-- page specific plugin scripts -->
         <script src="/static/js/jquery.colorbox.min.js"></script>
 
         <!-- ace scripts -->

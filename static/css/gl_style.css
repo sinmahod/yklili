@@ -179,6 +179,15 @@ input[type=text]:hover,select:hover{
     background-color: #daeefb;    
 }
 
+/* 分页条 */
+.pagination>li:first-child>a, .pagination>li:first-child>span {
+    border-bottom-left-radius: 8px !important;
+    border-top-left-radius: 8px !important;
+}
+.pagination>li:last-child>a, .pagination>li:last-child>span {
+    border-bottom-right-radius: 8px !important;
+    border-top-right-radius: 8px !important;
+}
 
 /*  dialog宽度，只有在大屏时才生效 */
 @media (min-width: 768px) {

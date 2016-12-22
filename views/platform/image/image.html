@@ -3,14 +3,18 @@
                                 <i class="ace-icon fa fa-rocket bigger-125"></i>
                                 <span class="bigger-115 no-text-shadow">上传图片</span>
                             </button>
-                        </div><!-- /.page-header -->
+                            <button class="btn btn-sm btn-success" onclick="asd()">
+                                <i class="ace-icon fa fa-rocket bigger-125"></i>
+                                <span class="bigger-115 no-text-shadow">上传图片</span>
+                            </button>
+                         </div><!-- /.page-header -->
                         
                         <div class="bottom-border"></div>
 
                         <div class="row">
                             <div>
-                                    <ul class="ace-thumbnails clearfix">
-                                        <li id="list1" list="true" dataurl="/data/image/List" page="true" size="10">
+                                    <ul class="ace-thumbnails clearfix" id="list1" list="true" dataurl="/data/image/List" page="true" size="21">
+                                        <li>
                                             <a href="${FilePath}${FileNewName}" data-rel="colorbox">
                                                 <img width="150" height="150" class="lazy" data-original="${FilePath}${FileNewName}" />
                                             </a>
@@ -18,10 +22,6 @@
                                             <div class="tools tools-bottom">
                                                 <a href="#">
                                                     <i class="ace-icon fa fa-link"></i>
-                                                </a>
-
-                                                <a href="#">
-                                                    <i class="ace-icon fa fa-paperclip"></i>
                                                 </a>
 
                                                 <a href="#">
@@ -36,135 +36,31 @@
                                     </ul>
 
                                 </div><!-- PAGE CONTENT ENDS -->
-
-                                <div style="text-align: center;">
-                                    <ul class="pagination">
-                                        <li class="disabled">
-                                            <a href="#">
-                                                <i class="ace-icon fa fa-angle-double-left"></i>
-                                            </a>
-                                        </li>
-
-                                        <li class="active">
-                                            <a href="#">1</a>
-                                        </li>
-
-                                        <li>
-                                            <a href="#">2</a>
-                                        </li>
-
-                                        <li>
-                                            <a href="#">3</a>
-                                        </li>
-
-                                        <li>
-                                            <a href="#">4</a>
-                                        </li>
-
-                                        <li>
-                                            <a href="#">5</a>
-                                        </li>
-
-                                        <li>
-                                            <a href="#">
-                                                <i class="ace-icon fa fa-angle-double-right"></i>
-                                            </a>
-                                        </li>
-                                    </ul>
+                                <div align="center">
+                                    <ul class="pagination" id="pagebar"></ul>
                                 </div>
-
                         </div><!-- /.row -->
 
         <!-- jgrid -->
         <script type="text/javascript">
-
         jQuery(function($) {
-
- var $overflow = '';
-            var colorbox_params = {
-                rel: 'colorbox',
-                reposition:true,
-                scalePhotos:true,
-                scrolling:false,
-                previous:'<i class="ace-icon fa fa-arrow-left"></i>',
-                next:'<i class="ace-icon fa fa-arrow-right"></i>',
-                close:'&times;',
-                current:'{current} of {total}',
-                maxWidth:'800',
-                maxHeight:'500',
-                onOpen:function(){
-                    //$overflow = document.body.style.overflow;
-                    //document.body.style.overflow = 'hidden';
-                },
-                onClosed:function(){
-                   // document.body.style.overflow = $overflow;
-                },
-                onComplete:function(){
-                   // $.colorbox.resize();
-                }
-            };
-
-            $('.ace-thumbnails [data-rel="colorbox"]').colorbox(colorbox_params);
-            $("#cboxLoadingGraphic").html("<i class='ace-icon fa fa-spinner orange fa-spin'></i>");//let's add a custom loading icon
-            
-            
-            $(document).one('ajaxloadstart.page', function(e) {
-                $('#colorbox, #cboxOverlay').remove();
-            });
-
-
-            $("[list='true']").each(function(){
-                var list = $(this);
-                var id = list.attr("id");
-                var url = list.attr("dataurl");
-                var page = list.attr("page");
-                var size = list.attr("size");
-                var html = this.outerHTML;
-
-                
-
-                if (!page || page=="false"){
-                    size = 10000;
-                }
-
-                var data = {page:1, rows:size};
-               
-                $.post(url, data, function(result){
-                    if (result != null ){
-                        if (result["records"] > 0){
-                            var reg = /\${([^{}]+)}/g;
-                            var tempArr = [];
-                            $.each(result["rows"],function(idx,data){
-                                var tempHtml = html.replace(reg, function (match, name) {
-                                    return data[name];
-                                });
-                                tempArr.push(tempHtml);
-                            });
-                            list.replaceWith(tempArr.join('')); 
-
-                            $("img.lazy").lazyload();
-                        }
-                    }else{
-                          BootFrame.alert("服务器发生错误，未获取到数据",null,"错误",true);   
-                    }
-                }).error(function() { 
-                    BootFrame.alert("服务器发生错误，未获取到数据",null,"错误",true); 
-                });
-                
-            });
-            
+            DataList("pagebar");
         });
 
         function uploadImage(){
             var bf = BootFrame.uploader();
             bf.fileType('image');
-            bf.show(test);
+            bf.show(operation);
         }
 
-        function test(fs){
-            alert(fs.length)
+        function operation(fs){
+            DataList.loadData("list1");
             for (var i = 0 ; i < fs.length ; i++){
-                alert(fs[i].Name);
+                //alert(fs[i].FileName);
             }
+        }
+
+        function asd(){
+            DataList.loadData("list1");
         }
         </script>

@@ -1,79 +1,211 @@
-$(function () {
+(function ($) {
+//展示图片Colorbox 分页条paginator
+/* 使用方式
+ * <div>
+ *  <ul class="ace-thumbnails clearfix" list="true" dataurl="/data/image/List" page="true" size="1">
+ *          <li>
+ *               <a href="${FilePath}${FileNewName}" data-rel="colorbox">
+ *                   <img width="150" height="150" class="lazy" data-original="${FilePath}${FileNewName}" />
+ *               </a>
+ *
+ *               <div class="tools tools-bottom">
+ *                   <a href="#">
+ *                       <i class="ace-icon fa fa-link"></i>
+ *                   </a>
+ *
+ *                   <a href="#">
+ *                       <i class="ace-icon fa fa-pencil"></i>
+ *                   </a>
+ *
+ *                   <a href="#">
+ *                       <i class="ace-icon fa fa-times red"></i>
+ *                   </a>
+ *               </div>
+ *           </li>
+ *       </ul>
+ *
+ *   </div>
+ *   <div align="center">
+ *       <ul class="pagination" id="pagebar"></ul>
+ *   </div>
+ *
+ *  <script type="text/javascript">
+ *      jQuery(function($) {
+ *           DataList("pagebar");
+ *      });
+ *  </script>   
+ */
 
-window.BValidate = function(options){
+var DataListMap = {};
 
-            $("ul[list]").each(function(){
-                var v = $(this).attr("verify");                                    //校验值  verify="notEmpty"  返回 notEmpty
-                var name = $(this).attr("name");
-                var id = $(this).attr("id");
-            });
+window.DataList = function(pagebar,list,html){
+    var cpage = 1;
+    var total = 0;
+    var size = 0;
+    var url;
 
-        var form ,f;
-        var fields = {};
-        var varMsg = {
-                notEmpty : "此项不可为空",
-                identical : "两次输入的密码不一致",   
-                lessThan :  "输入的数值必须小于{0}",
-                lessThans : "输入的数值必须小于等于{0}",
-                greaterThan : "输入的数值必须大于{0}",
-                greaterThans : "输入的数值必须大于等于{0}",
-                zipCode : "请输入正确的邮编",
-                uri : "请输入正确的网址",
-                emailAddress : "请输入正确的邮箱地址",
-                stringLength : "输入的字符长度至少{0}位，最多{1}位",
-                phone : "请输入正确的手机号码",
-                regexp : "输入不合法",
-                remote : "远程校验不合法"
-          };
+    if (!list){
+        //检查所有带有List属性的标签，开始循环当前标签（包含子dom）
+        $("[list='true']").each(function(){
+            list = $(this);
+            var id = list.attr("id");
+            if(!id){
+                BootFrame.alert("检查到页面中有list参数，但是所在元素没有id。",null,"错误",true);
+                return;
+            }
+            html = list.html();
+            DataListMap[id] = {template:html,pagebar:pagebar};
+            execute();
+        });
+    }else{
+        execute();
+    }
 
-            options = $.extend({
-            message: '表单验证',
-            feedbackIcons: {
-                valid: 'ace-icon glyphicon glyphicon-ok',
-                invalid: 'ace-icon glyphicon glyphicon-remove',
-                validating: 'ace-icon glyphicon glyphicon-refresh'
-            },
-            fields: fields
-            }, options);
+    //第一次的执行方法
+    function execute(){
+        url = list.attr("dataurl");
+        size = list.attr("size");
+        var page = list.attr("page");
+        if (!page || page=="false"){
+            size = 10000;
+        }
 
- };
-
- })(jQuery);
-                    var options = {
-                        bootstrapMajorVersion: 2, //版本
-                        currentPage: 1, //当前页数
-                        totalPages: 2, //总页数
-                        itemTexts: function (type, page, current) {
-                            switch (type) {
-                                case "first":
-                                    return "首页";
-                                case "prev":
-                                    return "上一页";
-                                case "next":
-                                    return "下一页";
-                                case "last":
-                                    return "末页";
-                                case "page":
-                                    return page;
-                            }
-                        },//点击事件，用于通过Ajax来刷新整个list列表
-                        onPageClicked: function (event, originalEvent, type, page) {
-                            $.ajax({
-                                url: "/OA/Setting/GetDate?id=" + page,
-                                type: "Post",
-                                data: "page=" + page,
-                                success: function (data1) {
-                                    if (data1 != null) {
-                                        $.each(eval("(" + data + ")").list, function (index, item) { //遍历返回的json
-                                            $("#list").append('<table id="data_table" class="table table-striped">');
-                                        });
-                                    }
-                                }
-                            });
-                        }
-                    };
-                    $('#example').bootstrapPaginator(options);
+        readData(url,1,function(result){
+            newHtml = renderList(result);
+            if (newHtml != null){
+                list.html(newHtml);
+                if (newHtml != ""){
+                     $("img.lazy").lazyload();
+                    initColorBox();
+                    initPagebar($('#'+pagebar));
                 }
             }
         });
-    })
+    }
+    
+    
+
+    //分页条初始化
+    function initPagebar(pagebar){
+         var options = {
+            bootstrapMajorVersion: 3, //版本
+            alignment: "center",//居中显示
+            currentPage: cpage,//当前页码
+            totalPages: total,//总页码
+            numberOfPages: 5,//最多显示几个页码按钮
+            itemTexts: function (type, page, current) {
+                    switch (type) {
+                    case "first":
+                        return "首页";
+                    case "prev":
+                        return "上一页";
+                    case "next":
+                        return "下一页";
+                    case "last":
+                        return "尾页";
+                    case "page":
+                        return page;
+                    }
+            },
+            //点击事件
+            onPageClicked: function (event, originalEvent, type, page) {
+                readData(url,page,function(result){
+                    newHtml = renderList(result);
+                    if (newHtml != null){
+                        list.html(newHtml);
+                        $("img.lazy").lazyload();
+                        initColorBox();
+                    }
+                    //initColorBox();
+                });
+            }
+        };
+        pagebar.bootstrapPaginator(options);
+    }
+
+    //ajax同步方式读取数据
+    //url = 请求的url
+    //page = 请求的页码
+    //size = 每页请求的数据量
+    //fn = 后执行函数
+    function readData(url,page,fn){
+        $.ajax({
+            url : url,
+            type : 'post',
+            data : {page:page, rows:size},//这里使用json对象
+            success : function(result){
+                if (result != null ){
+                    fn(result);
+                }else{
+                    BootFrame.alert("服务器发生错误，未获取到数据",null,"错误",true);
+                }
+            },
+            fail:function(){
+                BootFrame.alert("服务器发生错误，未获取到数据",null,"错误",true); 
+            }
+        });
+    }
+
+    //渲染列表
+    function renderList(result){
+        if (result["rows"].length == 0){
+            return "";
+        }
+        if (result["records"] > 0){
+            total = result["total"];
+            cpage = result["page"];
+            var reg = /\${([^{}]+)}/g;
+            var tempArr = [];
+            $.each(result["rows"],function(idx,data){
+                var tempHtml = html.replace(reg, function (match, name) {
+                    return data[name];
+                });
+                tempArr.push(tempHtml);
+            });
+            return tempArr.join(''); 
+        }
+        return null;
+    }
+
+    //初始化ColorBox
+    function initColorBox(){
+        var $overflow = '';
+        var colorbox_params = {
+            rel: 'colorbox',
+            reposition:true,
+            scalePhotos:true,
+            scrolling:false,
+            previous:'<i class="ace-icon fa fa-arrow-left"></i>',
+            next:'<i class="ace-icon fa fa-arrow-right"></i>',
+            close:'&times;',
+            current:'{current} of {total}',
+            maxWidth:'100%',
+            maxHeight:'100%',
+            onOpen:function(){
+                $overflow = document.body.style.overflow;
+                document.body.style.overflow = 'hidden';
+            },
+            onClosed:function(){
+                document.body.style.overflow = $overflow;
+            },
+            onComplete:function(){
+                $.colorbox.resize();
+            }
+        };
+
+        $('.ace-thumbnails [data-rel="colorbox"]').colorbox(colorbox_params);
+        $("#cboxLoadingGraphic").html("<i class='ace-icon fa fa-spinner orange fa-spin'></i>");
+        
+        $(document).one('ajaxloadstart.page', function(e) {
+            $('#colorbox, #cboxOverlay').remove();
+        });
+    }
+
+ };
+
+ DataList.loadData = function(listid){
+    var map = DataListMap[listid];
+    DataList(map["pagebar"],$('#'+listid),map["template"]);
+ }
+
+ })(jQuery);

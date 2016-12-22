@@ -346,7 +346,7 @@
 									        // swf文件路径
 									        swf: '/static/webuploader/Uploader.swf',
 									        // 文件接收服务端。
-									        server: '/data/image/Upload',
+									        server: '/data/upload/Upload',
 									        fileVal :'fileupload' ,
 									        // 选择文件的按钮。可选。
 									        // 内部根据当前运行是创建，可能是input元素，也可能是flash.
@@ -421,7 +421,8 @@
 
 									    // 所有文件上传完成
 									    u.on( 'uploadFinished', function(){
-									    	fn(f)
+									    	fn(f);
+									    	dobj.close();
 									    });
 
 									    // 文件上传失败
