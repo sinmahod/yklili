@@ -282,6 +282,7 @@
 		uploader: function(){
 			var p,u,l;
 			var t = '';
+			var isimage = false;
 			var t2 = '';
 			var s = 10;
 			var b = [];
@@ -299,6 +300,8 @@
 				},
 				fileType: function(type){
 					if (type=='image'){
+						h = 220;
+						isimage = true;
 						t = 'gif,jpg,jpeg,bmp,png';
 						t2 = 'image/*';
 					}
@@ -329,7 +332,111 @@
 						b.push(sc);
 						b.push(bt);
 					}
-				  	dobj = BootstrapDialog.show({
+					if (isimage){
+						dobj = BootstrapDialog.show({
+					                title: '文件上传',
+					                message: $('<div></div>').load('/static/webuploader/imageupload.html'),
+					                cssClass: 'dialog-'+w+' dialog-h-'+h,
+					                closeByBackdrop: false,   //点击空白位置关闭窗口失效
+					                draggable: true,
+					                buttons: b,
+					                onshown:function(){
+					                	 u = WebUploader.create({
+									        // swf文件路径
+									        swf: '/static/webuploader/Uploader.swf',
+									        // 文件接收服务端。
+									        server: '/data/upload/Upload',
+									        fileVal :'fileupload' ,
+									        // 选择文件的按钮。可选。
+									        // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+									        // mutiple 是否允许多选文件上传
+									        pick: {id:'#picker',multiple: false},
+									        //可上传的文件数量
+									        fileNumLimit: s,
+									        // 不压缩image, 默认如果是jpeg，文件上传前会压缩一把再上传！
+									        resize: false,
+									        // 只允许选择的文件，可选。
+									        accept: {
+									            title: '文件',
+									            extensions: t,
+									            mimeTypes: t2
+									        }
+									    });
+				                				// 当有文件被添加进队列的时候
+									    u.on( 'fileQueued', function( file ) {
+									          var icon = 'fa-picture-o file-image';
+									          if ( file.type.indexOf('image') == -1 ) {
+									                icon = 'fa-file';
+									          }
+									          $(".uploader-list").append('<div id="' + file.id + '" class="ace-file-input item">'+
+									            '<span id="span' + file.id + '" class="ace-file-container selected" data-title="待上传">'+
+									                '<div class="progress progress-striped active" style="height:28px;background: #ffffff;">'+
+									                '<div class="progress-bar" role="progressbar" style="width: 0%">' +
+									                '<span class="ace-file-name" style="display:inherit;position: absolute;" data-title="' + file.name + '">'+
+									                    '<i class=" ace-icon fa ' + icon + '"></i>'+
+									                '</span>'+
+									                '</div>'+
+									                '</div>'+
+									            '</span>'+
+									            '<a id="a' + file.id + '" class="remove" href="#;">'+
+									                '<i class=" ace-icon fa fa-times"></i>'+
+									            '</a>'+
+									        '</div>');
+									          $('#a'+file.id).click(function(){
+									       		 u.removeFile(file.id,true);
+									   	 });
+									    });
+
+									    // 文件被移除
+									    u.on( 'fileDequeued',function( file ){
+									        $('div#'+file.id).remove();
+									    });
+
+									    // 文件上传过程中创建进度条实时显示。
+									    u.on( 'uploadProgress', function( file, percentage ) {
+									        var $li = $( '#span'+file.id ),
+									            $percent = $li.find('.progress .progress-bar');
+									        // 避免重复创建
+									        if ( !$percent.length ) {
+									            $percent = $('<div class="progress progress-striped active">' +
+									              '<div class="progress-bar" role="progressbar" style="width: 0%">' +
+									              '</div>' +
+									            '</div>').appendTo( $li ).find('.progress-bar');
+									        }
+									        $( '#span'+file.id ).attr('data-title','上传中');
+									        $percent.css( 'width', percentage * 100 + '%' );
+									    });
+
+									    // 文件上传成功
+									    u.on( 'uploadSuccess', function( file ,response) {
+									    	if (response.STATUS == 1){
+									    		f.push(response.File);
+									    	}
+									        $( '#span'+file.id ).attr('data-title','已上传');
+									        $( '#a'+file.id ).addClass( "success" );
+									        $( '#a'+file.id ).unbind( "click" );
+									        $( '#a'+file.id ).children("i").removeClass('fa-times').addClass('fa-check');
+									    });
+
+									    // 所有文件上传完成
+									    u.on( 'uploadFinished', function(){
+									    	fn(f);
+									    	dobj.close();
+									    });
+
+									    // 文件上传失败
+									    u.on( 'uploadError', function( file ) {
+									        $( '#span'+file.id ).attr('data-title','有错误');
+									    });
+
+									    // 文件上传完成（不管成功失败）
+									    u.on( 'uploadComplete', function( file ) {
+									        //$( '#'+file.id ).find('.progress').fadeOut();
+									    });									    
+					                }
+				           });
+					}else{
+						dobj = BootstrapDialog.show({
 					                title: '文件上传',
 					                message: '<div id="uploader" class="uploader-dialog">'+
 				                					 	'<div class="btns">'+
@@ -436,6 +543,7 @@
 									    });									    
 					                }
 				           });
+					}
 				  	dobj.getModalHeader().css('padding','10px 10px 10px 15px');
 				  	dobj.getModalFooter().css('padding','10px 15px');
 				}
