@@ -22,7 +22,7 @@
         <script src="/static/js/gl.paginator.extend.js"></script>
 
         <!-- webUploader -->
-        <script src="/static/webuploader/webuploader.js"></script>
+        <script src="/static/webuploader/webuploader.nolog.min.js"></script>
 
          <!-- progressbar -->
         <script src="/static/js/jquery-ui.min.js"></script>

@@ -38,34 +38,56 @@
 
 var DataListMap = {};
 
-window.DataList = function(pagebar,list,html){
+window.DataList = function(options){
+    var $pagebar,$list,html,url,size; 
     var cpage = 1;
     var total = 0;
-    var size = 0;
-    var url;
 
-    if (!list){
+    if (typeof(options) != "undefined"){
+        if (typeof(options["pagebar"]) != "undefined" ) $pagebar = $('#'+options.pagebar);
+        if (typeof(options["list"]) != "undefined" ) $list = $('#'+options.list);
+        if (typeof(options["html"]) != "undefined" ) html = options.html;
+        size = typeof(options["size"]) != "undefined" ? size = options.size : 0;
+    }
+
+    if (!$pagebar){
+        $("[pagebar='true']").each(function(){
+            $pagebar = $(this);
+        });
+        if (!$pagebar){
+            throw new Error( 'not find pagebar' );
+        }
+    }
+
+
+    if (!$list){
         //检查所有带有List属性的标签，开始循环当前标签（包含子dom）
         $("[list='true']").each(function(){
-            list = $(this);
-            var id = list.attr("id");
-            if(!id){
-                BootFrame.alert("检查到页面中有list参数，但是所在元素没有id。",null,"错误",true);
-                return;
-            }
-            html = list.html();
-            DataListMap[id] = {template:html,pagebar:pagebar};
-            execute();
+            $list = $(this);
+            start();
         });
     }else{
+        start();
+    }
+
+    function start(){
+        var id = $list.attr("id");
+        if(!id){
+            console.log('Error:没有找到list元素的id');
+            return;
+        }
+        if(!html){
+             html = $list.html();
+        }   
+        DataListMap[id] = {template:html,pagebar:$pagebar};
         execute();
     }
 
     //第一次的执行方法
     function execute(){
-        url = list.attr("dataurl");
-        size = list.attr("size");
-        var page = list.attr("page");
+        url = $list.attr("dataurl");
+        size = $list.attr("size");
+        var page = $list.attr("page");
         if (!page || page=="false"){
             size = 10000;
         }
@@ -73,11 +95,11 @@ window.DataList = function(pagebar,list,html){
         readData(url,1,function(result){
             newHtml = renderList(result);
             if (newHtml != null){
-                list.html(newHtml);
+                $list.html(newHtml);
                 if (newHtml != ""){
                      $("img.lazy").lazyload();
                     initColorBox();
-                    initPagebar($('#'+pagebar));
+                    initPagebar($pagebar);
                 }
             }
         });
@@ -112,7 +134,7 @@ window.DataList = function(pagebar,list,html){
                 readData(url,page,function(result){
                     newHtml = renderList(result);
                     if (newHtml != null){
-                        list.html(newHtml);
+                        $list.html(newHtml);
                         $("img.lazy").lazyload();
                         initColorBox();
                     }
@@ -137,11 +159,11 @@ window.DataList = function(pagebar,list,html){
                 if (result != null ){
                     fn(result);
                 }else{
-                    BootFrame.alert("服务器发生错误，未获取到数据",null,"错误",true);
+                    console.log('Error:服务器发生错误，未获取到数据');
                 }
             },
             fail:function(){
-                BootFrame.alert("服务器发生错误，未获取到数据",null,"错误",true); 
+                console.log('Error:服务器发生错误，未获取到数据');
             }
         });
     }
@@ -205,7 +227,11 @@ window.DataList = function(pagebar,list,html){
 
  DataList.loadData = function(listid){
     var map = DataListMap[listid];
-    DataList(map["pagebar"],$('#'+listid),map["template"]);
+    DataList({
+        list: $('#'+listid),
+        pagebar: map["pagebar"],
+        html: map["template"]
+    });
  }
 
  })(jQuery);

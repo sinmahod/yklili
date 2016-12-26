@@ -38,7 +38,6 @@
     border: 3px dashed #e6e6e6;
 }
 #uploader .queueList.filled {
-    padding: 17px;
     margin: 0;
     border: 3px dashed transparent;
 }
@@ -343,6 +342,7 @@
     top: 10px;
     right: 20px;
     line-height: 40px;
+    width: auto;
 }
 
 #filePicker2 {
@@ -354,22 +354,21 @@
 #uploader .statusBar .btns .uploadBtn,
 #uploader .statusBar .btns .uploadBtn.state-uploading,
 #uploader .statusBar .btns .uploadBtn.state-paused {
-    background: #ffffff;
-    border: 1px solid #cfcfcf;
-    color: #565656;
-    padding: 0 18px;
-    display: inline-block;
-    border-radius: 3px;
-    margin-left: 10px;
-    cursor: pointer;
     font-size: 14px;
-    float: left;
+    background: #00b7ee;
+    border-radius: 0px;
+    line-height: 35px;
+    padding: 0 10px;
+    color: #fff;
+    display: inline-block;
+    cursor: pointer;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
 }
 #uploader .statusBar .btns .webuploader-pick-hover,
 #uploader .statusBar .btns .uploadBtn:hover,
 #uploader .statusBar .btns .uploadBtn.state-uploading:hover,
 #uploader .statusBar .btns .uploadBtn.state-paused:hover {
-    background: #f0f0f0;
+    background: #00a2d4;
 }
 
 #uploader .statusBar .btns .uploadBtn {

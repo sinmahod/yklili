@@ -10,8 +10,13 @@
 	//rows每页展示/请求数量  可选，默认10000
 	//istree  是否树形展示
 	//<table id="dataGrid" url="test" rows="10" istree="true"></table>
-	var dataGrid =  $('#'+options.tableName);
-	var dataGridPage = $('#'+options.pageName);
+	var dataGrid;
+	var dataGridPage;
+
+	if (typeof(options) != "undefined"){
+        if (typeof(options["tableName"]) != "undefined" ) dataGrid = $('#'+options.tableName);
+        if (typeof(options["pageName"]) != "undefined" ) dataGridPage = $('#'+options.pageName);
+    }
 
 	if (!dataGrid){
 		console.log('Error:没有设置tableName');

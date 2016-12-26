@@ -13,10 +13,10 @@
 
                         <div class="row">
                             <div>
-                                    <ul class="ace-thumbnails clearfix" id="list1" list="true" dataurl="/data/image/List" page="true" size="21">
+                                    <ul class="ace-thumbnails clearfix" id="list1" list="true" dataurl="/data/image/List" page="true" size="18">
                                         <li>
-                                            <a href="${FilePath}${FileNewName}" data-rel="colorbox">
-                                                <img width="150" height="150" class="lazy" data-original="${FilePath}${FileNewName}" />
+                                            <a href="${FilePath}${FileNewName}" style="width: 165px;height: 165px;overflow: hidden" data-rel="colorbox">
+                                                <img class="lazy" data-original="${FilePath}${FileNewName}" style="min-width: 180px;max-width: 270px;min-height: 180px;max-height: 270px;" />
                                             </a>
 
                                             <div class="tools tools-bottom">
@@ -37,14 +37,17 @@
 
                                 </div><!-- PAGE CONTENT ENDS -->
                                 <div align="center">
-                                    <ul class="pagination" id="pagebar"></ul>
+                                    <ul class="pagination" pagebar="true" id="pagebar"></ul>
                                 </div>
                         </div><!-- /.row -->
 
         <!-- jgrid -->
         <script type="text/javascript">
         jQuery(function($) {
-            DataList("pagebar");
+            DataList({
+                list: "list1",
+                pagebar: "pagebar"
+            });
         });
 
         function uploadImage(){
