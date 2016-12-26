@@ -22,10 +22,7 @@
 		console.log('Error:没有设置tableName');
 		return;
 	}
-	if (!dataGridPage){
-		console.log('Error:没有设置pageName');
-		return;
-	}
+	
 	var rows = dataGrid.attr('rows') ? dataGrid.attr('rows') : parseInt(($(window).height() - 320)/39);
 
 	var parent_column = dataGrid.closest('[class*="col-"]');

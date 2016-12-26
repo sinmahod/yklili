@@ -42,6 +42,9 @@
         <!-- ajax -->
         <script src="/static/js/gl.senddata.js"></script>
 
+        <!-- markdown -->
+        <script src="/static/js/editormd.js"></script>
+
         <script type="text/javascript">
             $(function(){
               $(document).pjax('.menu-pjax-a', '#main')

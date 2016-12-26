@@ -44,10 +44,10 @@ window.DataList = function(options){
     var total = 0;
 
     if (typeof(options) != "undefined"){
-        if (typeof(options["pagebar"]) != "undefined" ) $pagebar = $('#'+options.pagebar);
-        if (typeof(options["list"]) != "undefined" ) $list = $('#'+options.list);
-        if (typeof(options["html"]) != "undefined" ) html = options.html;
-        size = typeof(options["size"]) != "undefined" ? size = options.size : 0;
+        if (typeof(options["pagebar"]) != "undefined" ) $pagebar = $('#'+options["pagebar"]);
+        if (typeof(options["list"]) != "undefined" ) $list = $('#'+options["list"]);
+        if (typeof(options["html"]) != "undefined" ) html = options["html"];
+        size = typeof(options["size"]) != "undefined" ? options["size"] : 10000;
     }
 
     if (!$pagebar){
@@ -86,7 +86,9 @@ window.DataList = function(options){
     //第一次的执行方法
     function execute(){
         url = $list.attr("dataurl");
-        size = $list.attr("size");
+        if (!size){
+            size = $list.attr("size");
+        }
         var page = $list.attr("page");
         if (!page || page=="false"){
             size = 10000;
@@ -109,12 +111,16 @@ window.DataList = function(options){
 
     //分页条初始化
     function initPagebar(pagebar){
-         var options = {
+        var n = 5;
+        var w = $(document.body).width();
+        if (w < 400) n = 3;
+        else if (w < 500) n = 4;
+        var options = {
             bootstrapMajorVersion: 3, //版本
             alignment: "center",//居中显示
             currentPage: cpage,//当前页码
             totalPages: total,//总页码
-            numberOfPages: 5,//最多显示几个页码按钮
+            numberOfPages: n,//最多显示几个页码按钮
             itemTexts: function (type, page, current) {
                     switch (type) {
                     case "first":

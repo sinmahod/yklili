@@ -12,8 +12,8 @@
                         <div class="bottom-border"></div>
 
                         <div class="row">
-                            <div>
-                                    <ul class="ace-thumbnails clearfix" id="list1" list="true" dataurl="/data/image/List" page="true" size="18">
+                            <div style="position: relative;">
+                                    <ul class="ace-thumbnails clearfix" id="list1" list="true" dataurl="/data/image/List" page="true" size="18" style="margin: 0 auto;position: relative;max-width:1557px;">
                                         <li>
                                             <a href="${FilePath}${FileNewName}" style="width: 165px;height: 165px;overflow: hidden" data-rel="colorbox">
                                                 <img class="lazy" data-original="${FilePath}${FileNewName}" style="min-width: 180px;max-width: 270px;min-height: 180px;max-height: 270px;" />
@@ -44,9 +44,21 @@
         <!-- jgrid -->
         <script type="text/javascript">
         jQuery(function($) {
+            var w = $("#list1").width();
+            var h = $(document.body).height() - 160;
+            var s = 0;
+            if (w > 700){
+                w = parseInt(w / 173);
+                h = parseInt(h / 173);
+                s = w * h;
+                $("#list1").css("max-width",w * 173);
+            }else{
+                s = parseInt(w / 170) * 3;
+            }
             DataList({
                 list: "list1",
-                pagebar: "pagebar"
+                pagebar: "pagebar",
+                size: parseInt(s)
             });
         });
 
