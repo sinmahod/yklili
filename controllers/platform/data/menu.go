@@ -49,7 +49,7 @@ func (c *MenuController) InitPage() {
 //保存数据
 func (c *MenuController) Save() {
 	if len(c.RequestData) > 0 {
-		menu := new(models.Menu)
+		menu := new(models.S_Menu)
 		tran := new(orm.Transaction)
 		pid := numberutil.Atoi(c.RequestData["Pid"])
 
@@ -66,6 +66,7 @@ func (c *MenuController) Save() {
 			c.fail("操作失败，请确认参数是否传递正确")
 			goto END
 		} else {
+			sysuser := c.GetSession("User").(*models.S_User)
 			if !numberutil.IsNumber(c.RequestData["Id"]) {
 				if pid == 0 {
 					menu.SetLevel(1)
@@ -74,8 +75,6 @@ func (c *MenuController) Save() {
 					menu.SetLevel(2)
 					menu.SetInnerCode(models.GetMaxNo("menu", models.GetInnerCode(pid), 4))
 				}
-				menu.SetCurrentTime()
-				sysuser := c.GetSession("User").(*models.User)
 				menu.SetAddUser(sysuser.GetUserName())
 				tran.Add(menu, orm.INSERT)
 			} else {
@@ -94,6 +93,7 @@ func (c *MenuController) Save() {
 						menu.SetInnerCode(models.GetMaxNo("menu", "", 4))
 					}
 				}
+				menu.SetModifyUser(sysuser.GetUserName())
 				tran.Add(menu, orm.UPDATE)
 			}
 
@@ -117,7 +117,7 @@ func (c *MenuController) Del() {
 		tran := new(orm.Transaction)
 		idList := strings.Split(ids, ",")
 		for _, id := range idList {
-			menu := new(models.Menu)
+			menu := new(models.S_Menu)
 			menu.SetId(id)
 			if !menu.GetIsLeaf() {
 				c.fail("操作失败，要删除的菜单存在子级菜单，请先删除子级菜单")

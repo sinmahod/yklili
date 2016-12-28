@@ -26,5 +26,5 @@ func (t *DBConnectTask) GetDesc() string {
 
 func (t *DBConnectTask) Execute() {
 	o := orm.NewOrm()
-	o.Raw("SELECT COUNT(*) FROM menu").QueryRow()
+	o.Raw("SELECT COUNT(*) FROM s_menu").QueryRow()
 }

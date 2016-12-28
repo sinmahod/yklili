@@ -35,7 +35,7 @@ func (c *HTMLController) Prepare() {
 			c.LayoutSections["Include"] = "public/include.tpl"
 			c.LayoutSections["Script"] = "public/script.tpl"
 
-			user := c.GetSession("User").(*models.User)
+			user := c.GetSession("User").(*models.S_User)
 			c.Data["UserName"] = user.GetUserName()
 		}()
 

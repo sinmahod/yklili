@@ -46,7 +46,7 @@ func (c *UserController) InitPage() {
 //保持数据
 func (c *UserController) Save() {
 	if len(c.RequestData) > 0 {
-		user := new(models.User)
+		user := new(models.S_User)
 		tran := new(orm.Transaction)
 		if numberutil.IsNumber(c.RequestData["Id"]) {
 			user.SetId(c.RequestData["Id"])
@@ -56,12 +56,12 @@ func (c *UserController) Save() {
 			beego.Warn("请确认参数是否传递正确", err)
 			c.fail("操作失败，请确认参数是否传递正确")
 		} else {
+			sysuser := c.GetSession("User").(*models.S_User)
 			if !numberutil.IsNumber(c.RequestData["Id"]) {
-				user.SetCurrentTime()
-				sysuser := c.GetSession("User").(*models.User)
 				user.SetAddUser(sysuser.GetUserName())
 				tran.Add(user, orm.INSERT)
 			} else {
+				user.SetModifyUser(sysuser.GetUserName())
 				tran.Add(user, orm.UPDATE)
 			}
 
@@ -84,7 +84,7 @@ func (c *UserController) Del() {
 		tran := new(orm.Transaction)
 		idList := strings.Split(ids, ",")
 		for _, id := range idList {
-			user := new(models.User)
+			user := new(models.S_User)
 			user.SetId(id)
 			tran.Add(user, orm.DELETE)
 		}

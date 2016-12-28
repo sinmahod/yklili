@@ -17,7 +17,7 @@ func init() {
 }
 
 func Test_MenuString(t *testing.T) {
-	m := new(models.Menu)
+	m := new(models.S_Menu)
 	m.Id = 1
 	o := orm.NewOrm()
 	o.Read(m, "Id")
@@ -25,7 +25,7 @@ func Test_MenuString(t *testing.T) {
 }
 
 func Test_UserString(t *testing.T) {
-	u := new(models.User)
+	u := new(models.S_User)
 	u.Id = 1
 	o := orm.NewOrm()
 	o.Read(u, "Id")

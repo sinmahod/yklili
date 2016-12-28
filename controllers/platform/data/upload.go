@@ -2,6 +2,7 @@ package data
 
 import (
 	"beegostudy/models"
+	"beegostudy/service/config"
 	"beegostudy/util/dateutil"
 	"beegostudy/util/fileutil"
 	"beegostudy/util/stringutil"
@@ -21,15 +22,21 @@ func (c *UploadController) Upload() {
 
 			filepath += dateutil.GetYMDPathString()
 
+			uploadpath := config.GetValue(config.UploadPath)
+
+			if uploadpath == "" {
+				uploadpath = beego.AppPath
+			}
+
 			//检查目录是否存在，不存在则创建
-			if !fileutil.IsDir(beego.AppPath + filepath) {
-				fileutil.CreateDir(beego.AppPath + filepath)
+			if !fileutil.IsDir(uploadpath + filepath) {
+				fileutil.CreateDir(uploadpath + filepath)
 			}
 
 			newfilename := stringutil.GetUUID() + path.Ext(file.Filename)
 
 			if f, err := file.Open(); err == nil {
-				err = fileutil.WriteFileByReadCloser(beego.AppPath+filepath+newfilename, f)
+				err = fileutil.WriteFileByReadCloser(uploadpath+filepath+newfilename, f)
 				if err != nil {
 					beego.Error(err)
 					c.fail("上传失败")
@@ -39,7 +46,7 @@ func (c *UploadController) Upload() {
 
 				filesize, _ := c.GetInt64("size")
 
-				sysuser := c.GetSession("User").(*models.User)
+				sysuser := c.GetSession("User").(*models.S_User)
 
 				m := models.AddAttachment(file.Filename, newfilename, filepath, c.GetString("type"), filesize, sysuser.GetUserName())
 				c.put("File", m)
