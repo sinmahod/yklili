@@ -1,8 +1,8 @@
 package data
 
 import (
+	"beegostudy/conf"
 	"beegostudy/models"
-	"beegostudy/service/config"
 	"beegostudy/util/dateutil"
 	"beegostudy/util/fileutil"
 	"beegostudy/util/stringutil"
@@ -22,7 +22,7 @@ func (c *UploadController) Upload() {
 
 			filepath += dateutil.GetYMDPathString()
 
-			uploadpath := config.GetValue(config.UploadPath)
+			uploadpath := conf.GetValue(conf.UploadPath)
 
 			if uploadpath == "" {
 				uploadpath = beego.AppPath

@@ -1,6 +1,7 @@
 package main
 
 import (
+	_ "beegostudy/conf"
 	"beegostudy/controllers/platform"
 	"beegostudy/controllers/platform/data"
 	"beegostudy/controllers/template"
@@ -11,14 +12,9 @@ import (
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/context"
-	"github.com/astaxie/beego/orm"
-	_ "github.com/go-sql-driver/mysql"
 )
 
 func init() {
-	orm.RegisterDriver("mysql", orm.DRMySQL)
-	orm.RegisterDataBase("default", "mysql", "root:qweqwe@tcp(60.205.164.3:3306)/beestudy?charset=utf8")
-
 	go cron.RunCron()
 }
 
@@ -36,7 +32,7 @@ func (this *MainController) Get() {
 
 func main() {
 
-	orm.Debug = true                                 //ORM调试模式打开
+	//ORM调试模式打开
 	beego.BConfig.WebConfig.Session.SessionOn = true //启用Session
 	beego.BConfig.Listen.EnableAdmin = true          //启用进程内监控
 
