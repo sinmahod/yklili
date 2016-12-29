@@ -44,8 +44,20 @@ window.DataList = function(options){
     var total = 0;
 
     if (typeof(options) != "undefined"){
-        if (typeof(options["pagebar"]) != "undefined" ) $pagebar = $('#'+options["pagebar"]);
-        if (typeof(options["list"]) != "undefined" ) $list = $('#'+options["list"]);
+        if (typeof(options["pagebar"]) != "undefined" ) {
+            if(typeof(options["pagebar"]) == "string"){
+                $pagebar = $('#'+options["pagebar"]);
+            }else{
+                $pagebar = options["pagebar"];
+            }
+        }
+        if (typeof(options["list"]) != "undefined" ) {
+            if(typeof(options["list"]) == "string"){
+                $list = $('#'+options["list"]);
+            }else{
+                $list = options["list"];
+            }
+        }
         if (typeof(options["html"]) != "undefined" ) html = options["html"];
         size = typeof(options["size"]) != "undefined" ? options["size"] : 10000;
     }
@@ -79,7 +91,7 @@ window.DataList = function(options){
         if(!html){
              html = $list.html();
         }   
-        DataListMap[id] = {template:html,pagebar:$pagebar};
+        DataListMap[id] = {template:html,pagebar:$pagebar,size:size};
         execute();
     }
 
@@ -236,7 +248,8 @@ window.DataList = function(options){
     DataList({
         list: $('#'+listid),
         pagebar: map["pagebar"],
-        html: map["template"]
+        html: map["template"],
+        size: map["size"]
     });
  }
 
