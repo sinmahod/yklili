@@ -1,5 +1,5 @@
 (function ($) {
-//展示图片Colorbox 分页条paginator
+// 分页条paginator
 /* 使用方式
  * <div>
  *  <ul class="ace-thumbnails clearfix" list="true" dataurl="/data/image/List" page="true" size="1">
@@ -31,15 +31,16 @@
  *
  *  <script type="text/javascript">
  *      jQuery(function($) {
- *           DataList("pagebar");
+ *           DataList({list:listID,pagebar:pagebarID,html:html,fn:function(){}});
  *      });
  *  </script>   
+ *  fn每次翻页后的执行函数
  */
 
 var DataListMap = {};
 
 window.DataList = function(options){
-    var $pagebar,$list,html,url,size; 
+    var $pagebar,$list,html,url,size,fn; 
     var cpage = 1;
     var total = 0;
 
@@ -60,6 +61,7 @@ window.DataList = function(options){
         }
         if (typeof(options["html"]) != "undefined" ) html = options["html"];
         size = typeof(options["size"]) != "undefined" ? options["size"] : 10000;
+        fn = typeof(options["fn"]) != "undefined" ? options["fn"] : null;
     }
 
     if (!$pagebar){
@@ -91,7 +93,7 @@ window.DataList = function(options){
         if(!html){
              html = $list.html();
         }   
-        DataListMap[id] = {template:html,pagebar:$pagebar,size:size};
+        DataListMap[id] = {template:html,pagebar:$pagebar,size:size,fn:fn};
         execute();
     }
 
@@ -112,7 +114,9 @@ window.DataList = function(options){
                 $list.html(newHtml);
                 if (newHtml != ""){
                      $("img.lazy").lazyload();
-                    initColorBox();
+                    if (fn){
+                        fn();
+                    }
                     initPagebar($pagebar);
                 }
             }
@@ -154,9 +158,10 @@ window.DataList = function(options){
                     if (newHtml != null){
                         $list.html(newHtml);
                         $("img.lazy").lazyload();
-                        initColorBox();
+                        if (fn){
+                            fn();
+                        }
                     }
-                    //initColorBox();
                 });
             }
         };
@@ -207,40 +212,7 @@ window.DataList = function(options){
         return null;
     }
 
-    //初始化ColorBox
-    function initColorBox(){
-        var $overflow = '';
-        var colorbox_params = {
-            rel: 'colorbox',
-            reposition:true,
-            scalePhotos:true,
-            scrolling:false,
-            previous:'<i class="ace-icon fa fa-arrow-left"></i>',
-            next:'<i class="ace-icon fa fa-arrow-right"></i>',
-            close:'&times;',
-            current:'{current} of {total}',
-            maxWidth:'100%',
-            maxHeight:'100%',
-            onOpen:function(){
-                $overflow = document.body.style.overflow;
-                document.body.style.overflow = 'hidden';
-            },
-            onClosed:function(){
-                document.body.style.overflow = $overflow;
-            },
-            onComplete:function(){
-                $.colorbox.resize();
-            }
-        };
-
-        $('.ace-thumbnails [data-rel="colorbox"]').colorbox(colorbox_params);
-        $("#cboxLoadingGraphic").html("<i class='ace-icon fa fa-spinner orange fa-spin'></i>");
-        
-        $(document).one('ajaxloadstart.page', function(e) {
-            $('#colorbox, #cboxOverlay').remove();
-        });
-    }
-
+   
  };
 
  DataList.loadData = function(listid){
@@ -249,7 +221,8 @@ window.DataList = function(options){
         list: $('#'+listid),
         pagebar: map["pagebar"],
         html: map["template"],
-        size: map["size"]
+        size: map["size"],
+        fn: map["fn"]
     });
  }
 

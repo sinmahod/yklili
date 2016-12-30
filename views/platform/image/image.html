@@ -11,8 +11,8 @@
                             <div style="position: relative;">
                                     <ul class="ace-thumbnails clearfix" id="list1" list="true" dataurl="/data/image/List" page="true" size="18" style="margin: 0 auto;position: relative;max-width:1557px;">
                                         <li>
-                                            <a href="${FilePath}${FileNewName}" style="width: 165px;height: 165px;overflow: hidden" data-rel="colorbox">
-                                                <img class="lazy" data-original="${FilePath}${FileNewName}" style="min-width: 180px;max-width: 270px;min-height: 180px;max-height: 270px;" />
+                                            <a href="/data/image/Img?sn=${Sign}" style="width: 165px;height: 165px;overflow: hidden" data-rel="colorbox">
+                                                <img class="lazy" data-original="/data/image/Img?sn=${Sign}" style="min-width: 180px;max-width: 270px;min-height: 180px;max-height: 270px;" />
                                             </a>
 
                                             <div class="tools tools-bottom">
@@ -54,9 +54,46 @@
             DataList({
                 list: "list1",
                 pagebar: "pagebar",
-                size: parseInt(s)
+                size: parseInt(s),
+                fn: initColorBox
             });
         });
+
+         //初始化ColorBox
+        function initColorBox(){
+            var $overflow = '';
+            var colorbox_params = {
+                rel: 'colorbox',
+                reposition:true,
+                scalePhotos:true,
+                scrolling:false,
+                photo:true,
+                previous:'<i class="ace-icon fa fa-arrow-left"></i>',
+                next:'<i class="ace-icon fa fa-arrow-right"></i>',
+                close:'&times;',
+                current:'{current} of {total}',
+                maxWidth:'100%',
+                maxHeight:'100%',
+                onOpen:function(){
+                    $overflow = document.body.style.overflow;
+                    document.body.style.overflow = 'hidden';
+                },
+                onClosed:function(){
+                    document.body.style.overflow = $overflow;
+                },
+                onComplete:function(){
+                    $.colorbox.resize();
+                }
+            };
+
+            $('.ace-thumbnails [data-rel="colorbox"]').colorbox(colorbox_params);
+            $("#cboxLoadingGraphic").html("<i class='ace-icon fa fa-spinner orange fa-spin'></i>");
+            
+            $(document).one('ajaxloadstart.page', function(e) {
+                $('#colorbox, #cboxOverlay').remove();
+            });
+        }
+
 
         function uploadImage(){
             var bf = BootFrame.uploader();

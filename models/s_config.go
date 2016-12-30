@@ -26,6 +26,7 @@ import (
 type S_Config struct {
 	ConfigKey   string    `orm:"pk;column(configkey);size(64)"`
 	ConfigValue string    `orm:"column(configvalue);size(256)"`
+	Memo        string    `orm:"column(memo);size(512)"`
 	AddTime     time.Time `orm:"auto_now_add;type(datetime);column(addtime)"`
 	AddUser     string    `orm:"column(adduser);size(64)"`
 	ModifyTime  time.Time `orm:"null;type(datetime);column(modifytime)"`
@@ -51,6 +52,10 @@ func (c *S_Config) GetV() string {
 
 func (c *S_Config) SetV(v string) {
 	c.ConfigValue = v
+}
+
+func (c *S_Config) SetMemo(m string) {
+	c.Memo = m
 }
 
 func (c *S_Config) SetAddUser(uname string) {

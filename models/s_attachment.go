@@ -2,6 +2,7 @@ package models
 
 import (
 	"beegostudy/util/modelutil"
+	"beegostudy/util/stringutil"
 	"encoding/json"
 	"fmt"
 	"strconv"
@@ -28,12 +29,13 @@ import (
 type S_Attachment struct {
 	Id          int       `orm:"pk;auto;column(id)"`
 	FileName    string    `orm:"column(filaname);size(128)"`
-	FileNewName string    `orm:"column(filenewfile);size(128)"`
+	FileNewName string    `orm:"column(filenewname);size(128)"`
 	FilePath    string    `orm:"column(filepath);size(256)"`
 	FileType    string    `orm:"column(filetype);size(64)"`
 	FileSize    int64     `orm:"column(filesize)"`
 	AddTime     time.Time `orm:"auto_now_add;type(datetime);column(addtime)"`
 	AddUser     string    `orm:"column(adduser);size(64)"`
+	Sign        string    `orm:"-"`
 }
 
 //自定义表名
@@ -140,6 +142,10 @@ func GetAttchmentsPage(size, index int, ordercolumn, orderby string, data map[st
 		qt = qt.Filter("FileName__icontains", data["FileName"])
 	}
 	_, err := qt.OrderBy(ordercolumn).Limit(size, (index-1)*size).All(&atta)
+
+	for i, _ := range atta {
+		atta[i].Sign = stringutil.Encode(stringutil.Encrypt(atta[i].FilePath + atta[i].FileNewName))
+	}
 
 	if err == nil {
 		cnt, err := qt.Count()
