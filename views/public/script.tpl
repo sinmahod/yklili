@@ -50,6 +50,7 @@
               $(document).pjax('.menu-pjax-a', '#main')
 
               $(".menu-pjax-a").click(function(){
+                    
                     $("#platform-menu").find("li").removeClass("active");
                     $("#platform-menu").find(".hover-show").removeClass("hover-show");
                     $(this).parent("li").siblings(".parent-menu").find(".submenu").slideUp("fast");
