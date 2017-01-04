@@ -36,7 +36,7 @@ func main() {
 	beego.BConfig.WebConfig.Session.SessionOn = true //启用Session
 	beego.BConfig.Listen.EnableAdmin = true          //启用进程内监控
 
-	beego.Router("/", &MainController{})
+	beego.Router("/", &platform.LoginController{})
 	beego.Router("/login", &platform.LoginController{})
 	beego.Router("/register", &platform.RegisterController{})
 
