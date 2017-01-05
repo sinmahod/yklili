@@ -189,6 +189,19 @@ input[type=text]:hover,select:hover{
     border-top-right-radius: 8px !important;
 }
 
+/* 主题颜色 */
+.btn-colorpicker {
+    width: 57.3px;
+    height: 45px;
+    vertical-align: inherit;
+}
+.dropdown-modal-border {
+    border-left: 1px solid #E1E1E1 !important;
+}
+.ace-nav>li.no-border {
+    border-width: thin !important;
+}
+
 /*  dialog宽度，只有在大屏时才生效 */
 @media (min-width: 768px) {
 

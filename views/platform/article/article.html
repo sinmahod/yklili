@@ -1,4 +1,7 @@
 <link rel="stylesheet" href="/static/css/editormd.min.css" />
+
+<input type="text" id="title" value="" placeholder="请输入文章标题" style="border: 0;font-size: 18px;width: 80%;"/>
+
 <div id="layout" >
             <div id="test-editormd">
                 <textarea id="content" style="display:none;">[TOC]
@@ -93,10 +96,12 @@ editor.setPreviewTheme('theme-name');
             $(function() {                
                 testEditor = editormd("test-editormd", {
                     width        : "100%",
-                    height      : $(window).height() - 100,
+                    height       : $(window).height() - 130,
                     delay        : 1000,  
                     theme        : (localStorage.theme) ? localStorage.theme : "dark",
                     previewTheme : "default", 
+                    watch        : false, //实时预览
+                    //toolbar    : false, //工具栏
                     editorTheme  : (localStorage.editorTheme) ? localStorage.editorTheme : "pastel-on-dark", 
                     path         : '/static/lib/',
                     toolbarIconsClass : {

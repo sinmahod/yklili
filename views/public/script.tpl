@@ -50,7 +50,6 @@
               $(document).pjax('.menu-pjax-a', '#main')
 
               $(".menu-pjax-a").click(function(){
-                    
                     $("#platform-menu").find("li").removeClass("active");
                     $("#platform-menu").find(".hover-show").removeClass("hover-show");
                     $(this).parent("li").siblings(".parent-menu").find(".submenu").slideUp("fast");
@@ -60,6 +59,15 @@
                     $(this).parents(".parent-menu").addClass("active").siblings().removeClass("active");
                     $(this).parents(".open").siblings(".open").removeClass("open");
               });
+
+              $(document).click(function(event){
+                  var _con = $('#sidebar');
+                  if(!_con.is(event.target) && _con.has(event.target).length === 0){ 
+                        _con.removeClass("display");
+                        $('#menu-toggler').removeClass("display");
+                  }
+              });
+
             })
             
             $('[data-rel=tooltip]').tooltip({container:'body'});
