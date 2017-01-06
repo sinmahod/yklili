@@ -43,7 +43,7 @@
         <script src="/static/js/gl.senddata.js"></script>
 
         <!-- markdown -->
-        <script src="/static/js/editormd.js"></script>
+        <script src="/static/editor.md/editormd.js"></script>
 
         <script type="text/javascript">
             $(function(){

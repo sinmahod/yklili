@@ -12,10 +12,23 @@
 	//<table id="dataGrid" url="test" rows="10" istree="true"></table>
 	var dataGrid;
 	var dataGridPage;
+	var cb = true;
+	var sr = true;
+	var vr = true;
+	var beforefn,selectfn;
+
+	
 
 	if (typeof(options) != "undefined"){
         if (typeof(options["tableName"]) != "undefined" ) dataGrid = $('#'+options.tableName);
         if (typeof(options["pageName"]) != "undefined" ) dataGridPage = $('#'+options.pageName);
+        if (typeof(options["showCheckbox"]) != "undefined" ) cb = options["showCheckbox"];
+        if (typeof(options["showRownum"]) != "undefined" ) sr = options["showRownum"];
+     	if (typeof(options["viewrecords"]) != "undefined" ) sr = options["viewrecords"];
+        if (typeof(options["beforefn"]) != "undefined" ) beforefn = options["beforefn"];
+        if (typeof(options["selectfn"]) != "undefined" ) selectfn = options["selectfn"];
+    }else{
+    	return;
     }
 
 	if (!dataGrid){
@@ -23,7 +36,13 @@
 		return;
 	}
 	
-	var rows = dataGrid.attr('rows') ? dataGrid.attr('rows') : parseInt(($(window).height() - 320)/39);
+	var rows = dataGrid.attr('rows') ? dataGrid.attr('rows') : parseInt(($(window).height() - 250)/39);
+
+	if (typeof(options["rowView"]) != "undefined" && options["rowView"] == false){
+		options.rowList = [];    //每页最大数量支持
+    }else{
+    	options.rowList = [rows,30,50];
+    }
 
 	var parent_column = dataGrid.closest('[class*="col-"]');
                 //resize to fit page size
@@ -41,6 +60,8 @@
             }
         })
 
+   
+
 	options = $.extend({
 		url: dataGrid.attr('url'),
 		mtype: "GET", 
@@ -49,7 +70,7 @@
 		
 		caption: options.title,  	//表格名称
 		rowNum: rows, 		// 显示行数，-1为显示全部,默认自适应
-		rowList: [rows,30,50],    //每页最大数量支持
+		
 		rownumWidth: 30,	// 序号列宽
 		multiboxonly: true,	// 单击复选框时在多选
 		altRows: true, 		// 斑马线样式，交替行altclass
@@ -60,10 +81,10 @@
 		colModel: options.columnModel,
 
 		// 列表参数
-		showRownum: true,	// 是否显示行号
+		showRownum: sr,	// 是否显示行号
 		showCheckbox: true,// 是否显示复选框
-		multiselect: true,      //是否可以多选
-    		multiboxonly: true,     //只有选中checkbox才有效
+		multiselect: cb,      //是否可以多选
+		multiboxonly: true,     //只有选中checkbox才有效
 		sortable: false,	// 列表是否允许支持
 		
 		// 树结构表格
@@ -81,21 +102,33 @@
 		ExpandColumn: dataGrid.attr('treeColumn'),	//树形结构列的列明
 
 		//设置宽度为0px，不显示滚动条
-		scrollOffset: 0,  
-		viewrecords : true, //是否显示总数量
-		height: $(window).height() - 320,     //表格高度，宽度默认自动填充
+		scrollOffset: 1,  
+		viewrecords : vr, //是否显示总数量
+		height: $(window).height() - 250,     //表格高度，宽度默认自动填充
 
 		pager : dataGridPage,     //翻页导航
 
 		closeAfterAdd: true,    //添加数据后关闭窗口
 		closeAfterEdit:true,     //修改数据后关闭窗口
-		loadComplete : function() {	//修改翻页图标样式
-			updatePagerIcons(this);
+		loadComplete : function() {
+			//当从服务器返回响应时执行，xhr：XMLHttpRequest 对象
+			updatePagerIcons(this);	//修改翻页图标样式
 		},
-
-		//页码的文字
-		pgtext: '转到 <input class="ui-pg-input ui-corner-all" type="text" size="2" maxlength="7" value="0" role="textbox"> 页，共<span id="sp_1_grid-pager"></span>页'
-
+		gridComplete: function () {
+	   		//当表格所有数据都加载完成而且其他的处理也都完成时触发此事件，排序，翻页同样也会触发此事件
+	 	},
+	 	beforeRequest: function () {
+	 		//向服务器端发起请求之前触发此事件但如果datatype是一个function时例外
+	 		if(beforefn){
+				beforefn();
+			}
+	 	},
+	 	beforeSelectRow: function(rowid) {
+	 		//选中行时触发
+	 		if(selectfn){
+				selectfn(rowid);
+			}
+	 	}
       }, options);
 	
 	function updatePagerIcons(table) {
@@ -248,10 +281,10 @@ DataGrid.loadData = function(tableid){
 	$.jgrid = $.jgrid || {};
 	$.extend($.jgrid,{
 	    defaults : {
-	        recordtext: "{0} - {1}\u3000共 {2} 条", // 共字前是全角空格
+	        recordtext: "<span class=\"hidden-xs\">共 {2} 条</span>", // 共字前是全角空格
 	        emptyrecords: "无数据显示",
 	        loadtext: "正在加载...",
-	        pgtext : " {0} 共 {1} 页"
+			pgtext: '{0} 共 {1} 页'
 	    },
 	    search : {
 	        caption: "搜索...",

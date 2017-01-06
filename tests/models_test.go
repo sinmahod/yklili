@@ -32,6 +32,17 @@ func Test_UserString(t *testing.T) {
 	t.Logf("%s", u)
 }
 
+func Test_AddArticle(t *testing.T) {
+	// a := new(models.S_Article)
+	// a.Id = 3
+	// o := orm.NewOrm()
+	// a.Title = "Test"
+	// a.Content = "###asdasd"
+	// a.Status = 1
+	// a.SetModifyUser("admin")
+	// o.Insert(a)
+}
+
 func Test_LeftPad(t *testing.T) {
 	s := stringutil.LeftPad("aa", 'c', 8)
 	t.Fatal(s)

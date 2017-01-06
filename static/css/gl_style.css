@@ -191,15 +191,29 @@ input[type=text]:hover,select:hover{
 
 /* 主题颜色 */
 .btn-colorpicker {
-    width: 57.3px;
+    width: 45px;
     height: 45px;
-    vertical-align: inherit;
+    margin-top: -2px;
 }
 .dropdown-modal-border {
     border-left: 1px solid #E1E1E1 !important;
 }
 .ace-nav>li.no-border {
     border-width: thin !important;
+}
+
+@media (max-width: 415px) {
+.ui-jqgrid .ui-jqgrid-pager {
+    padding-top: 0px!important;
+}
+
+.ui-jqgrid .ui-jqgrid-pager .ui-paging-pager{
+    height: auto;
+}
+}
+
+.ui-jqgrid .ui-pg-selbox {
+    width: auto;
 }
 
 /*  dialog宽度，只有在大屏时才生效 */

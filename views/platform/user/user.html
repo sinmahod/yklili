@@ -162,14 +162,14 @@
             BootFrame.confirm("您确定要删除这些用户吗？", function(){
                 var data = {Ids: ids.join()};
                 SendData.Post("/data/user/Del",data,function(response){
-                if ( response.STATUS==1){
-                    BootFrame.alert(response.MESSAGE,function(){
-                        DataGrid.loadData('datatable');
-                    });
-                }else{
-                    BootFrame.alert(response.MESSAGE,null,"操作失败",true);
-                }
-            });
+                    if ( response.STATUS==1){
+                        BootFrame.alert(response.MESSAGE,function(){
+                            DataGrid.loadData('datatable');
+                        });
+                    }else{
+                        BootFrame.alert(response.MESSAGE,null,"操作失败",true);
+                    }
+                });
             });
         }
 

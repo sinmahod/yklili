@@ -19,9 +19,6 @@
                             <div class="col-xs-12">
                                 <!-- PAGE CONTENT BEGINS -->
                                 <table id="datatable" url="/data/menu/List" istree="true" treeColumn="MenuName"></table>
-
-                                <div id="datapager"></div>
-
                                 <!-- PAGE CONTENT ENDS -->
                             </div><!-- /.col -->
                         </div><!-- /.row -->
@@ -33,7 +30,6 @@
                 var dataGrid = new DataGrid({  
                     title: '菜单管理',
                     tableName: 'datatable',  
-                    pageName: 'datapager', 
                     // 设置数据表格列
                     columnModel: [  
                         {name:'Id',index:'Id',hidden:true,key:true},

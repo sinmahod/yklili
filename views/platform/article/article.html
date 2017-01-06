@@ -1,143 +1,118 @@
-<link rel="stylesheet" href="/static/css/editormd.min.css" />
-
-<input type="text" id="title" value="" placeholder="请输入文章标题" style="border: 0;font-size: 18px;width: 80%;"/>
-
-<div id="layout" >
-            <div id="test-editormd">
-                <textarea id="content" style="display:none;">[TOC]
-
-### Themes
-
-#### Setting
-
-configs:
-
-```javascript
-{
-    // Editor.md theme, default or dark, change at v1.5.0
-    // You can also custom css class .editormd-theme-xxxx
-    theme : "default | dark",
-
-    // Preview container theme, added v1.5.0
-    // You can also custom css class .editormd-preview-theme-xxxx
-    previewTheme : "default | dark",
-
-    // Added @v1.5.0 & after version this is CodeMirror (editor area) theme
-    editorTheme : editormd.editorThemes['theme-name']
+<link rel="stylesheet" href="/static/editor.md/css/editormd.min.css" />
+<style type="text/css">
+.ui-jqgrid .ui-jqgrid-btable {
+    border-left: 0px solid #E1E1E1;
 }
-```
+.ui-jqgrid-bdiv {
+    border-left: 1px solid #E1E1E1;
+    border-right: 1px solid #E1E1E1;
+}
+.ui-jqgrid .ui-jqgrid-pager {
+    border-left: 1px solid #E1E1E1 !important;
+    border-right: 1px solid #E1E1E1 !important;
+}
+#contentHtml {
+    border: 1px solid #e0e0e0;
+    overflow:scroll;
+    display:none;
+}
+</style>
 
-functions:
+<div class="page-header">
+    <button class="btn btn-sm btn-primary" onclick="addMenu()">
+        <i class="ace-icon fa fa-plus bigger-125"></i>
+        <span class="bigger-115 no-text-shadow">新建菜单</span>
+    </button>
+     <button class="btn btn-sm btn-info" onclick="editMenu()">
+        <i class="ace-icon fa fa-pencil bigger-125"></i>
+        <span class="bigger-115 no-text-shadow">修改菜单</span>
+    </button>
+     <button class="btn btn-sm btn-success" onclick="delMenu()">
+        <i class="ace-icon fa fa-minus bigger-125"></i>
+        <span class="bigger-115 no-text-shadow">删除菜单</span>
+    </button>
+</div><!-- /.page-header -->
 
-```javascript
-editor.setTheme('theme-name');
-editor.setEditorTheme('theme-name');
-editor.setPreviewTheme('theme-name');
-```
+<div class="bottom-border"></div>
 
-#### Default theme
+<div class="row">
+    <div class="col-sm-4 col-xs-12">
+        <!-- PAGE CONTENT BEGINS -->
+        <table id="datatable" url="/data/article/List" ></table>
 
-- Editor.md theme : `default`
-- Preview area theme : `default`
-- Editor area theme : `default`
-
-> Recommend `dark` theme.
-
-#### Recommend editor area themes
-
-- ambiance
-- eclipse
-- mdn-like
-- mbo
-- monokai
-- neat
-- pastel-on-dark
-
-#### Editor area themes
-
-- default
-- 3024-day
-- 3024-night
-- ambiance
-- ambiance-mobile
-- base16-dark
-- base16-light
-- blackboard
-- cobalt
-- eclipse
-- elegant
-- erlang-dark
-- lesser-dark
-- mbo
-- mdn-like
-- midnight
-- monokai
-- neat
-- neo
-- night
-- paraiso-dark
-- paraiso-light
-- pastel-on-dark
-- rubyblue
-- solarized
-- the-matrix
-- tomorrow-night-eighties
-- twilight
-- vibrant-ink
-- xq-dark
-- xq-light
-</textarea>
-            </div>
-        </div>
+        <div id="datapager"></div>
+        <!-- PAGE CONTENT ENDS -->
+    </div><!-- /.col -->
+    <div class="col-sm-8 hidden-xs">
+        <!-- PAGE CONTENT BEGINS -->
+        <div id="contentHtml"></div>
+        <!-- PAGE CONTENT ENDS -->
+    </div><!-- /.col -->
+</div><!-- /.row -->
         
-        <script type="text/javascript">
 
-            var testEditor;
-            $(function() {                
-                testEditor = editormd("test-editormd", {
-                    width        : "100%",
-                    height       : $(window).height() - 130,
-                    delay        : 1000,  
-                    theme        : (localStorage.theme) ? localStorage.theme : "dark",
-                    previewTheme : "default", 
-                    watch        : false, //实时预览
-                    //toolbar    : false, //工具栏
-                    editorTheme  : (localStorage.editorTheme) ? localStorage.editorTheme : "pastel-on-dark", 
-                    path         : '/static/lib/',
-                    toolbarIconsClass : {
-                        testIcon : "fa-picture-o"  // 指定一个FontAawsome的图标类
-                    },
-                    toolbarIcons : function() {
-                        return ["bold", "del", "italic", "quote", "ucwords", "uppercase", "lowercase", "|", 
-            "h1", "h2", "h3", "h4", "h5", "h6", "|", 
-            "list-ul", "list-ol", "hr", "|",
-            "link", "reference-link", "testIcon", "code", "preformatted-text", "code-block", "table", "datetime", "html-entities", "pagebreak", "|",, "watch", "preview", "fullscreen", "search"]
-                    },
-                    toolbarHandlers : {
-                        /**
-                         * @param {Object}      cm         CodeMirror对象
-                         * @param {Object}      icon       图标按钮jQuery元素对象
-                         * @param {Object}      cursor     CodeMirror的光标对象，可获取光标所在行和位置
-                         * @param {String}      selection  编辑器选中的文本
-                         */
-                        testIcon : function(cm, icon, cursor, selection) {
-                            //var cursor    = cm.getCursor();     //获取当前光标对象，同cursor参数
-                            //var selection = cm.getSelection();  //获取当前选中的文本，同selection参数
-                            cm.replaceSelection("[" + selection + ":testIcon]");
+<script src="/static/editor.md/lib/marked.min.js"></script>
+<script src="/static/editor.md/lib/prettify.min.js"></script>
+<script src="/static/editor.md/lib/flowchart.min.js"></script>
+<script src="/static/editor.md/lib/raphael.min.js"></script>
+<script src="/static/editor.md/lib/underscore.min.js"></script>
+
+
+<script src="/static/editor.md/lib/sequence-diagram.min.js"></script>
+<script src="/static/editor.md/lib/jquery.flowchart.min.js"></script>
+<script type="text/javascript">
+    jQuery(function($) {
+        var dataGrid = new DataGrid({  
+            title: '文章管理',
+            tableName: 'datatable',  
+            pageName: 'datapager', 
+            showCheckbox: false,
+            showRownum: false,
+            viewrecords: false,
+            rowView: false,
+            // 设置数据表格列
+            columnModel: [
+                {name:'Id',index:'Id',hidden:true,key:true},
+                {label:'用户名称',name:'Title',index:'Title',align:"center",width:100},
+                {name:'',index:'', width:30, fixed:true,align:"center", sortable:false, resize:false,
+                    formatter : function(value, grid, rows, state){
+                        var checked = "";
+                        if (rows.Status){
+                            checked = "checked=\"checked\"";
                         }
-                    },
-                    onload : function() {
-                        var keyMap = {
-                            "Ctrl-S": function(cm) {
-                                alert("Ctrl+S");
-                            },
-                            "Ctrl-A": function(cm) { // default Ctrl-A selectAll
-                                cm.execCommand("selectAll");
-                            },
-                        };
-                        this.addKeyMap(keyMap);
+                        return '<div title="" style="float:left;cursor:pointer;" class="ui-pg-div ui-inline-edit" id="jEditButton_5" onclick="editArticle('+rows.Id+')"  data-original-title="Edit selected row"><span class="ui-icon ui-icon-pencil"></span></div>';
+                    }
+                },
+            ],
+            beforefn: function(){
+                $('#datatable').closest('.ui-jqgrid-view').find('div.ui-jqgrid-hdiv').remove();
+                $('#contentHtml').height($('#gbox_datatable').height());
+                $('#contentHtml').show();
+            },
+            selectfn: function(rowid){
+                var data = {Id: rowid};
+                SendData.Post("/data/article/InitArticle",data,function(response){
+                    if (response.STATUS==1){
+                        $('#contentHtml').html('<textarea id="append-md" style="display:none;">' + response["Article"].Content + '</textarea>');
+                        editormd.markdownToHTML("contentHtml", {
+                            markdown        : $("#append-md").val(),
+                            htmlDecode      : "style,script,iframe",  // you can filter tags decode
+                            emoji           : true,
+                            taskList        : true,
+                            tex             : true,  // 默认不解析
+                            flowChart       : true,  // 默认不解析
+                            sequenceDiagram : true,  // 默认不解析
+                        });
+
+                    }else{
+                        BootFrame.alert(response.MESSAGE,null,"操作失败",true);
                     }
                 });
-                testEditor.setToolbarAutoFixed(false);
-            });
-        </script>
+            }
+        });
+    }); 
+
+    function editArticle(){
+
+    }
+</script>

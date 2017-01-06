@@ -1,0 +1,143 @@
+<link rel="stylesheet" href="/static/editor.md/css/editormd.min.css" />
+
+<input type="text" id="title" value="" placeholder="请输入文章标题" style="border: 0;font-size: 18px;width: 80%;"/>
+
+<div id="layout" >
+            <div id="test-editormd">
+                <textarea id="content" style="display:none;">[TOC]
+
+### Themes
+
+#### Setting
+
+configs:
+
+```javascript
+{
+    // Editor.md theme, default or dark, change at v1.5.0
+    // You can also custom css class .editormd-theme-xxxx
+    theme : "default | dark",
+
+    // Preview container theme, added v1.5.0
+    // You can also custom css class .editormd-preview-theme-xxxx
+    previewTheme : "default | dark",
+
+    // Added @v1.5.0 & after version this is CodeMirror (editor area) theme
+    editorTheme : editormd.editorThemes['theme-name']
+}
+```
+
+functions:
+
+```javascript
+editor.setTheme('theme-name');
+editor.setEditorTheme('theme-name');
+editor.setPreviewTheme('theme-name');
+```
+
+#### Default theme
+
+- Editor.md theme : `default`
+- Preview area theme : `default`
+- Editor area theme : `default`
+
+> Recommend `dark` theme.
+
+#### Recommend editor area themes
+
+- ambiance
+- eclipse
+- mdn-like
+- mbo
+- monokai
+- neat
+- pastel-on-dark
+
+#### Editor area themes
+
+- default
+- 3024-day
+- 3024-night
+- ambiance
+- ambiance-mobile
+- base16-dark
+- base16-light
+- blackboard
+- cobalt
+- eclipse
+- elegant
+- erlang-dark
+- lesser-dark
+- mbo
+- mdn-like
+- midnight
+- monokai
+- neat
+- neo
+- night
+- paraiso-dark
+- paraiso-light
+- pastel-on-dark
+- rubyblue
+- solarized
+- the-matrix
+- tomorrow-night-eighties
+- twilight
+- vibrant-ink
+- xq-dark
+- xq-light
+</textarea>
+            </div>
+        </div>
+        
+        <script type="text/javascript">
+
+            var testEditor;
+            $(function() {                
+                testEditor = editormd("test-editormd", {
+                    width        : "100%",
+                    height       : $(window).height() - 130,
+                    delay        : 1000,  
+                    theme        : (localStorage.theme) ? localStorage.theme : "dark",
+                    previewTheme : "default", 
+                    watch        : false, //实时预览
+                    //toolbar    : false, //工具栏
+                    editorTheme  : (localStorage.editorTheme) ? localStorage.editorTheme : "pastel-on-dark", 
+                    path         : '/static/editor.md/lib/',
+                    toolbarIconsClass : {
+                        testIcon : "fa-picture-o"  // 指定一个FontAawsome的图标类
+                    },
+                    toolbarIcons : function() {
+                        return ["bold", "del", "italic", "quote", "ucwords", "uppercase", "lowercase", "|", 
+            "h1", "h2", "h3", "h4", "h5", "h6", "|", 
+            "list-ul", "list-ol", "hr", "|",
+            "link", "reference-link", "testIcon", "code", "preformatted-text", "code-block", "table", "datetime", "html-entities", "pagebreak", "|",, "watch", "preview", "fullscreen", "search"]
+                    },
+                    toolbarHandlers : {
+                        /**
+                         * @param {Object}      cm         CodeMirror对象
+                         * @param {Object}      icon       图标按钮jQuery元素对象
+                         * @param {Object}      cursor     CodeMirror的光标对象，可获取光标所在行和位置
+                         * @param {String}      selection  编辑器选中的文本
+                         */
+                        testIcon : function(cm, icon, cursor, selection) {
+                            //var cursor    = cm.getCursor();     //获取当前光标对象，同cursor参数
+                            //var selection = cm.getSelection();  //获取当前选中的文本，同selection参数
+                            cm.replaceSelection("[" + selection + ":testIcon]");
+                        }
+                    },
+                    onload : function() {
+                        var keyMap = {
+                            "Ctrl-S": function(cm) {
+                                alert("Ctrl+S");
+                            },
+                            "Ctrl-A": function(cm) { // default Ctrl-A selectAll
+                                cm.execCommand("selectAll");
+                            },
+                        };
+                        this.addKeyMap(keyMap);
+                    }
+                });
+                testEditor.setToolbarAutoFixed(false);
+            });
+        </script>
