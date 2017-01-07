@@ -15,7 +15,7 @@
 	var cb = true;
 	var sr = true;
 	var vr = true;
-	var beforefn,selectfn;
+	var gridfn,beforefn,selectfn,onbdclickfn;
 
 	
 
@@ -25,8 +25,10 @@
         if (typeof(options["showCheckbox"]) != "undefined" ) cb = options["showCheckbox"];
         if (typeof(options["showRownum"]) != "undefined" ) sr = options["showRownum"];
      	if (typeof(options["viewrecords"]) != "undefined" ) sr = options["viewrecords"];
+     	if (typeof(options["gridfn"]) != "undefined" ) gridfn = options["gridfn"];
         if (typeof(options["beforefn"]) != "undefined" ) beforefn = options["beforefn"];
         if (typeof(options["selectfn"]) != "undefined" ) selectfn = options["selectfn"];
+        if (typeof(options["onbdclickfn"]) != "undefined" ) onbdclickfn = options["onbdclickfn"];
     }else{
     	return;
     }
@@ -37,6 +39,10 @@
 	}
 	
 	var rows = dataGrid.attr('rows') ? dataGrid.attr('rows') : parseInt(($(window).height() - 250)/39);
+
+	if (!rows || rows == 0){
+		return;
+	}
 
 	if (typeof(options["rowView"]) != "undefined" && options["rowView"] == false){
 		options.rowList = [];    //每页最大数量支持
@@ -116,6 +122,9 @@
 		},
 		gridComplete: function () {
 	   		//当表格所有数据都加载完成而且其他的处理也都完成时触发此事件，排序，翻页同样也会触发此事件
+			if(gridfn){
+	   			gridfn();
+	   		}
 	 	},
 	 	beforeRequest: function () {
 	 		//向服务器端发起请求之前触发此事件但如果datatype是一个function时例外
@@ -123,10 +132,16 @@
 				beforefn();
 			}
 	 	},
-	 	beforeSelectRow: function(rowid) {
-	 		//选中行时触发
-	 		if(selectfn){
+	 	onSelectRow: function(rowid,s) {
+	 		//点击行时触发
+	 		if(s && selectfn){
 				selectfn(rowid);
+			}
+	 	},
+	 	ondblClickRow: function(rowid){
+	 		//选中行双击时触发
+	 		if(onbdclickfn){
+				onbdclickfn(rowid);
 			}
 	 	}
       }, options);

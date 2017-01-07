@@ -2,6 +2,13 @@
         <script type="text/javascript">
             if('ontouchstart' in document.documentElement) document.write("<script src='/static/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
         </script>
+
+        <!-- progressbar -->
+        <script src="/static/js/jquery-ui.min.js"></script>
+        <script src="/static/js/jquery.ui.touch-punch.min.js"></script>
+
+
+        <!-- core -->
         <script src="/static/js/bootstrap.min.js"></script>
 
         <!--[if lte IE 8]>
@@ -23,10 +30,6 @@
 
         <!-- webUploader -->
         <script src="/static/webuploader/webuploader.nolog.min.js"></script>
-
-         <!-- progressbar -->
-        <script src="/static/js/jquery-ui.min.js"></script>
-        <script src="/static/js/jquery.ui.touch-punch.min.js"></script>
 
         <!-- image view -->
         <script src="/static/js/jquery.lazyload.js"></script>

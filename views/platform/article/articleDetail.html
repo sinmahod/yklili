@@ -1,92 +1,35 @@
 <link rel="stylesheet" href="/static/editor.md/css/editormd.min.css" />
 
-<input type="text" id="title" value="" placeholder="请输入文章标题" style="border: 0;font-size: 18px;width: 80%;"/>
+
+<div style="padding-bottom: 8px;">
+
+<input type="text" id="title" value="{{.Article.Title}}" placeholder="请输入文章标题" style="border: 0;font-size: 18px;width: 70%;color: #438eb9;"/>
+
+    <div class="btn-group" style="float: right;">
+
+        <button type="button"  class="btn btn-success" id="save-btn" data-loading-text="Loading...">保存</button>
+
+        <button data-toggle="dropdown" class="btn btn-success dropdown-toggle">
+            <span class="ace-icon fa fa-caret-down icon-only"></span>
+        </button>
+
+        <ul class="dropdown-menu dropdown-success" style="min-width: 80px;">
+            <li>
+                <a href="#">发布</a>
+            </li>
+
+            <li class="divider"></li>
+
+            <li>
+                <a href="#">删除</a>
+            </li>
+        </ul>
+    </div><!-- /.btn-group -->
+</div>
 
 <div id="layout" >
             <div id="test-editormd">
-                <textarea id="content" style="display:none;">[TOC]
-
-### Themes
-
-#### Setting
-
-configs:
-
-```javascript
-{
-    // Editor.md theme, default or dark, change at v1.5.0
-    // You can also custom css class .editormd-theme-xxxx
-    theme : "default | dark",
-
-    // Preview container theme, added v1.5.0
-    // You can also custom css class .editormd-preview-theme-xxxx
-    previewTheme : "default | dark",
-
-    // Added @v1.5.0 & after version this is CodeMirror (editor area) theme
-    editorTheme : editormd.editorThemes['theme-name']
-}
-```
-
-functions:
-
-```javascript
-editor.setTheme('theme-name');
-editor.setEditorTheme('theme-name');
-editor.setPreviewTheme('theme-name');
-```
-
-#### Default theme
-
-- Editor.md theme : `default`
-- Preview area theme : `default`
-- Editor area theme : `default`
-
-> Recommend `dark` theme.
-
-#### Recommend editor area themes
-
-- ambiance
-- eclipse
-- mdn-like
-- mbo
-- monokai
-- neat
-- pastel-on-dark
-
-#### Editor area themes
-
-- default
-- 3024-day
-- 3024-night
-- ambiance
-- ambiance-mobile
-- base16-dark
-- base16-light
-- blackboard
-- cobalt
-- eclipse
-- elegant
-- erlang-dark
-- lesser-dark
-- mbo
-- mdn-like
-- midnight
-- monokai
-- neat
-- neo
-- night
-- paraiso-dark
-- paraiso-light
-- pastel-on-dark
-- rubyblue
-- solarized
-- the-matrix
-- tomorrow-night-eighties
-- twilight
-- vibrant-ink
-- xq-dark
-- xq-light
-</textarea>
+                <textarea id="content" style="display:none;">{{.Article.Content}}</textarea>
             </div>
         </div>
         
@@ -100,13 +43,14 @@ editor.setPreviewTheme('theme-name');
                     delay        : 1000,  
                     theme        : (localStorage.theme) ? localStorage.theme : "dark",
                     previewTheme : "default", 
-                    watch        : false, //实时预览
+                    watch        : true, //实时预览
                     //toolbar    : false, //工具栏
                     editorTheme  : (localStorage.editorTheme) ? localStorage.editorTheme : "pastel-on-dark", 
                     path         : '/static/editor.md/lib/',
                     toolbarIconsClass : {
                         testIcon : "fa-picture-o"  // 指定一个FontAawsome的图标类
                     },
+                    htmlDecode   : "style,script,iframe",
                     toolbarIcons : function() {
                         return ["bold", "del", "italic", "quote", "ucwords", "uppercase", "lowercase", "|", 
             "h1", "h2", "h3", "h4", "h5", "h6", "|", 
@@ -127,17 +71,39 @@ editor.setPreviewTheme('theme-name');
                         }
                     },
                     onload : function() {
-                        var keyMap = {
-                            "Ctrl-S": function(cm) {
-                                alert("Ctrl+S");
-                            },
-                            "Ctrl-A": function(cm) { // default Ctrl-A selectAll
+                        this.cm.on("keydown", function(cm,e){
+                            var keyCode = e.keyCode || e.which || e.charCode;
+                            var ctrlKey = e.ctrlKey || e.metaKey;
+                            if(ctrlKey && keyCode == 83) {
+                                
+                                var btn = $('#save-btn');
+                                btn.button('loading')
+                                saveArticle(function(){
+                                    btn.button('reset')
+                                });
+                                e.preventDefault();
+                            }
+                            if(ctrlKey && keyCode == 65) {
                                 cm.execCommand("selectAll");
-                            },
-                        };
-                        this.addKeyMap(keyMap);
+                                e.preventDefault();
+                            }
+                        });
                     }
                 });
                 testEditor.setToolbarAutoFixed(false);
+
+                $('#save-btn').on(ace.click_event, function () {
+                    var btn = $(this);
+                    btn.button('loading')
+                    setTimeout(function () {
+                        btn.button('reset')
+                    }, 2000)
+                });
             });
+
+            function saveArticle(fn){
+                 setTimeout(function () {
+                    fn()
+                 },2000);
+            }
         </script>
