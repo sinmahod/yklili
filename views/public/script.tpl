@@ -48,6 +48,9 @@
         <!-- markdown -->
         <script src="/static/editor.md/editormd.js"></script>
 
+        <!-- get form data -->
+        <script src="/static/js/jquery.formHelp.js"></script>
+
         <script type="text/javascript">
             $(function(){
               $(document).pjax('.menu-pjax-a', '#main')

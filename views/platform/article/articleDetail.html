@@ -3,17 +3,23 @@
 
 <div style="padding-bottom: 8px;">
 
-<input type="text" id="title" value="{{.Article.Title}}" placeholder="请输入文章标题" style="border: 0;font-size: 18px;width: 70%;color: #438eb9;"/>
+<form id="form1">
+
+<input type="hidden" id="Id" name="Id" value="{{.Article.Id}}" />
+
+<input type="text" id="Title" name="Title" value="{{.Article.Title}}" placeholder="请输入文章标题" style="border: 0;font-size: 18px;width: 70%;color: #438eb9;"/>
 
     <div class="btn-group" style="float: right;">
 
-        <button type="button"  class="btn btn-success" id="save-btn" data-loading-text="Loading...">保存</button>
+        <button type="button" style="width:58px;" class="btn btn-inverse" id="save-btn" data-loading-text="<i class='fa fa-spinner fa-spin bigger-125'></i>">
+        保存
+        </button>
 
-        <button data-toggle="dropdown" class="btn btn-success dropdown-toggle">
+        <button data-toggle="dropdown" class="btn btn-inverse dropdown-toggle">
             <span class="ace-icon fa fa-caret-down icon-only"></span>
         </button>
 
-        <ul class="dropdown-menu dropdown-success" style="min-width: 80px;">
+        <ul class="dropdown-menu dropdown-inverse" style="min-width: 80px;">
             <li>
                 <a href="#">发布</a>
             </li>
@@ -28,82 +34,108 @@
 </div>
 
 <div id="layout" >
-            <div id="test-editormd">
-                <textarea id="content" style="display:none;">{{.Article.Content}}</textarea>
-            </div>
-        </div>
-        
-        <script type="text/javascript">
+    <div id="test-editormd">
+        <textarea id="Content" name="Content" style="display:none;">{{.Article.Content}}</textarea>
+    </div>
+</div>
 
-            var testEditor;
-            $(function() {                
-                testEditor = editormd("test-editormd", {
-                    width        : "100%",
-                    height       : $(window).height() - 130,
-                    delay        : 1000,  
-                    theme        : (localStorage.theme) ? localStorage.theme : "dark",
-                    previewTheme : "default", 
-                    watch        : true, //实时预览
-                    //toolbar    : false, //工具栏
-                    editorTheme  : (localStorage.editorTheme) ? localStorage.editorTheme : "pastel-on-dark", 
-                    path         : '/static/editor.md/lib/',
-                    toolbarIconsClass : {
-                        testIcon : "fa-picture-o"  // 指定一个FontAawsome的图标类
-                    },
-                    htmlDecode   : "style,script,iframe",
-                    toolbarIcons : function() {
-                        return ["bold", "del", "italic", "quote", "ucwords", "uppercase", "lowercase", "|", 
-            "h1", "h2", "h3", "h4", "h5", "h6", "|", 
-            "list-ul", "list-ol", "hr", "|",
-            "link", "reference-link", "testIcon", "code", "preformatted-text", "code-block", "table", "datetime", "html-entities", "pagebreak", "|",, "watch", "preview", "fullscreen", "search"]
-                    },
-                    toolbarHandlers : {
-                        /**
-                         * @param {Object}      cm         CodeMirror对象
-                         * @param {Object}      icon       图标按钮jQuery元素对象
-                         * @param {Object}      cursor     CodeMirror的光标对象，可获取光标所在行和位置
-                         * @param {String}      selection  编辑器选中的文本
-                         */
-                        testIcon : function(cm, icon, cursor, selection) {
-                            //var cursor    = cm.getCursor();     //获取当前光标对象，同cursor参数
-                            //var selection = cm.getSelection();  //获取当前选中的文本，同selection参数
-                            cm.replaceSelection("[" + selection + ":testIcon]");
-                        }
-                    },
-                    onload : function() {
-                        this.cm.on("keydown", function(cm,e){
-                            var keyCode = e.keyCode || e.which || e.charCode;
-                            var ctrlKey = e.ctrlKey || e.metaKey;
-                            if(ctrlKey && keyCode == 83) {
-                                
-                                var btn = $('#save-btn');
-                                btn.button('loading')
-                                saveArticle(function(){
-                                    btn.button('reset')
-                                });
-                                e.preventDefault();
-                            }
-                            if(ctrlKey && keyCode == 65) {
-                                cm.execCommand("selectAll");
-                                e.preventDefault();
-                            }
+</form>
+        
+<script type="text/javascript">
+
+    var emd;
+    $(function() {                
+        emd = editormd("test-editormd", {
+            width        : "100%",
+            height       : $(window).height() - 130,
+            delay        : 1000,  
+            theme        : (localStorage.theme) ? localStorage.theme : "dark",
+            previewTheme : "default", 
+            watch        : true, //实时预览
+            //toolbar    : false, //工具栏
+            editorTheme  : (localStorage.editorTheme) ? localStorage.editorTheme : "pastel-on-dark", 
+            path         : '/static/editor.md/lib/',
+            toolbarIconsClass : {
+                testIcon : "fa-picture-o"  // 指定一个FontAawsome的图标类
+            },
+            htmlDecode   : "style,script,iframe",
+            toolbarIcons : function() {
+                return ["bold", "del", "italic", "quote", "ucwords", "uppercase", "lowercase", "|", 
+    "h1", "h2", "h3", "h4", "h5", "h6", "|", 
+    "list-ul", "list-ol", "hr", "|",
+    "link", "reference-link", "testIcon", "code", "preformatted-text", "code-block", "table", "datetime", "html-entities", "pagebreak", "|",, "watch", "preview", "fullscreen", "search"]
+            },
+            toolbarHandlers : {
+                /**
+                 * @param {Object}      cm         CodeMirror对象
+                 * @param {Object}      icon       图标按钮jQuery元素对象
+                 * @param {Object}      cursor     CodeMirror的光标对象，可获取光标所在行和位置
+                 * @param {String}      selection  编辑器选中的文本
+                 */
+                testIcon : function(cm, icon, cursor, selection) {
+                    //var cursor    = cm.getCursor();     //获取当前光标对象，同cursor参数
+                    //var selection = cm.getSelection();  //获取当前选中的文本，同selection参数
+                    cm.replaceSelection("[" + selection + ":testIcon]");
+                }
+            },
+            onload : function() {
+                this.cm.on("keydown", function(cm,e){
+                    var keyCode = e.keyCode || e.which || e.charCode;
+                    var ctrlKey = e.ctrlKey || e.metaKey;
+                    if(ctrlKey && keyCode == 83) {
+                        
+                        var btn = $('#save-btn');
+                        btn.button('loading')
+                        saveArticle(function(){
+                            btn.button('reset');
                         });
+                        e.preventDefault();
+                    }
+                    if(ctrlKey && keyCode == 65) {
+                        cm.execCommand("selectAll");
+                        e.preventDefault();
                     }
                 });
-                testEditor.setToolbarAutoFixed(false);
-
-                $('#save-btn').on(ace.click_event, function () {
-                    var btn = $(this);
-                    btn.button('loading')
-                    setTimeout(function () {
-                        btn.button('reset')
-                    }, 2000)
-                });
-            });
-
-            function saveArticle(fn){
-                 setTimeout(function () {
-                    fn()
-                 },2000);
             }
-        </script>
+        });
+        emd.setToolbarAutoFixed(false);
+
+        $('#save-btn').on(ace.click_event, function () {
+            var btn = $(this);
+            btn.button('loading')
+            saveArticle(function(){
+                btn.button('reset');
+            });
+        });
+    });
+
+    function saveArticle(fn){
+        var data = $('#form1').serializeJson();
+        if(data['Title'] == ''){
+            BootFrame.alert('请输入文章标题',fn,"操作失败",true);
+            return;
+        }
+        data['Content'] = emd.getMarkdown();
+        SendData.Post("/data/article/Save",data,function(response){
+            if ( response.STATUS==1){
+                $('#Id').val(response.Id);
+                fn();
+                BootFrame.gritter(response.MESSAGE);
+            }else{
+                fn();
+                BootFrame.alert(response.MESSAGE,null,"操作失败",true);
+            }
+        });
+    }
+</script>
+
+
+
+
+
+
+
+
+
+
+

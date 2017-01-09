@@ -75,6 +75,7 @@ func (c *MenuController) Save() {
 					menu.SetLevel(2)
 					menu.SetInnerCode(models.GetMaxNo("menu", models.GetInnerCode(pid), 4))
 				}
+				menu.SetId(models.GetMaxId("S_MenuID"))
 				menu.SetAddUser(sysuser.GetUserName())
 				tran.Add(menu, orm.INSERT)
 			} else {

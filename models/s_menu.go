@@ -26,7 +26,7 @@ import (
 *	default(D)	默认值D（需要对应类型）
 **/
 type S_Menu struct {
-	Id         int       `orm:"pk;auto;column(id)"`
+	Id         int       `orm:"pk;column(id)"`
 	Pid        int       `orm:"column(pid)"`
 	MenuName   string    `orm:"column(menuname);size(64)"`
 	Icon       string    `orm:"null;column(icon);size(32)"`

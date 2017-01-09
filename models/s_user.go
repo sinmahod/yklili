@@ -2,6 +2,7 @@ package models
 
 import (
 	"beegostudy/util/modelutil"
+	"beegostudy/util/pwdutil"
 	"encoding/json"
 	"fmt"
 	"strconv"
@@ -26,7 +27,7 @@ import (
 *	default(D)	默认值D（需要对应类型）
 **/
 type S_User struct {
-	Id         int       `orm:"pk;auto;column(id)"`
+	Id         int       `orm:"pk;column(id)"`
 	UserName   string    `orm:"column(username);index;unique;size(64)"`
 	RealName   string    `orm:"column(realname);size(128)"`
 	Password   string    `orm:"column(password);size(64)"`
@@ -64,6 +65,10 @@ func (user *S_User) GetUserName() string {
 
 func (user *S_User) GetPassword() string {
 	return user.Password
+}
+
+func (user *S_User) SetPassword(pwd string) {
+	user.Password = pwdutil.GeneratePWD(pwd)
 }
 
 func (user *S_User) SetAddTime(t time.Time) {
@@ -205,6 +210,7 @@ func GetUsersPage(size, index int, ordercolumn, orderby string, data map[string]
 func InsertUser(username, password, email, phone string) (int64, error) {
 	o := orm.NewOrm()
 	user := new(S_User)
+	user.Id = GetMaxId("S_UserID")
 	user.UserName = username
 	user.Password = password
 	user.Email = email

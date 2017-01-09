@@ -61,9 +61,15 @@ func main() {
 	//校验用户登录：未登录则重定向到login
 	var FilterUser = func(ctx *context.Context) {
 		if ctx.Input.Session("User") == nil {
-			//如果使用dialog方式会出现弹出窗口被定向到了登录页，这里使用js跳转
-			//ctx.Redirect(302, "platform.LoginPage")
-			ctx.WriteString(platform.LoginPageScript)
+			if ctx.Input.IsAjax() && ctx.Input.Query("IsSendData") != "" {
+				response := make(map[string]interface{})
+				response["STATUS"] = 101
+				ctx.Output.JSON(response, true, true)
+			} else {
+				//如果使用dialog方式会出现弹出窗口被定向到了登录页，这里使用js跳转
+				//ctx.Redirect(302, "platform.LoginPage")
+				ctx.WriteString(platform.LoginPageScript)
+			}
 		}
 	}
 
@@ -71,6 +77,7 @@ func main() {
 	beego.Router("/:path.html", &template.HTMLController{})
 
 	beego.InsertFilter("/platform/*", beego.BeforeRouter, FilterUser)
+	beego.InsertFilter("/data/*", beego.BeforeRouter, FilterUser)
 
 	//附件默认目录
 	beego.SetStaticPath("/upload", "upload")

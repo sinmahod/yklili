@@ -9,7 +9,18 @@
     return {
         //Post
         Post: function(controller,data,fn){
+            if(data){
+                data["IsSendData"] = true;
+            }else{
+                data = {"IsSendData" : true}
+            }
             $.post(controller,data,function(result){
+                if (typeof(result["STATUS"]) != "undefined" ) {
+                    if (result["STATUS"] == 101) {
+                        BootFrame.alert("会话超时请重新登录",null,"超时",true); 
+                        return;
+                    }
+                }
                 if(fn){
                     fn(result);
                 }
@@ -18,7 +29,18 @@
             });
         },//<! Post >
         Get: function(controller,data,fn){
+            if(data){
+                data["IsSendData"] = true;
+            }else{
+                data = {"IsSendData" : true}
+            }
             $.get(controller,data,function(result){
+                if (typeof(result["STATUS"]) != "undefined" ) {
+                    if (result["STATUS"] == 101) {
+                        BootFrame.alert("会话超时请重新登录",null,"超时",true); 
+                        return;
+                    }
+                }
                 if(fn){
                     fn(result);
                 }

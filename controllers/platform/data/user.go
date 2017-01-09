@@ -56,8 +56,12 @@ func (c *UserController) Save() {
 			beego.Warn("请确认参数是否传递正确", err)
 			c.fail("操作失败，请确认参数是否传递正确")
 		} else {
+			if c.GetString("Password") != "" {
+				user.SetPassword(c.GetString("Password"))
+			}
 			sysuser := c.GetSession("User").(*models.S_User)
 			if !numberutil.IsNumber(c.RequestData["Id"]) {
+				user.SetId(models.GetMaxId("S_UserID"))
 				user.SetAddUser(sysuser.GetUserName())
 				tran.Add(user, orm.INSERT)
 			} else {

@@ -19,17 +19,9 @@
 </style>
 
 <div class="page-header">
-    <button class="btn btn-sm btn-primary" onclick="addMenu()">
+    <button class="btn btn-sm btn-primary" onclick="addArticle()">
         <i class="ace-icon fa fa-plus bigger-125"></i>
-        <span class="bigger-115 no-text-shadow">新建菜单</span>
-    </button>
-     <button class="btn btn-sm btn-info" onclick="editMenu()">
-        <i class="ace-icon fa fa-pencil bigger-125"></i>
-        <span class="bigger-115 no-text-shadow">修改菜单</span>
-    </button>
-     <button class="btn btn-sm btn-success" onclick="delMenu()">
-        <i class="ace-icon fa fa-minus bigger-125"></i>
-        <span class="bigger-115 no-text-shadow">删除菜单</span>
+        <span class="bigger-115 no-text-shadow">新建文章</span>
     </button>
 </div><!-- /.page-header -->
 
@@ -113,6 +105,10 @@
             }
         });
     }); 
+
+    function addArticle(){
+        $('#main').load('/data/article/InitPage'); 
+    }
 
     function editArticle(rowid){
         $('#main').load('/data/article/InitPage?Id='+rowid); 

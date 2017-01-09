@@ -41,6 +41,26 @@ func init() {
 
 var mutex sync.Mutex
 
+func GetMaxId(noname string) int {
+	//添加锁
+	mutex.Lock()
+	//解锁
+	defer mutex.Unlock()
+	o := orm.NewOrm()
+	v := 0
+	if v, _ = getNoValue(noname, "ID"); v == 0 {
+		no := S_MaxNo{NoName: noname, NoType: "ID", NoValue: 1, NoLength: 32}
+		o.Insert(&no)
+	} else {
+		v++
+		_, err := o.Raw("UPDATE s_maxno SET novalue = ?, nolength = ? WHERE noname = ? and notype = ?", v, 32, noname, "ID").Exec()
+		if err != nil {
+			beego.Error("错误：操作数据库错误")
+		}
+	}
+	return v
+}
+
 func GetMaxNo(noname, notype string, length int) string {
 	//添加锁
 	mutex.Lock()

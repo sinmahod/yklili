@@ -27,7 +27,7 @@ import (
 *   default(D)  默认值D（需要对应类型）
 **/
 type S_Attachment struct {
-	Id          int       `orm:"pk;auto;column(id)"`
+	Id          int       `orm:"pk;column(id)"`
 	FileName    string    `orm:"column(filaname);size(128)"`
 	FileNewName string    `orm:"column(filenewname);size(128)"`
 	FilePath    string    `orm:"column(filepath);size(256)"`
@@ -109,6 +109,7 @@ func (m *S_Attachment) String() string {
 //新创建一个附件
 func AddAttachment(filename, filenewname, filepath, filetype string, filesize int64, adduser string) *S_Attachment {
 	m := new(S_Attachment)
+	m.Id = GetMaxId("S_AttachmentID")
 	m.FileName = filename
 	m.FileNewName = filenewname
 	m.FilePath = filepath
@@ -130,7 +131,7 @@ func AddAttachment(filename, filenewname, filepath, filetype string, filesize in
 func GetAttchmentsPage(size, index int, ordercolumn, orderby string, data map[string]interface{}) (*DataGrid, error) {
 
 	if ordercolumn == "" {
-		ordercolumn = "addtime"
+		ordercolumn = "-addtime"
 	} else if strings.EqualFold(orderby, "desc") {
 		ordercolumn = "-" + ordercolumn
 	}

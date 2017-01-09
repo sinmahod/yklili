@@ -26,15 +26,15 @@ import (
 *   default(D)  默认值D（需要对应类型）
 **/
 type S_Article struct {
-	Id         int       `orm:"pk;auto;column(id)"`
+	Id         int       `orm:"pk;column(id)"`
 	Title      string    `orm:"column(title);size(128)"`
-	Content    string    `orm:"column(content);type(text)"`
+	Content    string    `orm:"null;column(content);type(text)"`
 	Logo       int       `orm:"column(logo)"`
 	Status     int       `orm:"column(status)"`
 	AddTime    time.Time `orm:"auto_now_add;type(datetime);column(addtime)"`
 	AddUser    string    `orm:"column(adduser);size(64)"`
-	ModifyTime time.Time `orm:"type(datetime);column(modifytime)"`
-	ModifyUser string    `orm:"column(modifyuser);size(64)"`
+	ModifyTime time.Time `orm:"null;type(datetime);column(modifytime)"`
+	ModifyUser string    `orm:"null;column(modifyuser);size(64)"`
 }
 
 //自定义表名

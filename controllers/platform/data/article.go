@@ -78,6 +78,7 @@ func (c *ArticleController) Save() {
 		} else {
 			sysuser := c.GetSession("User").(*models.S_User)
 			if !numberutil.IsNumber(c.RequestData["Id"]) {
+				article.SetId(models.GetMaxId("S_ArticleID"))
 				article.SetAddUser(sysuser.GetUserName())
 				tran.Add(article, orm.INSERT)
 			} else {
@@ -89,6 +90,7 @@ func (c *ArticleController) Save() {
 				beego.Error(err)
 				c.fail("操作失败，数据修改时出现错误")
 			} else {
+				c.put("Id", article.GetId())
 				c.success("操作成功")
 			}
 		}
