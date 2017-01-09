@@ -286,7 +286,7 @@
 		 *	依赖：webuploader.nolog.min.js
 		 */
 		uploader: function(){
-			var p,u,l;
+			var p,u;
 			var t = '';
 			var isimage = false;
 			var t2 = '';
@@ -297,6 +297,7 @@
 			var w = 600;
 			var h = 100;
 			var dobj;
+			var l = "/data/upload/Upload";
 			return{
 				url: function(url){
 					l = url;
@@ -425,7 +426,7 @@
 
 								            chunked: true,
 								            // server: 'http://webuploader.duapp.com/server/fileupload.php',
-								            server: '/data/upload/Upload',
+								            server: l,
 								            fileNumLimit: 10,
 								            fileSizeLimit: 5 * 1024 * 1024,    // 200 M
 								            fileSingleSizeLimit: 1 * 1024 * 1024    // 50 M
@@ -769,7 +770,7 @@
 									        // swf文件路径
 									        swf: '/static/webuploader/Uploader.swf',
 									        // 文件接收服务端。
-									        server: '/data/upload/Upload',
+									        server: l,
 									        fileVal :'fileupload' ,
 									        // 选择文件的按钮。可选。
 									        // 内部根据当前运行是创建，可能是input元素，也可能是flash.
