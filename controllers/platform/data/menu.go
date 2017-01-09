@@ -98,7 +98,7 @@ func (c *MenuController) Save() {
 				tran.Add(menu, orm.UPDATE)
 			}
 
-			if tran.Commit() != nil {
+			if err = tran.Commit(); err != nil {
 				beego.Error(err)
 				c.fail("操作失败，数据修改时出现错误")
 			} else {
@@ -127,10 +127,11 @@ func (c *MenuController) Del() {
 			}
 			tran.Add(menu, orm.DELETE)
 		}
-		if tran.Commit() == nil {
-			c.success("操作成功")
+		if err := tran.Commit(); err != nil {
+			beego.Error(err)
+			c.fail("操作失败，操作数据库时出现错误")
 		} else {
-			c.fail("操作失败，传递参数为空")
+			c.success("操作成功")
 		}
 
 	} else {

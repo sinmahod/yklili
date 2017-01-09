@@ -11,8 +11,8 @@
                                 <i class="ace-icon fa fa-minus bigger-125"></i>
                                 <span class="bigger-115 no-text-shadow">删除用户</span>
                             </button>
-                            <button class="btn btn-sm btn-success" onclick="editPassword()">
-                                <i class="ace-icon fa fa-minus bigger-125"></i>
+                            <button class="btn btn-sm btn-pink" onclick="editPassword()">
+                                <i class="ace-icon fa fa-cog bigger-125"></i>
                                 <span class="bigger-115 no-text-shadow">修改密码</span>
                             </button>
                              <button class="btn btn-sm btn-purple search-button">
@@ -125,7 +125,23 @@
             bf.show();
         }
 
-       function addUser(){
+        function editPassword(){
+            var ids = DataGrid.getSelectRowIds("datatable");
+            
+            if (ids.length == 0){
+                BootFrame.alert("请选择要修改密码的用户");
+                return;
+            }
+            var bf = BootFrame.dialog();
+            bf.title("修改密码");
+            bf.url('/data/user/EditPassword?Id='+ids[0]);
+            bf.width(400);
+            bf.height(180);
+            bf.addButton("确认",savePassword,null,13);
+            bf.show();
+        }
+
+        function addUser(){
            var bf = BootFrame.dialog();
             bf.title("新建用户");
             bf.url('/data/user/InitPage');
@@ -133,9 +149,30 @@
             bf.height(350);
             bf.addButton("确认",save,null,13);
             bf.show();
-       }
+        }
 
         function save(bf,but){ //默认接收两个参数，1 BootFrame ，2 当前按钮
+            if (!bf.verifyForm()){
+                return;
+            }
+            but.disable();  //禁止点击按钮
+            but.spin();     //增加按钮等待图标
+            SendData.Post("/data/user/Save",bf.getFormData(),function(response){
+                if ( response.STATUS==1){
+                    BootFrame.alert(response.MESSAGE,function(){
+                        DataGrid.loadData('datatable');
+                        bf.close()
+                    });
+                }else{
+                    BootFrame.alert(response.MESSAGE,function(){
+                        but.enable();   //解除按钮点击
+                        but.stopSpin(); //清楚等待图标
+                    },"操作失败",true);
+                }
+            });
+        }
+
+        function savePassword(bf,but){ //默认接收两个参数，1 BootFrame ，2 当前按钮
             if (!bf.verifyForm()){
                 return;
             }

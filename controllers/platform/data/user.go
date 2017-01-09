@@ -43,7 +43,26 @@ func (c *UserController) InitPage() {
 	c.addScript()
 }
 
-//保持数据
+//修改密码初始化
+func (c *UserController) EditPassword() {
+	idStr := c.GetString("Id")
+
+	if idStr != "" {
+		id, _ := strconv.Atoi(idStr)
+
+		user, err := models.GetUserById(id)
+		if err != nil {
+			beego.Error(err)
+			return
+		}
+		c.Data["User"] = user
+	}
+
+	c.TplName = "platform/user/userPasswordDialog.html"
+	c.addScript()
+}
+
+//保存数据
 func (c *UserController) Save() {
 	if len(c.RequestData) > 0 {
 		user := new(models.S_User)
@@ -69,12 +88,40 @@ func (c *UserController) Save() {
 				tran.Add(user, orm.UPDATE)
 			}
 
-			if tran.Commit() != nil {
+			if err = tran.Commit(); err != nil {
 				beego.Error(err)
 				c.fail("操作失败，数据修改时出现错误")
 			} else {
 				c.success("操作成功")
 			}
+		}
+	} else {
+		c.fail("操作失败，传递参数为空")
+	}
+	c.ServeJSON()
+}
+
+//修改Miami
+func (c *UserController) SavePassword() {
+	if len(c.RequestData) > 0 {
+		user := new(models.S_User)
+		tran := new(orm.Transaction)
+		if numberutil.IsNumber(c.RequestData["Id"]) && c.GetString("Password") != "" {
+			user.SetId(c.RequestData["Id"])
+			user.Fill()
+			user.SetPassword(c.GetString("Password"))
+			sysuser := c.GetSession("User").(*models.S_User)
+			user.SetModifyUser(sysuser.GetUserName())
+			tran.Add(user, orm.UPDATE)
+			if err := tran.Commit(); err != nil {
+				beego.Error(err)
+				c.fail("操作失败，数据修改时出现错误")
+			} else {
+				c.success("操作成功")
+			}
+		} else {
+			beego.Warn("请确认参数是否传递正确")
+			c.fail("操作失败，请先选择用户")
 		}
 	} else {
 		c.fail("操作失败，传递参数为空")
@@ -92,10 +139,11 @@ func (c *UserController) Del() {
 			user.SetId(id)
 			tran.Add(user, orm.DELETE)
 		}
-		if tran.Commit() == nil {
-			c.success("操作成功")
+		if err := tran.Commit(); err != nil {
+			beego.Error(err)
+			c.fail("操作失败，操作数据库时出现错误")
 		} else {
-			c.fail("操作失败，传递参数为空")
+			c.success("操作成功")
 		}
 
 	} else {
