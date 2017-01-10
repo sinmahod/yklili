@@ -1,0 +1,82 @@
+<style type="text/css">
+.bg-in {
+    border: 2px solid #c538f3 !important;
+}
+</style>
+
+<div class="row">
+    <div style="position: relative;">
+            <ul class="ace-thumbnails clearfix" id="list1" list="true" dataurl="/data/image/List" page="true" size="18" style="margin: 0 auto;position: relative;max-width:1557px;">
+                <li class="imgli" style="display:none;">
+                    <a href="#;" onclick="selectorImg(this)" style="width: 145px;height: 145px;overflow: hidden">
+                        <img class="lazy" data-original="/data/image/Img?sn=${Sign}" style="min-width: 160px;max-width: 240px;min-height: 160px;max-height: 240px;" />
+                    </a>
+
+                    <div class="tools tools-bottom in" style="width: 30px;">
+                        <a href="/data/image/Img?sn=${Sign}" data-rel="colorbox">
+                            <i class="ace-icon fa fa-search-plus"></i>
+                        </a>
+                    </div>
+                </li>
+            </ul>
+
+        </div><!-- PAGE CONTENT ENDS -->
+        <div align="center">
+            <ul class="pagination" pagebar="true" id="pagebar"></ul>
+        </div>
+</div><!-- /.row -->
+
+<!-- jgrid -->
+<script type="text/javascript">
+ //初始化ColorBox
+function initColorBox(){
+    var $overflow = '';
+    var colorbox_params = {
+        rel: 'colorbox',
+        reposition:true,
+        scalePhotos:true,
+        scrolling:false,
+        photo:true,
+        previous:'<i class="ace-icon fa fa-arrow-left"></i>',
+        next:'<i class="ace-icon fa fa-arrow-right"></i>',
+        close:'&times;',
+        current:'{current} of {total}',
+        maxWidth:'100%',
+        maxHeight:'100%',
+        onOpen:function(){
+            $overflow = document.body.style.overflow;
+            document.body.style.overflow = 'hidden';
+        },
+        onClosed:function(){
+            document.body.style.overflow = $overflow;
+        },
+        onComplete:function(){
+            $.colorbox.resize();
+        }
+    };
+
+    $('.ace-thumbnails [data-rel="colorbox"]').colorbox(colorbox_params);
+    $("#cboxLoadingGraphic").html("<i class='ace-icon fa fa-spinner orange fa-spin'></i>");
+    
+    $(document).one('ajaxloadstart.page', function(e) {
+        $('#colorbox, #cboxOverlay').remove();
+    });
+}
+
+function selectorImg(ele){
+    $(ele).parent('li').addClass('bg-in');
+}
+
+function uploadImage(){
+    var bf = BootFrame.uploader();
+    bf.fileType('image');
+    bf.show(operation);
+}
+
+function operation(fs){
+    DataList.loadData("list1");
+    for (var i = 0 ; i < fs.length ; i++){
+        //alert(fs[i].FileName);
+    }
+}
+</script>

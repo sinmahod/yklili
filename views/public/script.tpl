@@ -33,7 +33,7 @@
 
         <!-- image view -->
         <script src="/static/js/jquery.lazyload.js"></script>
-        <script src="/static/js/jquery.colorbox.min.js"></script>
+        <script src="/static/js/jquery.colorbox.js"></script>
 
         <!-- ace scripts -->
         <script src="/static/js/ace-elements.min.js"></script>

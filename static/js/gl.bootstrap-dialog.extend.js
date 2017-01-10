@@ -68,6 +68,7 @@
 			var id;
 			var dobj;
 			var p;
+			var onfn;
 			return{
 				id : function(id){
 					diaid = id;
@@ -84,11 +85,14 @@
 				url: function(u){
 					m = $('<div></div>').load(u);
 				},
-				width:function(width){
+				width: function(width){
 					w = width / 5 * 5;
 				},
-				height:function(height){
+				height: function(height){
 					h = height / 5 * 5 ; //框头框尾130px
+				},
+				onshow: function(fn){
+					onfn = fn;
 				},
 				addButton: function(name,fn,css,keycode){
 					var bf = this;  //获得dialog实体
@@ -136,18 +140,21 @@
 						b.push(bt);
 					}
 				  	dobj = BootstrapDialog.show({
-			  			   id: diaid,
-					                title: t,
-					                message: m,
-					                cssClass: 'dialog-'+w+' dialog-h-'+h,
-					                type: p,
-					                closeByBackdrop: false,   //点击空白位置关闭窗口失效
-					                draggable: true,
-					                buttons: b,
-					                onshown:function(){  //增加verify属性检查(注册校验)
-					                	BValidate({dialogId:this.id});
-					                }
-				           });
+		  			   		id: diaid,
+		                	title: t,
+			                message: m,
+			                cssClass: 'dialog-'+w+' dialog-h-'+h,
+			                type: p,
+			                closeByBackdrop: false,   //点击空白位置关闭窗口失效
+			                draggable: true,
+			                buttons: b,
+			                onshown:function(){  //增加verify属性检查(注册校验)
+			                	BValidate({dialogId:this.id});
+			                	if(onfn){
+			                		onfn();
+			                	}
+			                }
+		           });
 				  	dobj.getModalHeader().css('padding','10px 10px 10px 15px');
 				  	dobj.getModalFooter().css('padding','10px 15px');
 				  	id = dobj.$modal[0].id;

@@ -56,14 +56,14 @@
             editorTheme  : (localStorage.editorTheme) ? localStorage.editorTheme : "pastel-on-dark", 
             path         : '/static/editor.md/lib/',
             toolbarIconsClass : {
-                testIcon : "fa-picture-o"  // 指定一个FontAawsome的图标类
+                uploadimage : "fa-picture-o"  // 指定一个FontAawsome的图标类
             },
             htmlDecode   : "style,script,iframe",
             toolbarIcons : function() {
                 return ["bold", "del", "italic", "quote", "ucwords", "uppercase", "lowercase", "|", 
     "h1", "h2", "h3", "h4", "h5", "h6", "|", 
     "list-ul", "list-ol", "hr", "|",
-    "link", "reference-link", "testIcon", "code", "preformatted-text", "code-block", "table", "datetime", "html-entities", "pagebreak", "|",, "watch", "preview", "fullscreen", "search"]
+    "link", "reference-link", "uploadimage", "code", "preformatted-text", "code-block", "table", "datetime", "html-entities", "pagebreak", "|",, "watch", "preview", "fullscreen", "search"]
             },
             toolbarHandlers : {
                 /**
@@ -72,7 +72,38 @@
                  * @param {Object}      cursor     CodeMirror的光标对象，可获取光标所在行和位置
                  * @param {String}      selection  编辑器选中的文本
                  */
-                testIcon : function(cm, icon, cursor, selection) {
+                uploadimage : function(cm, icon, cursor, selection) {
+                    var bf = BootFrame.dialog();
+                    bf.id("imageselect");
+                    bf.title("选择图片");
+                    bf.url('/data/image/InitPage');
+                    bf.width(800);
+                    bf.height(500);
+                    bf.addButton("确认",function(){
+
+                    },null,13);
+                    bf.onshow(function(){
+                        var w = $("#list1").width();
+                        var h = $("#imageselect").find('.modal-body').height();
+                        var s = 0;
+                        if (w > 600){
+                            w = parseInt(w / 153);
+                            h = parseInt(h / 153);
+                            s = w * h;
+                            $("#list1").css("max-width",w * 153);
+                        }else{
+                            s = parseInt(w / 150) * 3;
+                        }
+                        $('.imgli').show();
+                        DataList({
+                            list: "list1",
+                            pagebar: "pagebar",
+                            size: parseInt(s),
+                            fn: initColorBox
+                        });
+                    });
+                    bf.show();
+
                     //var cursor    = cm.getCursor();     //获取当前光标对象，同cursor参数
                     //var selection = cm.getSelection();  //获取当前选中的文本，同selection参数
                     cm.replaceSelection("[" + selection + ":testIcon]");

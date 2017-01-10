@@ -24,6 +24,11 @@ func (c *ImageController) List() {
 	}
 }
 
+func (c *ImageController) InitPage() {
+	c.TplName = "platform/image/imageDialog.html"
+	c.addScript()
+}
+
 func (c *ImageController) Img() {
 	sn := c.GetString("sn")
 
