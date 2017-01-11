@@ -21,11 +21,11 @@
                 <div class="navbar-buttons navbar-header pull-right" role="navigation">
                     <ul class="nav ace-nav">
                         <li class="dropdown-modal-border">
-                             <select id="skin-colorpicker" class="hide">
+                             <select id="skin-colorpicker" class="hide" >
                                 <option data-skin="no-skin" value="#438EB9">#438EB9</option>
-                                <option data-skin="skin-1" value="#222A2D">#222A2D</option>
-                                <option data-skin="skin-2" value="#C6487E">#C6487E</option>
-                                <option data-skin="skin-3" value="#D0D0D0">#D0D0D0</option>
+                                <option data-skin="skin-1" value="#222A2D" {{.Skin1}}>#222A2D</option>
+                                <option data-skin="skin-2" value="#C6487E" {{.Skin2}}>#C6487E</option>
+                                <option data-skin="skin-3" value="#D0D0D0" {{.Skin3}}>#D0D0D0</option>
                             </select>
                         </li>
                         <li class="grey dropdown-modal">

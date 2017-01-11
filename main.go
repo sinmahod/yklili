@@ -42,6 +42,7 @@ func main() {
 
 	//数据控制器
 	models := map[string]beego.ControllerInterface{
+		"system":  &data.SystemController{},
 		"menu":    &data.MenuController{},
 		"user":    &data.UserController{},
 		"cron":    &data.CronController{},
@@ -70,6 +71,7 @@ func main() {
 				//ctx.Redirect(302, "platform.LoginPage")
 				ctx.WriteString(platform.LoginPageScript)
 			}
+			return
 		}
 	}
 
@@ -77,7 +79,10 @@ func main() {
 	beego.Router("/:path.html", &template.HTMLController{})
 
 	beego.InsertFilter("/platform/*", beego.BeforeRouter, FilterUser)
-	beego.InsertFilter("/data/*", beego.BeforeRouter, FilterUser)
+
+	if beego.BConfig.RunMode != "dev" {
+		beego.InsertFilter("/data/*", beego.BeforeRouter, FilterUser)
+	}
 
 	//附件默认目录
 	beego.SetStaticPath("/upload", "upload")

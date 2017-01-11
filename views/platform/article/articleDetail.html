@@ -6,8 +6,13 @@
 <form id="form1">
 
 <input type="hidden" id="Id" name="Id" value="{{.Article.Id}}" />
+<div class="btn-group" style="float: left;">
+<button type="button" class="btn btn-inverse" id="back-btn">
+    <i class="fa fa-angle-left"></i>
+</button>
+</div>
 
-<input type="text" id="Title" name="Title" value="{{.Article.Title}}" placeholder="请输入文章标题" style="border: 0;font-size: 18px;width: 70%;color: #438eb9;"/>
+<input type="text" id="Title" name="Title" value="{{.Article.Title}}" placeholder="请输入文章标题" style="border: 0;font-size: 18px;width: 60%;color: #438eb9;"/>
 
     <div class="btn-group" style="float: right;">
 
@@ -21,13 +26,13 @@
 
         <ul class="dropdown-menu dropdown-inverse" style="min-width: 80px;">
             <li>
-                <a href="#">发布</a>
+                <a href="#;" onclick="pushArticle()">发布</a>
             </li>
 
             <li class="divider"></li>
 
             <li>
-                <a href="#">删除</a>
+                <a href="#;" onclick="delArticle()">删除</a>
             </li>
         </ul>
     </div><!-- /.btn-group -->
@@ -40,6 +45,9 @@
 </div>
 
 </form>
+
+<!-- markdown -->
+<script src="/static/editor.md/editormd.js"></script>
         
 <script type="text/javascript">
 
@@ -47,11 +55,11 @@
     $(function() {                
         emd = editormd("test-editormd", {
             width        : "100%",
-            height       : $(window).height() - 130,
+            height       : $(window).height() - 140,
             delay        : 1000,  
             theme        : (localStorage.theme) ? localStorage.theme : "dark",
             previewTheme : "default", 
-            watch        : true, //实时预览
+            watch        : $(window).width() > 767 ? true : false, //实时预览
             //toolbar    : false, //工具栏
             editorTheme  : (localStorage.editorTheme) ? localStorage.editorTheme : "pastel-on-dark", 
             path         : '/static/editor.md/lib/',
@@ -63,7 +71,7 @@
                 return ["bold", "del", "italic", "quote", "ucwords", "uppercase", "lowercase", "|", 
     "h1", "h2", "h3", "h4", "h5", "h6", "|", 
     "list-ul", "list-ol", "hr", "|",
-    "link", "reference-link", "uploadimage", "code", "preformatted-text", "code-block", "table", "datetime", "html-entities", "pagebreak", "|",, "watch", "preview", "fullscreen", "search"]
+    "link", "reference-link", "uploadimage", "code", "preformatted-text", "code-block", "table", "datetime", "html-entities", "pagebreak", "|", "watch", "preview", "fullscreen", "search"]
             },
             toolbarHandlers : {
                 /**
@@ -80,7 +88,11 @@
                     bf.width(800);
                     bf.height(500);
                     bf.addButton("确认",function(){
-
+                        var imgurl = getImgUrl();
+                        //var cursor    = cm.getCursor();     //获取当前光标对象，同cursor参数
+                        //var selection = cm.getSelection();  //获取当前选中的文本，同selection参数
+                        cm.replaceSelection("![](" + imgurl + ")");
+                        bf.close();
                     },null,13);
                     bf.onshow(function(){
                         var w = $("#list1").width();
@@ -103,10 +115,6 @@
                         });
                     });
                     bf.show();
-
-                    //var cursor    = cm.getCursor();     //获取当前光标对象，同cursor参数
-                    //var selection = cm.getSelection();  //获取当前选中的文本，同selection参数
-                    cm.replaceSelection("[" + selection + ":testIcon]");
                 }
             },
             onload : function() {
@@ -138,6 +146,9 @@
                 btn.button('reset');
             });
         });
+        $('#back-btn').on(ace.click_event, function () {
+            $('#main').load('/platform/article/article.html?_pjax=%23main'); 
+        });
     });
 
     function saveArticle(fn){
@@ -148,7 +159,7 @@
         }
         data['Content'] = emd.getMarkdown();
         SendData.Post("/data/article/Save",data,function(response){
-            if ( response.STATUS==1){
+            if (response.STATUS==1){
                 $('#Id').val(response.Id);
                 fn();
                 BootFrame.gritter(response.MESSAGE);
@@ -156,6 +167,41 @@
                 fn();
                 BootFrame.alert(response.MESSAGE,null,"操作失败",true);
             }
+        });
+    }
+
+    function delArticle(){
+        var data = $('#form1').serializeJson();
+        if(data['Id'] == ''){
+            $('#main').load('/platform/article/article.html?_pjax=%23main'); 
+            return;
+        }
+        SendData.Post("/data/article/Del",data,function(response){
+            if (response.STATUS==1){
+                BootFrame.gritter(response.MESSAGE);
+                $('#main').load('/platform/article/article.html?_pjax=%23main'); 
+            }else{
+                BootFrame.alert(response.MESSAGE,null,"操作失败",true);
+            }
+        });
+    }
+
+    function pushArticle(){
+        var data = $('#form1').serializeJson();
+        if(data['Title'] == ''){
+            BootFrame.alert('请输入文章标题',fn,"操作失败",true);
+            return;
+        }
+        data['Content'] = emd.getMarkdown();
+        $('#save-btn').button('loading');
+        data['Status'] = 1;
+        SendData.Post("/data/article/Save",data,function(response){
+            if (response.STATUS==1){
+                BootFrame.gritter(response.MESSAGE);
+            }else{
+                BootFrame.alert(response.MESSAGE,null,"操作失败",true);
+            }
+            $('#save-btn').button('reset');
         });
     }
 </script>

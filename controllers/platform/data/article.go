@@ -5,7 +5,6 @@ import (
 	"beegostudy/models/orm"
 	"beegostudy/util/numberutil"
 	"strconv"
-	"strings"
 
 	"github.com/astaxie/beego"
 )
@@ -76,6 +75,11 @@ func (c *ArticleController) Save() {
 			beego.Warn("请确认参数是否传递正确", err)
 			c.fail("操作失败，请确认参数是否传递正确")
 		} else {
+			if numberutil.IsNumber(c.RequestData["Status"]) {
+				article.SetStatus(models.PUBLISH)
+			} else {
+				article.SetStatus(models.DRAFT)
+			}
 			sysuser := c.GetSession("User").(*models.S_User)
 			if !numberutil.IsNumber(c.RequestData["Id"]) {
 				article.SetId(models.GetMaxId("S_ArticleID"))
@@ -101,22 +105,19 @@ func (c *ArticleController) Save() {
 }
 
 func (c *ArticleController) Del() {
-	ids := c.GetString("Ids")
-	if ids != "" {
+	id := c.GetString("Id")
+	if id != "" {
 		tran := new(orm.Transaction)
-		idList := strings.Split(ids, ",")
-		for _, id := range idList {
-			article := new(models.S_Article)
-			article.SetId(id)
-			tran.Add(article, orm.DELETE)
-		}
+		article := new(models.S_Article)
+		article.SetId(id)
+		article.SetStatus(models.DELETE)
+		tran.Add(article, orm.UPDATE)
 		if err := tran.Commit(); err != nil {
 			beego.Error(err)
 			c.fail("操作失败，操作数据库时出现错误")
 		} else {
 			c.success("操作成功")
 		}
-
 	} else {
 		c.fail("操作失败，传递参数为空")
 	}

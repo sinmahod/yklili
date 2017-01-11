@@ -37,6 +37,12 @@ type S_Article struct {
 	ModifyUser string    `orm:"null;column(modifyuser);size(64)"`
 }
 
+const (
+	DRAFT = iota
+	PUBLISH
+	DELETE
+)
+
 //自定义表名
 func (a *S_Article) TableName() string {
 	return "s_article"
@@ -51,6 +57,10 @@ func (a *S_Article) SetId(id interface{}) error {
 		beego.Error("Id字段必须为正整数型【%v】\n", id)
 	}
 	return err
+}
+
+func (a *S_Article) SetStatus(state int) {
+	a.Status = state
 }
 
 func (a *S_Article) GetId() int {
@@ -130,6 +140,7 @@ func GetArticlesPage(size, index int, ordercolumn, orderby string, data map[stri
 	if data["AddUser"] != nil {
 		qt = qt.Filter("AddUser__icontains", data["AddUser"])
 	}
+	qt = qt.Exclude("Status", DELETE)
 	_, err := qt.OrderBy(ordercolumn).Limit(size, (index-1)*size).All(&as)
 
 	if err == nil {
@@ -139,6 +150,12 @@ func GetArticlesPage(size, index int, ordercolumn, orderby string, data map[stri
 
 		if cnt%int64(size) > 0 {
 			pagetotal++
+		}
+
+		for _, a := range as {
+			if a.Status == DRAFT {
+				a.Title = "* " + a.Title
+			}
 		}
 
 		return GetDataGrid(as, index, int(pagetotal), cnt), err

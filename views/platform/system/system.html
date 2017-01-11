@@ -1,0 +1,29 @@
+<div class="page-header">
+    <button class="btn btn-sm btn-success">
+        <i class="ace-icon fa fa-rocket bigger-125"></i>
+        <span class="bigger-115 no-text-shadow">系统管理</span>
+    </button>
+</div><!-- /.page-header -->
+
+<div class="bottom-border"></div>
+
+<div class="row">
+    <div class="col-xs-12">
+       <div class="profile-user-info profile-user-info-striped" id="list1" list="true" dataurl="/data/system/List" page="true" size="20">
+            <div class="profile-info-row">
+                <div class="profile-info-name"> ${Key} </div>
+
+                <div class="profile-info-value">
+                    <span class="editable editable-click" id="username">${Value}</span>
+                </div>
+            </div>
+
+        </div>
+    </div><!-- /.col -->
+</div><!-- /.row -->
+
+ <script type="text/javascript">
+        jQuery(function($) {
+            DataList({list: "list1"});
+        });
+</script>       

@@ -68,9 +68,9 @@ window.DataList = function(options){
         $("[pagebar='true']").each(function(){
             $pagebar = $(this);
         });
-        if (!$pagebar){
-            throw new Error( 'not find pagebar' );
-        }
+        // if (!$pagebar){
+        //     throw new Error( 'not find pagebar' );
+        // }
     }
 
 
@@ -117,7 +117,9 @@ window.DataList = function(options){
                     if (fn){
                         fn();
                     }
-                    initPagebar($pagebar);
+                    if($pagebar){
+                        initPagebar($pagebar);    
+                    }
                 }
             }
         });

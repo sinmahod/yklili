@@ -38,7 +38,10 @@
                         {label:'链接',name:'Link',index:'Link', width:70},
                         {label:'层级ID',name:'InnerCode',index:'InnerCode', width:90},
                         {label:'添加时间',name:'AddTime',index:'AddTime', width:150,formatter: 'date',formatoptions:{srcformat: 'Y-m-dTH:i:s',newformat: 'Y-m-d H:i:s'}}
-                    ]
+                    ],
+                    onbdclickfn: function(rowid){
+                        editMenu(rowid); 
+                    },
                 });
                 $(".search-button").click(function(){
                     if ($(".table-detail").css("display") == 'none'){
@@ -51,16 +54,18 @@
                 });
         }); 
 
-        function editMenu(){
-            var ids = DataGrid.getSelectRowIds("datatable");
-            
-            if (ids.length == 0){
-                BootFrame.alert("请选择要修改的菜单");
-                return;
+        function editMenu(id){
+            if (!id){
+                var ids = DataGrid.getSelectRowIds("datatable");
+                if (ids.length == 0){
+                    BootFrame.alert("请选择要修改的菜单");
+                    return;
+                }
+                id = ids[0];
             }
             var bf = BootFrame.dialog();
             bf.title("修改菜单");
-            bf.url('/data/menu/InitPage?Id='+ids[0]);
+            bf.url('/data/menu/InitPage?Id=' + id );
             bf.width(500);
             bf.height(300);
             bf.addButton("确认",save,null,13);

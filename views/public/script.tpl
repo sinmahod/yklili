@@ -42,6 +42,9 @@
         <!-- pjax -->
         <script src="/static/js/jquery.pjax.js"></script>
 
+        <!-- cookie -->
+        <script src="/static/js/jquery.cookie.js"></script>
+
         <!-- ajax -->
         <script src="/static/js/gl.senddata.js"></script>
 
@@ -72,6 +75,22 @@
                         _con.removeClass("display");
                         $('#menu-toggler').removeClass("display");
                   }
+              });
+
+              $('.colorpick-btn').click(function(){
+                    var c = $(this).attr('data-color');
+                    if(c && c == '#438EB9'){
+                        $.cookie('skin',null);
+                    }
+                    if(c && c == '#222A2D'){
+                        $.cookie('skin','1');
+                    }
+                    if(c && c == '#C6487E'){
+                        $.cookie('skin','2');
+                    }
+                    if(c && c == '#D0D0D0'){
+                        $.cookie('skin','3');
+                    }
               });
 
             })

@@ -17,6 +17,15 @@ type HTMLController struct {
 **/
 func (c *HTMLController) Prepare() {
 
+	skin := c.Ctx.GetCookie("skin")
+
+	if skin == "" || skin == "null" {
+		c.Data["Skin"] = "no-skin"
+	} else {
+		c.Data["Skin"] = "skin-" + skin
+		c.Data["Skin"+skin] = "selected"
+	}
+
 	c.HTMLPath = c.GetString(":path")
 
 	//如果使用pjax的请求则只解析局部模板，反之返回解析全部模板
