@@ -11,9 +11,9 @@
         <!-- core -->
         <script src="/static/js/bootstrap.min.js"></script>
 
-        <!--[if lte IE 8]>
+        {{str2html "<!--[if lte IE 8]>"}}
           <script src="/static/js/excanvas.min.js"></script>
-        <![endif]-->
+        {{str2html "<![endif]-->"}}
         
         <!-- bootstrapDialog -->
         <script src="/static/js/bootstrap-dialog.min.js"></script>

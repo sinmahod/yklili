@@ -19,9 +19,9 @@
         <!-- ace styles -->
         <link rel="stylesheet" href="/static/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style" />
 
-        <!--[if lte IE 9]>
+        {{str2html "<!--[if lte IE 9]>"}}
             <link rel="stylesheet" href="/static/css/ace-part2.min.css" class="ace-main-stylesheet" />
-        <![endif]-->
+        {{str2html "<![endif]-->"}}
         <link rel="stylesheet" href="/static/css/ace-skins.min.css" />
         <link rel="stylesheet" href="/static/css/ace-rtl.min.css" />
 
@@ -31,9 +31,9 @@
         <!-- webUploader -->
         <link rel="stylesheet" href="/static/webuploader/webuploader.css" />
 
-        <!--[if lte IE 9]>
+        {{str2html "<!--[if lte IE 9]>"}}
           <link rel="stylesheet" href="/static/css/ace-ie.min.css" />
-        <![endif]-->
+        {{str2html "<![endif]-->"}}
 
         <!-- gl style -->
         <link rel="stylesheet" href="/static/css/gl_style.css" />        
@@ -43,20 +43,20 @@
         <!-- ace settings handler -->
         <script src="/static/js/ace-extra.min.js"></script>
 
-        <!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
+        {{str2html "<!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->"}}
 
-        <!--[if lte IE 8]>
+        {{str2html "<<!--[if lte IE 8]>"}}
         <script src="/static/js/html5shiv.min.js"></script>
         <script src="/static/js/respond.min.js"></script>
-        <![endif]-->
+        {{str2html "<<![endif]-->"}}
 
-         <!--[if !IE]> -->
+        {{str2html "<!--[if !IE]> -->"}}
         <script src="/static/js/jquery-2.1.4.min.js"></script>
-        <!-- <![endif]-->
+        {{str2html "<!-- <![endif]-->"}}
         <!-- <![
-        <!--[if IE]>
+        {{str2html "<!--[if IE]>
         <script src="/static/js/jquery-1.11.3.min.js"></script>
-        <![endif]-->
+        {{str2html "<![endif]-->
 
         <!-- page specific plugin scripts -->
         <script src="/static/js/bootstrap-datepicker.min.js"></script>
