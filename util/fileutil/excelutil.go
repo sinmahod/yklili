@@ -26,157 +26,97 @@ var movies = []Movie{
 		Actors: []string{"Steve McQueen", "Jacqueline Bisset"}},
 }
 
-type ExcelData struct {
-	Name     string `tag:"姓名"`
-	DayCount string `tag:"全勤工作天数"`
-}
-
-func ReadExcel2(filename string) {
-	var eds []ExcelData
-	ReadExcel3(filename, &eds)
-}
-
-func getFullName(t reflect.Type) string {
-	return t.PkgPath() + "." + t.Name()
-}
-
-func ReadExcel3(filename string, obj interface{}) error {
-
+/* //结构体tag与excel表格第一列对应，如果不写tag则取结构体变量名
+ *
+ *	type ExcelData struct {
+ *		Name     string `tag:"姓名"`
+ *		DayCount int    `tag:"全勤工作天数"`
+ *		Sse      float32
+ *	}
+ *
+ *	func ReadExcel2(filename string) {
+ *		var eds []ExcelData
+ *		ReadExcel(filename, &eds)
+ *		for i, ed := range eds {
+ *			fmt.Printf("%d\t%s\t%d\t%g\n", i+1, ed.Name, ed.DayCount, ed.Sse)
+ *		}
+ *	}
+ */
+func ReadExcel(filename string, obj interface{}) error {
 	val := reflect.ValueOf(obj)
-	ind := reflect.Indirect(val)
-	fn := "" //结构体类型FullNane
 
 	if val.Kind() != reflect.Ptr {
 		return fmt.Errorf("传递的对象必须为结构体数组")
 	}
 
+	ind := val.Elem()
+
 	if ind.Kind() == reflect.Slice {
 		if ind.Type().Elem().Kind() != reflect.Struct {
 			return fmt.Errorf("传递的对象必须为结构体数组")
 		}
-		fn = getFullName(ind.Type().Elem())
+
+		e := ind.Type().Elem()     //得到单个结构体type
+		v := reflect.New(e).Elem() //创建一个新的结构体value
+
+		//保存结构体Tag或变量名与列名的对应关系
+		nameMap := make(map[string]string)
+
+		//取得结构体tag与excel表格第一列对应，如果不写tag则取结构体变量名
+		for i := 0; i < e.NumField(); i++ {
+			structColumn := e.Field(i)
+			if columnTag := structColumn.Tag.Get("tag"); columnTag != "" {
+				//如果有Tag则将key设置为tag
+				nameMap[columnTag] = structColumn.Name
+			} else {
+				nameMap[structColumn.Name] = structColumn.Name
+			}
+		}
+
+		xlFile, err := xlsx.OpenFile(filename)
+		if err != nil {
+			return err
+		}
+
+		if len(xlFile.Sheets) > 0 {
+			sheet := xlFile.Sheets[0]
+			for line, row := range sheet.Rows {
+				if line == 0 {
+					exist := false
+					for i, cell := range row.Cells {
+						text, _ := cell.String()
+						if name, ok := nameMap[text]; ok {
+							isnil = true
+							delete(nameMap, text)
+							nameMap[strconv.Itoa(i)] = name
+						}
+					}
+					if !exist {
+						return fmt.Errorf("Excel与结构体不存在对应列")
+					}
+				} else {
+					for i, cell := range row.Cells {
+						text, _ := cell.String()
+						if name, ok := nameMap[strconv.Itoa(i)]; ok {
+							//填充结构体value
+							setField(v, name, text)
+						}
+					}
+					ind = reflect.Append(ind, v)
+				}
+			}
+		}
 	} else {
 		return fmt.Errorf("传递的对象必须为结构体数组")
 	}
 
-	slice := ind //复制一份结构体
-
-	fmt.Println(fn)
-
-	////////////////
-
-	// v := reflect.ValueOf(obj).Elem() //结构体属性值
-
-	// var t reflect.Type
-
-	// fmt.Println(v.String())
-
-	// if vType := v.Kind().String(); vType == "struct" {
-	// 	t = v.Type()
-	// } else {
-	// 	return fmt.Errorf("传递参数必须是一个结构体[%S]", vType)
-	// }
-
-	// //对应关系设置
-	// nameMap := make(map[string]string)
-
-	// for i := 0; i < t.NumField(); i++ {
-	// 	structColumn := t.Field(i)
-	// 	if columnTag := structColumn.Tag.Get("tag"); columnTag != "" {
-	// 		nameMap[columnTag] = structColumn.Name
-	// 	} else {
-	// 		nameMap[structColumn.Name] = structColumn.Name
-	// 	}
-	// }
-
-	// xlFile, err := xlsx.OpenFile(filename)
-	// if err != nil {
-	// 	return err
-	// }
-	// if len(xlFile.Sheets) > 0 {
-	// 	sheet := xlFile.Sheets[0]
-	// 	for line, row := range sheet.Rows {
-	// 		if line == 0 {
-	// 			for i, cell := range row.Cells {
-	// 				text, _ := cell.String()
-	// 				if name, ok := nameMap[text]; ok {
-	// 					delete(nameMap, text)
-	// 					nameMap[strconv.Itoa(i)] = name
-	// 				}
-	// 			}
-	// 		} else {
-	// 			for i, cell := range row.Cells {
-	// 				text, _ := cell.String()
-	// 				if name, ok := nameMap[strconv.Itoa(i)]; ok {
-	// 					//写入数据
-	// 					setField(v, name, text)
-	// 				}
-	// 			}
-
-	// 		}
-	// 	}
-	// 	fmt.Println(obj)
-	// }
+	if !ind.IsNil() {
+		val.Elem().Set(ind)
+	}
 	return nil
 }
 
-func ReadExcel(filename string, obj interface{}) ([]interface{}, error) {
-	v := reflect.ValueOf(obj).Elem() //结构体属性值
-
-	var t reflect.Type
-
-	fmt.Println(v.String())
-
-	if vType := v.Kind().String(); vType == "struct" {
-		t = v.Type()
-	} else {
-		return nil, fmt.Errorf("传递参数必须是一个结构体[%S]", vType)
-	}
-
-	//对应关系设置
-	nameMap := make(map[string]string)
-
-	for i := 0; i < t.NumField(); i++ {
-		structColumn := t.Field(i)
-		if columnTag := structColumn.Tag.Get("tag"); columnTag != "" {
-			nameMap[columnTag] = structColumn.Name
-		} else {
-			nameMap[structColumn.Name] = structColumn.Name
-		}
-	}
-
-	xlFile, err := xlsx.OpenFile(filename)
-	if err != nil {
-		return nil, err
-	}
-	if len(xlFile.Sheets) > 0 {
-		sheet := xlFile.Sheets[0]
-		for line, row := range sheet.Rows {
-			if line == 0 {
-				for i, cell := range row.Cells {
-					text, _ := cell.String()
-					if name, ok := nameMap[text]; ok {
-						delete(nameMap, text)
-						nameMap[strconv.Itoa(i)] = name
-					}
-				}
-			} else {
-				for i, cell := range row.Cells {
-					text, _ := cell.String()
-					if name, ok := nameMap[strconv.Itoa(i)]; ok {
-						//写入数据
-						setField(v, name, text)
-					}
-				}
-
-			}
-		}
-		fmt.Println(obj)
-	}
-	return nil, nil
-}
-
-// 用map的值替换结构的值
+// 设置结构体的值
 func setField(structValue reflect.Value, name string, value interface{}) error {
 	structFieldValue := structValue.FieldByName(name) //结构体单个属性值
 
@@ -243,8 +183,6 @@ func typeConversion(value string, ntype string) (reflect.Value, error) {
 		i, err := strconv.ParseBool(value)
 		return reflect.ValueOf(bool(i)), err
 	}
-
-	//else if .......增加其他一些类型的转换
 
 	return reflect.ValueOf(value), errors.New("未知的类型：" + ntype + "\t 值：" + value)
 }

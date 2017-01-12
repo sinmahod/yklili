@@ -6,6 +6,6 @@ import (
 )
 
 func Test_ReadExcel(t *testing.T) {
-	fileutil.ReadExcel2("/Users/gl/Downloads/1.xlsx")
+	fileutil.ReadExcel2("E:\\mywork\\go\\src\\beegostudy\\1.xlsx")
 	t.Fatal("")
 }
