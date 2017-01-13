@@ -7,111 +7,236 @@ import (
 	"log"
 	"reflect"
 	"strconv"
+	"strings"
 	"time"
 )
 
-type Movie struct {
-	Title  string
-	Year   int  `json:"released"`
-	Color  bool `json:"color,omitempty"`
-	Actors []string
+type ExcelData struct {
+	Name     string `tag:"姓名"`
+	DayCount int    `tag:"全勤工作天数"`
+	Sse      float32
+	www      string
 }
 
-var movies = []Movie{
-	{Title: "Casablanca", Year: 1942, Color: false,
-		Actors: []string{"Humphrey Bogart", "Ingrid Bergman"}},
-	{Title: "Cool Hand Luke", Year: 1967, Color: true,
-		Actors: []string{"Paul Newman"}},
-	{Title: "Bullitt", Year: 1968, Color: true,
-		Actors: []string{"Steve McQueen", "Jacqueline Bisset"}},
+func WriteXLSX_Test() {
+
+	eds := make([]ExcelData, 0, 0)
+	eds = append(eds, ExcelData{"郭亮", 22, 32.123, ""})
+	eds = append(eds, ExcelData{"郭亮2", 22, 32.123, "aa"})
+	eds = append(eds, ExcelData{"郭亮3", 22, 32.123, "bb"})
+
+	nameMap := make(map[string]string)
+	nameMap["Name"] = "姓名"
+	nameMap["DayCount"] = "全勤工作天数"
+
+	err := WriteXLSXByMap("/workspace/asd.xlsx", eds, nameMap)
+	fmt.Println(err)
 }
 
-/* //结构体tag与excel表格第一列对应，如果不写tag则取结构体变量名
- *
- *	type ExcelData struct {
- *		Name     string `tag:"姓名"`
- *		DayCount int    `tag:"全勤工作天数"`
- *		Sse      float32
- *	}
- *
- *	func ReadExcel2(filename string) {
- *		var eds []ExcelData
- *		ReadExcel(filename, &eds)
- *		for i, ed := range eds {
- *			fmt.Printf("%d\t%s\t%d\t%g\n", i+1, ed.Name, ed.DayCount, ed.Sse)
- *		}
- *	}
- */
-func ReadExcel(filename string, obj interface{}) error {
-	val := reflect.ValueOf(obj)
+func WriteXLSX(filename string, obj interface{}) error {
+	return WriteXLSXByMap(filename, obj, nil)
+}
 
-	if val.Kind() != reflect.Ptr {
-		return fmt.Errorf("传递的对象必须为结构体数组")
+func WriteXLSXByMap(filename string, obj interface{}, nameMap map[string]string) error {
+	if !strings.HasSuffix(filename, ".xlsx") {
+		return fmt.Errorf("文件必须是xlsx类型")
 	}
 
-	ind := val.Elem()
+	val := reflect.ValueOf(obj)
 
-	if ind.Kind() == reflect.Slice {
-		if ind.Type().Elem().Kind() != reflect.Struct {
-			return fmt.Errorf("传递的对象必须为结构体数组")
-		}
+	if val.Kind() != reflect.Slice {
+		return fmt.Errorf("传递的对象必须为切片")
+	}
 
-		e := ind.Type().Elem()     //得到单个结构体type
-		v := reflect.New(e).Elem() //创建一个新的结构体value
+	if val.Len() == 0 {
+		return fmt.Errorf("传递的对象长度为0")
+	}
 
-		//保存结构体Tag或变量名与列名的对应关系
-		nameMap := make(map[string]string)
+	e := val.Type().Elem() //得到单个结构体type
+
+	if e.Kind() != reflect.Struct {
+		return fmt.Errorf("传递的对象必须为结构体数组指针")
+	}
+
+	if nameMap == nil {
+
+		nameMap = make(map[string]string)
 
 		//取得结构体tag与excel表格第一列对应，如果不写tag则取结构体变量名
 		for i := 0; i < e.NumField(); i++ {
 			structColumn := e.Field(i)
 			if columnTag := structColumn.Tag.Get("tag"); columnTag != "" {
 				//如果有Tag则将key设置为tag
-				nameMap[columnTag] = structColumn.Name
+				nameMap[structColumn.Name] = columnTag
 			} else {
 				nameMap[structColumn.Name] = structColumn.Name
 			}
 		}
+	}
 
-		xlFile, err := xlsx.OpenFile(filename)
+	return writexlsx(filename, nameMap, &val)
+}
+
+func writexlsx(filename string, nameMap map[string]string, val *reflect.Value) error {
+	file := xlsx.NewFile()
+	sheet, err := file.AddSheet("Sheet1")
+
+	if err != nil {
+		return err
+	}
+
+	row := sheet.AddRow()
+
+	e := val.Type().Elem() //得到单个结构体type
+
+	if e.Kind() != reflect.Struct {
+		return fmt.Errorf("传递的对象必须为结构体数组指针")
+	}
+
+	nameList := make([]string, 0)
+
+	// 写入标题(第一行)
+	for i := 0; i < e.NumField(); i++ {
+		columnName := e.Field(i).Name
+		if title, ok := nameMap[columnName]; ok {
+			cell := row.AddCell()
+			cell.Value = title
+			nameList = append(nameList, columnName)
+		}
+	}
+
+	if len(nameList) == 0 {
+		return fmt.Errorf("map与结构的列无法对应")
+	}
+
+	// 写入数据
+	for i := 0; i < val.Len(); i++ {
+		row := sheet.AddRow()
+		idxV := val.Index(i)
+		for _, columnName := range nameList {
+			cell := row.AddCell()
+			cell.SetValue(idxV.FieldByName(columnName))
+		}
+	}
+
+	// 写入文件
+	err = file.Save(filename)
+
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// type ExcelData struct {
+// 	Name     string `tag:"姓名"`
+// 	DayCount int    `tag:"全勤工作天数"`
+// 	Sse      float32
+// }
+//
+// func ReadExcel2(filename string) {
+// 	var eds []ExcelData
+// 	//ReadXLSX(filename, &eds)
+// 	nameMap := make(map[string]string)
+// 	nameMap["姓名"] = "Name"
+// 	nameMap["全勤工作天数"] = "DayCount"
+// 	ReadXLSXByMap(filename, &eds, nameMap)
+// 	for i, ed := range eds {
+// 		fmt.Printf("%d\t%s\t%d\t%g\n", i+1, ed.Name, ed.DayCount, ed.Sse)
+// 	}
+// }
+// 结构体tag与excel表格第一列对应，如果不写tag则取结构体变量名
+func ReadXLSX(filename string, obj interface{}) error {
+	return ReadXLSXByMap(filename, obj, nil)
+}
+
+// map中记录变量名与标题的对应关系 {"姓名":"Name","全勤工作天数":"DayCount"}
+func ReadXLSXByMap(filename string, obj interface{}, nameMap map[string]string) error {
+	if !strings.HasSuffix(filename, ".xlsx") {
+		return fmt.Errorf("文件必须是xlsx类型")
+	}
+
+	val := reflect.ValueOf(obj)
+
+	if val.Kind() != reflect.Ptr {
+		return fmt.Errorf("传递的对象必须为指针")
+	}
+
+	ele := val.Elem()
+
+	if ele.Kind() == reflect.Slice {
+		if ele.Type().Elem().Kind() != reflect.Struct {
+			return fmt.Errorf("传递的对象必须为结构体数组指针")
+		}
+
+		if nameMap == nil {
+			e := ele.Type().Elem() //得到单个结构体type
+
+			//保存结构体Tag或变量名与列名的对应关系
+			nameMap = make(map[string]string)
+
+			//取得结构体tag与excel表格第一列对应，如果不写tag则取结构体变量名
+			for i := 0; i < e.NumField(); i++ {
+				structColumn := e.Field(i)
+				if columnTag := structColumn.Tag.Get("tag"); columnTag != "" {
+					//如果有Tag则将key设置为tag
+					nameMap[columnTag] = structColumn.Name
+				} else {
+					nameMap[structColumn.Name] = structColumn.Name
+				}
+			}
+		}
+
+		err := readxlsx(filename, nameMap, &ele)
 		if err != nil {
 			return err
 		}
 
-		if len(xlFile.Sheets) > 0 {
-			sheet := xlFile.Sheets[0]
-			for line, row := range sheet.Rows {
-				if line == 0 {
-					exist := false
-					for i, cell := range row.Cells {
-						text, _ := cell.String()
-						if name, ok := nameMap[text]; ok {
-							isnil = true
-							delete(nameMap, text)
-							nameMap[strconv.Itoa(i)] = name
-						}
-					}
-					if !exist {
-						return fmt.Errorf("Excel与结构体不存在对应列")
-					}
-				} else {
-					for i, cell := range row.Cells {
-						text, _ := cell.String()
-						if name, ok := nameMap[strconv.Itoa(i)]; ok {
-							//填充结构体value
-							setField(v, name, text)
-						}
-					}
-					ind = reflect.Append(ind, v)
-				}
-			}
-		}
 	} else {
-		return fmt.Errorf("传递的对象必须为结构体数组")
+		return fmt.Errorf("传递的对象必须为结构体数组指针")
 	}
 
-	if !ind.IsNil() {
-		val.Elem().Set(ind)
+	if !ele.IsNil() {
+		val.Elem().Set(ele)
+	}
+	return nil
+}
+
+func readxlsx(filename string, nameMap map[string]string, ele *reflect.Value) error {
+	v := reflect.New(ele.Type().Elem()).Elem() //创建一个新的结构体value
+
+	xlFile, err := xlsx.OpenFile(filename)
+	if err != nil {
+		return err
+	}
+
+	if len(xlFile.Sheets) > 0 {
+		sheet := xlFile.Sheets[0]
+		for line, row := range sheet.Rows {
+			if line == 0 {
+				exist := false
+				for i, cell := range row.Cells {
+					text, _ := cell.String()
+					if name, ok := nameMap[text]; ok {
+						exist = true
+						delete(nameMap, text)
+						nameMap[strconv.Itoa(i)] = name
+					}
+				}
+				if !exist {
+					return fmt.Errorf("Excel与结构体不存在对应列")
+				}
+			} else {
+				for i, cell := range row.Cells {
+					text, _ := cell.String()
+					if name, ok := nameMap[strconv.Itoa(i)]; ok {
+						//填充结构体value
+						setField(v, name, text)
+					}
+				}
+				*ele = reflect.Append(*ele, v)
+			}
+		}
 	}
 	return nil
 }
