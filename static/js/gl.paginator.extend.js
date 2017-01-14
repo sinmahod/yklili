@@ -113,7 +113,6 @@ window.DataList = function(options){
             if (newHtml != null){
                 $list.html(newHtml);
                 if (newHtml != ""){
-                     $("img.lazy").lazyload();
                     if (fn){
                         fn();
                     }
@@ -159,7 +158,6 @@ window.DataList = function(options){
                     newHtml = renderList(result);
                     if (newHtml != null){
                         $list.html(newHtml);
-                        $("img.lazy").lazyload();
                         if (fn){
                             fn();
                         }

@@ -45,7 +45,7 @@
 
         {{str2html "<!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->"}}
 
-        {{str2html "<<!--[if lte IE 8]>"}}
+        {{str2html "<!--[if lte IE 8]>"}}
         <script src="/static/js/html5shiv.min.js"></script>
         <script src="/static/js/respond.min.js"></script>
         {{str2html "<<![endif]-->"}}
@@ -54,9 +54,9 @@
         <script src="/static/js/jquery-2.1.4.min.js"></script>
         {{str2html "<!-- <![endif]-->"}}
         <!-- <![
-        {{str2html "<!--[if IE]>
+        {{str2html "<!--[if IE]>"}}
         <script src="/static/js/jquery-1.11.3.min.js"></script>
-        {{str2html "<![endif]-->
+        {{str2html "<![endif]-->"}}
 
         <!-- page specific plugin scripts -->
         <script src="/static/js/bootstrap-datepicker.min.js"></script>

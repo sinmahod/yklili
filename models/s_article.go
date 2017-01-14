@@ -140,6 +140,9 @@ func GetArticlesPage(size, index int, ordercolumn, orderby string, data map[stri
 	if data["AddUser"] != nil {
 		qt = qt.Filter("AddUser__icontains", data["AddUser"])
 	}
+	if data["Status"] != nil {
+		qt = qt.Filter("Status", data["Status"])
+	}
 	qt = qt.Exclude("Status", DELETE)
 	_, err := qt.OrderBy(ordercolumn).Limit(size, (index-1)*size).All(&as)
 

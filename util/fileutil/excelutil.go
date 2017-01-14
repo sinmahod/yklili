@@ -11,32 +11,32 @@ import (
 	"time"
 )
 
-type ExcelData struct {
-	Name     string `tag:"姓名"`
-	DayCount int    `tag:"全勤工作天数"`
-	Sse      float32
-	www      string
-}
+// type ExcelData struct {
+// 	Name     string `tag:"姓名"`
+// 	DayCount int    `tag:"全勤工作天数"`
+// 	Sse      float32
+// 	www      string
+// }
+//
+// func WriteXLSX_Test() {
+// 	eds := make([]ExcelData, 0, 0)
+// 	eds = append(eds, ExcelData{"郭亮", 22, 32.123, ""})
+// 	eds = append(eds, ExcelData{"郭亮2", 22, 32.123, "aa"})
+// 	eds = append(eds, ExcelData{"郭亮3", 22, 32.123, "bb"})
 
-func WriteXLSX_Test() {
+// 	nameMap := make(map[string]string)
+// 	nameMap["Name"] = "姓名"
+// 	nameMap["DayCount"] = "全勤工作天数"
 
-	eds := make([]ExcelData, 0, 0)
-	eds = append(eds, ExcelData{"郭亮", 22, 32.123, ""})
-	eds = append(eds, ExcelData{"郭亮2", 22, 32.123, "aa"})
-	eds = append(eds, ExcelData{"郭亮3", 22, 32.123, "bb"})
-
-	nameMap := make(map[string]string)
-	nameMap["Name"] = "姓名"
-	nameMap["DayCount"] = "全勤工作天数"
-
-	err := WriteXLSXByMap("/workspace/asd.xlsx", eds, nameMap)
-	fmt.Println(err)
-}
-
+// 	err := WriteXLSXByMap("/workspace/asd.xlsx", eds, nameMap)
+// 	fmt.Println(err)
+// }
+// 将结构体切片写入xlsx文件--自动提取Title = Tag > Name
 func WriteXLSX(filename string, obj interface{}) error {
 	return WriteXLSXByMap(filename, obj, nil)
 }
 
+// 将结构体切片写入xlsx,根据传递的map确定title以及导出的字段
 func WriteXLSXByMap(filename string, obj interface{}, nameMap map[string]string) error {
 	if !strings.HasSuffix(filename, ".xlsx") {
 		return fmt.Errorf("文件必须是xlsx类型")

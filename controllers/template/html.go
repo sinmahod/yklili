@@ -35,7 +35,9 @@ func (c *HTMLController) Prepare() {
 
 	pjax := c.GetString("_pjax")
 
-	if strings.EqualFold(action, "Get") && pjax == "" {
+	u := c.GetSession("User")
+
+	if strings.EqualFold(action, "Get") && pjax == "" && u != nil {
 
 		defer func() {
 			c.Layout = "platform/platform.html"
@@ -44,7 +46,7 @@ func (c *HTMLController) Prepare() {
 			c.LayoutSections["Include"] = "public/include.tpl"
 			c.LayoutSections["Script"] = "public/script.tpl"
 
-			user := c.GetSession("User").(*models.S_User)
+			user := u.(*models.S_User)
 			c.Data["UserName"] = user.GetUserName()
 		}()
 

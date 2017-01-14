@@ -5,6 +5,7 @@ import (
 	"beegostudy/controllers/platform"
 	"beegostudy/controllers/platform/data"
 	"beegostudy/controllers/template"
+	_ "beegostudy/routers"
 	"beegostudy/service/cron"
 	_ "beegostudy/task"
 
@@ -36,7 +37,6 @@ func main() {
 	beego.BConfig.WebConfig.Session.SessionOn = true //启用Session
 	beego.BConfig.Listen.EnableAdmin = true          //启用进程内监控
 
-	beego.Router("/", &platform.LoginController{})
 	beego.Router("/login", &platform.LoginController{})
 	beego.Router("/register", &platform.RegisterController{})
 
