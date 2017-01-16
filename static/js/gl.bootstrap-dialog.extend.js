@@ -285,7 +285,7 @@
 			$.gritter.add({
 				title: title?title:'<i class="ace-icon fa fa-bell bigger-120 blue"></i>&nbsp<font color="orange">提示</font>',
 				text: msg,
-				class_name: 'gritter-info gritter-radius',
+				class_name: 'gritter-info',  //gritter-radius
 				time:time?time:2000
 			});
 		},//<! gritter >

@@ -175,10 +175,20 @@ span.menu{
 	padding:0.6em;
 }
 .header {
-	background: url('../images/banner.jpg') no-repeat 0px 0px;
 	min-height:700px;
 	background-size:cover;
 	margin-top:0;
+	height: 100vh;
+}
+@media only screen and (max-width: 900px) {
+	.header {
+	    height: 60vh;
+	}
+}
+@media only screen and (max-width: 500px) {
+    .header {
+        height: 40vh;
+    }
 }
 .logo {
 	padding-top: 22.8em;
@@ -310,39 +320,14 @@ a.newsmore {
 }
 /*----start-slide---*/
 /* Default Skin */
-.wmuSlider {
-	position: relative;
-	overflow: hidden;
-}
 .col-md-6.banner-top {
   padding: 0;
 }
 /* Default Skin */
-.wmuSliderPagination {
-	z-index: 2;
-	position: absolute;
-	right: 43%;
-	top: 27.5em;
-}
-ul.wmuSliderPagination {
-}
 .banner-top{
   width: 33%;
   float: left;
     padding: 0 5px;
-}
-.wmuSliderPagination li {
-	margin-right: 13px;
-  list-style-type: none;
-  display: inline-block;
-}
-.wmuSliderPagination a {
-	display: block;
-	text-indent: -9999px;
-	width:8px;
-	height:8px;
-	  border: 1px solid #fff;
-	border-radius:50px;
 }
 .banner-wrap {
   height: 429px;
@@ -352,29 +337,6 @@ a.wmuActive {
 }
 .wmuGallery .wmuGalleryImage {
 	margin-bottom: 10px;
-}
-.wmuSliderPrev, .wmuSliderNext {
-		position: absolute;
-	  display: block;
-	  -webkit-tap-highlight-color: rgba(0,0,0,0);
-	  top: 88%;
-	  right: 5%;
-	  opacity: 0.7;
-	  z-index: 3;
-	  text-indent: -9999px;
-	  overflow: hidden;
-	  text-decoration: none;
-	  height: 25px;
-	  width: 25px;
-	  background: url("../images/arrows.png") no-repeat -29px 0px;
-	  cursor:pointer;
-}
-.wmuSliderPrev{
-	left: 05%;
-	background: url("../images/arrows.png") no-repeat -2px 0px;
-}
-.wmuSliderWrapper {
-	padding: 0 1em;
 }
 .span1_bottom {
 	background:url(../images/slider-bg.jpg) no-repeat 0px 0px;

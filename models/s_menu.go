@@ -151,7 +151,7 @@ func (menu *S_Menu) String() string {
 func GetIndexLink() string {
 	o := orm.NewOrm()
 	var menu S_Menu
-	err := o.QueryTable("s_menu").Exclude("link", "").OrderBy("innercode").One(&menu, "link")
+	err := o.QueryTable("s_menu").Exclude("link", "").OrderBy("orderflag").One(&menu, "link")
 	if err == orm.ErrNoRows {
 		// 没有找到记录
 		return ""
@@ -186,7 +186,7 @@ func GetInnerCode(id int) string {
 func GetMenus() ([]*S_Menu, error) {
 	var menus []*S_Menu
 	o := orm.NewOrm()
-	_, err := o.QueryTable("s_menu").OrderBy("innercode").All(&menus)
+	_, err := o.QueryTable("s_menu").OrderBy("orderflag").All(&menus)
 	return menus, err
 }
 
@@ -233,7 +233,7 @@ func GetMenusLevel(url string) ([]*S_Menu, error) {
 **/
 func GetMenusPage(size, index int, ordercolumn, orderby string) (*DataGrid, error) {
 	if ordercolumn == "" {
-		ordercolumn = "innercode"
+		ordercolumn = "orderflag"
 	} else if strings.EqualFold(orderby, "desc") {
 		ordercolumn = "-" + ordercolumn
 	}
@@ -274,7 +274,7 @@ func GetMenusPage(size, index int, ordercolumn, orderby string) (*DataGrid, erro
 func GetMenusByLevel(level int) ([]*S_Menu, error) {
 	var menus []*S_Menu
 	o := orm.NewOrm()
-	_, err := o.QueryTable("s_menu").Filter("Level", level).OrderBy("innercode").All(&menus)
+	_, err := o.QueryTable("s_menu").Filter("Level", level).OrderBy("orderflag").All(&menus)
 	return menus, err
 }
 

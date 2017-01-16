@@ -1,0 +1,146 @@
+<style type="text/css">
+.profile-info-value {
+    padding: 0px 4px 0px 6px;
+}
+</style>
+
+<div class="page-header">
+    <button class="btn btn-sm btn-success">
+        <i class="ace-icon fa fa-rocket bigger-125"></i>
+        <span class="bigger-115 no-text-shadow">保存</span>
+    </button>
+</div><!-- /.page-header -->
+
+<div class="bottom-border"></div>
+
+<div class="row">
+    <div class="col-xs-12 col-sm-6">
+        <div class="widget-box">
+            <div class="widget-header">
+                <h4 class="widget-title">
+                    <i class="ace-icon fa fa-bookmark"></i>
+                    基础设置
+                </h4>
+            </div>
+            <div class="profile-user-info profile-user-info-striped">
+                <div class="profile-info-row">
+                    <div class="profile-info-name">域名设置：</div>
+                    <div class="profile-info-value">
+                        <span class="editable editable-click" id="username">
+                            <input type="text" id="Title" name="Title" value="{{.Article.Title}}" placeholder="请输入域名" style="border: 0;font-size: 12px;"/>
+                        </span>
+                    </div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name">站点名称：</div>
+                    <div class="profile-info-value">
+                        <span class="editable editable-click" id="username">
+                            <input type="text" id="Title" name="Title" value="{{.Article.Title}}" placeholder="请输入域名" style="border: 0;font-size: 12px;"/>
+                        </span>
+                    </div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name">站点简介：</div>
+                    <div class="profile-info-value">
+                        <span class="editable editable-click" id="username">
+                            <input type="text" id="Title" name="Title" value="{{.Article.Title}}" placeholder="请输入域名" style="border: 0;font-size: 12px;"/>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-6">
+        <div class="widget-box">
+            <div class="widget-header">
+                <h4 class="widget-title">
+                    <i class="ace-icon fa fa-tint"></i>
+                    Color Picker
+                </h4>
+            </div>
+            <div class="profile-user-info profile-user-info-striped">
+                <div class="profile-info-row">
+                    <div class="profile-info-name">域名设置：</div>
+                    <div class="profile-info-value">
+                        <span class="editable editable-click" id="username">
+                            <input type="text" id="Title" name="Title" value="{{.Article.Title}}" placeholder="请输入域名" style="border: 0;font-size: 12px;"/>
+                        </span>
+                    </div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name">域名设置：</div>
+                    <div class="profile-info-value">
+                        <span class="editable editable-click" id="username">
+                            <input type="text" id="Title" name="Title" value="{{.Article.Title}}" placeholder="请输入域名" style="border: 0;font-size: 12px;"/>
+                        </span>
+                    </div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-name">域名设置：</div>
+                    <div class="profile-info-value">
+                        <span class="editable editable-click" id="username">
+                            <input type="text" id="Title" name="Title" value="{{.Article.Title}}" placeholder="请输入域名" style="border: 0;font-size: 12px;"/>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div><!-- /.row -->
+
+<div class="row">
+    <div class="col-xs-12 col-sm-6">
+        <div class="widget-box">
+            <div class="widget-header">
+                <h4 class="widget-title">
+                    <i class="ace-icon fa fa-picture-o"></i>
+                    Blog Cover
+                </h4>
+            </div>
+            <div id="logoimage" class="wu-example">
+                <img id="logo" src="" onerror="this.src='/upload/2016/12/29/4fc0dbe6-f11c-4122-a651-61fd869fcfa5.jpg'" class="img-responsive">
+            </div>
+        </div>
+    </div>
+</div>            
+    
+
+ <script type="text/javascript">
+        jQuery(function($) {
+            $('#logoimage').on('click', function () {
+                var bf = BootFrame.dialog();
+                bf.id("imageselect");
+                bf.title("选择图片");
+                bf.url('/data/image/InitPage');
+                bf.width(800);
+                bf.height(500);
+                bf.addButton("确认",function(){
+                    var imgurl = getImgUrl();
+                    $('#logo').attr('src',imgurl);
+                    bf.close();
+                },null,13);
+                bf.onshow(function(){
+                    var w = $("#list1").width();
+                    var h = $("#imageselect").find('.modal-body').height();
+                    var s = 0;
+                    if (w > 600){
+                        w = parseInt(w / 153);
+                        h = parseInt(h / 153);
+                        s = w * h;
+                        $("#list1").css("max-width",w * 153);
+                    }else{
+                        s = parseInt(w / 150) * 3;
+                    }
+                    $('.imgli').show();
+                    DataList({
+                        list: "list1",
+                        pagebar: "pagebar",
+                        size: parseInt(s),
+                        fn: initColorBox
+                    });
+                });
+                bf.show();
+            });
+        });
+</script>       

@@ -52,6 +52,7 @@
                 emailAddress : "请输入正确的邮箱地址",
                 stringLength : "输入的字符长度至少{0}位，最多{1}位",
                 phone : "请输入正确的手机号码",
+                number : "输入类型必须为数值",
                 regexp : "输入不合法",
                 remote : "远程校验不合法"
           }
@@ -116,15 +117,18 @@
                         }
 
                          switch (t) {
-                             case 'remote':
+                            case 'remote':
                                 var urth = p.split(",");
                                 validators["threshold"] = urth[1];
                                 validators[t] = verifyRule(t,urth[0],m);
                                 break;
-                             case 'phone':
+                            case 'phone':
                                 validators["regexp"] = verifyRule(t,p,m);
                                 break;
-                             default:
+                            case 'number':
+                                validators["regexp"] = verifyRule(t,p,m);
+                                break;
+                            default:
                                 validators[t] = verifyRule(t,p,m);    
                                 break;
                          }
@@ -193,6 +197,9 @@
                 }else{
                     if (type == 'phone'){
                         verifyType["regexp"] = /^1[3|5|8]{1}[0-9]{9}$/ ;
+                    }
+                    if (type == 'number'){
+                        verifyType["regexp"] = /^[0-9]*$/ ;
                     }
                     if (verifyType["message"]  == undefined){
                         verifyType["message"] = varMsg[type];

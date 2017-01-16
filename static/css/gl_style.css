@@ -71,7 +71,13 @@ body {
 .ui-th-div {
     text-align: center;
 }
+.profile-user-info {
+    width: calc(100%);
+}
 
+.widget-box .profile-user-info {
+    border: 0;
+}
 /* positioning */
 
 .ui-icon-triangle-1-n {background-image: url(/static/images/ui-icons_256x240.png); background-position: 0 -16px; }
