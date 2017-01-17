@@ -175,7 +175,7 @@ span.menu{
 	padding:0.6em;
 }
 .header {
-	min-height:700px;
+	background: no-repeat center center;
 	background-size:cover;
 	margin-top:0;
 	height: 100vh;

@@ -28,6 +28,9 @@
         <script src="/static/js/bootstrap-paginator.min.js"></script>
         <script src="/static/js/gl.paginator.extend.js"></script>
 
+        <!-- init -->
+        <script src="/static/js/gl.init.js"></script>
+
         <!-- webUploader -->
         <script src="/static/webuploader/webuploader.nolog.min.js"></script>
 

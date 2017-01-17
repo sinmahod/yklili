@@ -19,18 +19,6 @@ func init() {
 	go cron.RunCron()
 }
 
-var Crontab = cron.New()
-
-type MainController struct {
-	beego.Controller
-}
-
-func (this *MainController) Get() {
-	this.Data["UserName"] = "HHHHH"
-
-	this.TplName = "test.html"
-}
-
 func main() {
 
 	//ORM调试模式打开
@@ -43,6 +31,7 @@ func main() {
 	//数据控制器
 	models := map[string]beego.ControllerInterface{
 		"system":  &data.SystemController{},
+		"site":    &data.SiteController{},
 		"menu":    &data.MenuController{},
 		"user":    &data.UserController{},
 		"cron":    &data.CronController{},

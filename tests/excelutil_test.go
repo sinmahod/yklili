@@ -2,16 +2,23 @@ package test
 
 import (
 	"beegostudy/util/fileutil"
-	//"fmt"
+	"fmt"
 	"testing"
 )
 
+type ExcelData struct {
+	Name string `tag:"姓名"`
+}
+
 func Test_ReadXLSX(t *testing.T) {
-	// fileutil.ReadExcel2("../1.xlsx")
+	ss, _ := fileutil.ReadXLSXToDT("../1.xlsx")
+	fmt.Println(ss)
+	// ss := excels[0]
+	// fmt.Println(ss)
 	t.Fatal("")
 }
 
 func Test_WriteXLSX(t *testing.T) {
-	fileutil.WriteXLSX_Test()
+	//fileutil.WriteXLSX_Test()
 	t.Fatal("")
 }

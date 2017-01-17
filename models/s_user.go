@@ -108,7 +108,7 @@ func (user *S_User) Fill() error {
 	if user.Email != "" {
 		return o.Read(user, "Email")
 	}
-	return fmt.Errorf("请确认是否传递了Id或UserName或Email", "")
+	return fmt.Errorf("请确认是否传递了Id或UserName或Email")
 
 }
 

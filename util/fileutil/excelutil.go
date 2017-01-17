@@ -202,6 +202,28 @@ func ReadXLSXByMap(filename string, obj interface{}, nameMap map[string]string) 
 	return nil
 }
 
+func ReadXLSXToDT(filename string) ([][]string, error) {
+	xlFile, err := xlsx.OpenFile(filename)
+	if err != nil {
+		return nil, err
+	}
+
+	dt := make([][]string, 0)
+
+	if len(xlFile.Sheets) > 0 {
+		sheet := xlFile.Sheets[0]
+		for _, row := range sheet.Rows {
+			dr := make([]string, 0)
+			for _, cell := range row.Cells {
+				text, _ := cell.String()
+				dr = append(dr, text)
+			}
+			dt = append(dt, dr)
+		}
+	}
+	return dt, nil
+}
+
 func readxlsx(filename string, nameMap map[string]string, ele *reflect.Value) error {
 	v := reflect.New(ele.Type().Elem()).Elem() //创建一个新的结构体value
 

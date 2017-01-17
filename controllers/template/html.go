@@ -31,8 +31,6 @@ func (c *HTMLController) Prepare() {
 	//如果使用pjax的请求则只解析局部模板，反之返回解析全部模板
 	_, action := c.GetControllerAndAction()
 
-	beego.Info(action)
-
 	pjax := c.GetString("_pjax")
 
 	u := c.GetSession("User")
