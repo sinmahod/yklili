@@ -55,6 +55,10 @@ h1.heading {
 }
 .top-header {
 	padding: 2em;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
 }
 .navigation {
 	float: left;
@@ -179,6 +183,8 @@ span.menu{
 	background-size:cover;
 	margin-top:0;
 	height: 100vh;
+	display: table;
+    width: 100%;
 }
 @media only screen and (max-width: 900px) {
 	.header {
@@ -191,7 +197,8 @@ span.menu{
     }
 }
 .logo {
-	padding-top: 22.8em;
+	display: table-cell;
+    vertical-align: middle;
 }
 .one {
 	width:48%;

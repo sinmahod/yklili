@@ -1,12 +1,23 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>{{config "String" "appname" ""}}</title>
+	<title>{{.Index.title}}</title>
 
 	{{template "front/include.tpl" .}}
+
+<style type="text/css">
+	body{
+	    background-color: {{.Index.backgroundcolor}};
+	}
+	h3 {
+		font-family: cursive;
+	    padding-bottom: 15px;
+	}
+</style>
+
 </head>
 <body>
-		<div class="header" style="background-image: url('/static/front/images/banner.jpg')">
+		<div class="header" style="background-image: url('{{.Index.banner}}')">
 			<div class="top-header">
 				<div class="navigation">
 					<div class="top-menu">
@@ -50,7 +61,8 @@
 				<div class="clearfix"></div>
 			</div>
 			<div class="logo logotext text-center">
-				<h1>{{config "String" "appname" ""}}</h1>
+				<h3>{{.Index.subtitle}}</h3>
+				<h1>{{.Index.title}}</h1>
 			</div>
 		</div>
 	

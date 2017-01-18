@@ -25,17 +25,20 @@ import (
 *   default(D)  默认值D（需要对应类型）
 **/
 type S_Site struct {
-	Id         int       `orm:"pk;column(id);"`
-	SiteName   string    `orm:"column(sitename);size(128)"`
-	SiteHost   string    `orm:"column(sitehost);size(128)"`
-	SiteDesc   string    `orm:"null;column(sitedesc);size(512)"`
-	SiteLogo   string    `orm:"null;column(sitelogo);size(256)"`
-	SiteBanner string    `orm:"null;column(sitebanner);size(256)"`
-	Memo       string    `orm:"null;column(memo);size(512)"`
-	AddTime    time.Time `orm:"auto_now_add;type(datetime);column(addtime)"`
-	AddUser    string    `orm:"column(adduser);size(64)"`
-	ModifyTime time.Time `orm:"null;type(datetime);column(modifytime)"`
-	ModifyUser string    `orm:"null;column(modifyuser);size(64)"`
+	Id              int       `orm:"pk;column(id);"`
+	SiteName        string    `orm:"column(sitename);size(128)"`
+	SiteSubtitle    string    `orm:"column(sitesubtitle);size(256)"`
+	SiteHost        string    `orm:"column(sitehost);size(128)"`
+	SiteDesc        string    `orm:"null;column(sitedesc);size(512)"`
+	SiteLogo        string    `orm:"null;column(sitelogo);size(256)"`
+	SiteBanner      string    `orm:"null;column(sitebanner);size(256)"`
+	BackgroundColor string    `orm:"null;column(backgroundcolor);size(32)"`
+	Copyright       string    `orm:"null;column(copyright);size(128)"`
+	Memo            string    `orm:"null;column(memo);size(512)"`
+	AddTime         time.Time `orm:"auto_now_add;type(datetime);column(addtime)"`
+	AddUser         string    `orm:"column(adduser);size(64)"`
+	ModifyTime      time.Time `orm:"null;type(datetime);column(modifytime)"`
+	ModifyUser      string    `orm:"null;column(modifyuser);size(64)"`
 }
 
 //自定义表名
@@ -66,6 +69,10 @@ func (c *S_Site) SetName(name string) {
 	c.SiteName = name
 }
 
+func (c *S_Site) GetSiteSubtitle() string {
+	return c.SiteSubtitle
+}
+
 func (c *S_Site) GetHost() string {
 	return c.SiteHost
 }
@@ -88,6 +95,14 @@ func (c *S_Site) GetBanner() string {
 
 func (c *S_Site) SetBanner(banner string) {
 	c.SiteBanner = banner
+}
+
+func (c *S_Site) GetBackgroundColor() string {
+	return c.BackgroundColor
+}
+
+func (c *S_Site) GetCopyright() string {
+	return c.Copyright
 }
 
 func (c *S_Site) SetMemo(m string) {
