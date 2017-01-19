@@ -128,6 +128,9 @@ window.DataList = function(options){
 
     //分页条初始化
     function initPagebar(pagebar){
+        if (total <= 1) {
+            return;
+        }
         var n = 5;
         var w = $(document.body).width();
         if (w < 400) n = 3;

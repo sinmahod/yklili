@@ -24,6 +24,7 @@ func main() {
 	//ORM调试模式打开
 	beego.BConfig.WebConfig.Session.SessionOn = true //启用Session
 	beego.BConfig.Listen.EnableAdmin = true          //启用进程内监控
+	beego.BConfig.EnableGzip = true                  //启用gzip压缩
 
 	beego.Router("/login", &platform.LoginController{})
 	beego.Router("/register", &platform.RegisterController{})

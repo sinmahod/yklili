@@ -444,7 +444,6 @@ a.newsmore1 {
 }
 .top-news{
 	padding:3em 1.5em;
-	min-height:853px;
 }
 .top-news img {
 	width:100%;
@@ -987,7 +986,6 @@ ul.share li {
 	}
 	.top-news {
 		padding: 2em 1em;
-		min-height: 842px;
 	}
 	img.ribbon {
 		top: 34px;
@@ -1085,9 +1083,6 @@ ul.share li {
 		padding: 2.5em 2em;
 		min-height: 390px;
 	}
-	.top-news {
-		min-height: 818px;
-	}
 	.footer-top p {
 		width: 80%;
 		font-size: 0.95em;
@@ -1133,9 +1128,6 @@ ul.share li {
 	}
 	.two {
 		min-height: 362px;
-	}
-	.top-news {
-		min-height: 782px;
 	}
 	a.morenews {
 		margin: 1.45em 0 1em 0;
