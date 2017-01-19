@@ -52,7 +52,7 @@
         <script src="/static/js/gl.senddata.js"></script>
 
         <!-- markdown -->
-        <script src="/static/editor.md/editormd.js"></script>
+        <script src="/static/editor.md/editormd.min.js"></script>
 
         <!-- get form data -->
         <script src="/static/js/jquery.formHelp.js"></script>

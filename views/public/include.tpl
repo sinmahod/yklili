@@ -50,10 +50,10 @@
         <script src="/static/js/respond.min.js"></script>
         {{str2html "<<![endif]-->"}}
 
-        {{str2html "<!--[if !IE]> -->"}}
+        {{str2html "<!--[if !IE]><!-->"}}
         <script src="/static/js/jquery-2.1.4.min.js"></script>
-        {{str2html "<!-- <![endif]-->"}}
-        <!-- <![
+        {{str2html "<!--<![endif]-->"}}
+        
         {{str2html "<!--[if IE]>"}}
         <script src="/static/js/jquery-1.11.3.min.js"></script>
         {{str2html "<![endif]-->"}}

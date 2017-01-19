@@ -57,7 +57,7 @@
         </div>
         <div class="col-md-2"></div>
         <div class="col-md-12 text-center">
-            <img id="qrious">
+            <div id="qrcode"></div>
             <h3>扫描二维码观看本页</h3>
         </div>
         <div class="col-md-4"></div>
@@ -75,25 +75,23 @@
     </div>
     {{template "front/footer.tpl" .}}
 
-<script src="static/editor.md/editormd.js"></script>
+<script src="static/editor.md/editormd.min.js"></script>
 <script src="static/editor.md/lib/marked.min.js"></script>
 <script src="static/editor.md/lib/prettify.min.js"></script>
 <script src="static/editor.md/lib/underscore.min.js"></script>
-<script src="static/front/js/qrious.js"></script>
+<script src="static/js/jquery.qrcode.min.js"></script>
 <script>
-editormd.markdownToHTML("contentHtml", {
-    markdown        : $("#append-md").val(),
-    htmlDecode      : "style,script,iframe",  // you can filter tags decode
-    emoji           : true,
-    taskList        : true,
-    tex             : true,  // 默认不解析
-    flowChart       : false,  // 默认不解析
-});
-var qr = window.qr = new QRious({
-  element: document.getElementById('qrious'),
-  size: 250,
-  value: window.location.href
-})
+jQuery(function($) {
+    editormd.markdownToHTML("contentHtml", {
+        markdown        : $("#append-md").val(),
+        htmlDecode      : "style,script,iframe",  // you can filter tags decode
+        emoji           : true,
+        taskList        : true,
+        tex             : true,  // 默认不解析
+        flowChart       : false,  // 默认不解析
+    });
+    $('#qrcode').qrcode(window.location.href)
+}); 
 </script>
 </body>
 </html>
