@@ -2,13 +2,21 @@ package conf
 
 import (
 	"beegostudy/models"
+	"github.com/astaxie/beego"
+	"strconv"
 )
 
 var configItem map[string]string
 
+func config(in string) string {
+	return GetValue(in)
+}
+
 func init() {
+	RegisterDB()
+	beego.AddFuncMap("SiteConfig", config)
 	configItem = make(map[string]string)
-	//Reload()
+	Reload()
 }
 
 // 刷新配置
@@ -17,6 +25,29 @@ func Reload() {
 	for _, c := range models.GetConfigs() {
 		configItem[c.GetK()] = c.GetV()
 	}
+	if siteid := beego.AppConfig.String("siteid"); siteid != "" {
+		id, err := strconv.Atoi(siteid)
+		site, err := models.GetSite(id)
+		if err == nil {
+			configItem["Banner"] = site.GetBanner()
+			configItem["Name"] = site.GetName()
+			configItem["Subtitle"] = site.GetSubtitle()
+			configItem["Host"] = site.GetHost()
+			configItem["BackgroundColor"] = site.GetBackgroundColor()
+			configItem["Copyright"] = site.GetCopyright()
+			configItem["Desc"] = site.GetDesc()
+			configItem["ArticleColor"] = site.GetArticleColor()
+			return
+		}
+	}
+	configItem["Banner"] = "/static/front/images/banner.jpg"
+	configItem["Name"] = "请前往后台设置站点"
+	configItem["Subtitle"] = "请前往后台设置站点"
+	configItem["Host"] = "/"
+	configItem["BackgroundColor"] = "#2c2c2c"
+	configItem["Desc"] = "请前往后台设置站点"
+	configItem["Copyright"] = "&copy; 2017 All rights  Reserved"
+	configItem["ArticleColor"] = "#fff"
 }
 
 // 清空配置

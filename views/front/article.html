@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{.Article.Title}}--{{"Name" | SiteConfig}}</title>
+    
+    {{template "front/include.tpl" .}}
+
+<link rel="stylesheet" href="static/editor.md/css/editormd.min.css" />
+<style type="text/css">
+    .author-post {
+        background: {{"ArticleColor" | SiteConfig}};
+    }
+    .markdown-body pre code {
+        white-space: pre;
+    }
+    ol.linenums {
+        display: block;
+        overflow-x: auto;
+    }
+    ol.linenums li {
+        list-style-type: decimal-leading-zero !important;
+    }
+    li.L1, li.L3, li.L5, li.L7, li.L9 {
+        background: inherit;
+    }
+</style>
+</head>
+<body>
+
+    <div class="middle-banner">
+        <div class="home">
+            <div class="top-menu">
+            <span class="menu"><a href="{{"Host" | SiteConfig}}"><img src="static/front/images/home.png" alt=""></a></span>
+            </div>
+        </div>
+        <div class="logo text-center">
+            <h3>{{.Article.Title}}</h3>
+            <span>{{dateformat .Article.AddTime "2006-01-02 15:04:05"}} by </span><a href="">{{.Article.AddUser}}</a>
+        </div>
+    </div>
+    <div class="author-post">
+        <div class="col-md-2"></div>
+        <div class="col-md-8 article-text">
+            <div id="contentHtml">
+               <textarea id="append-md" style="display:none;">{{.Article.Content}}</textarea>
+            </div>
+            <div class="lr-20">
+                <ul class="categories">
+                    <li><a href="#">markets</a></li>
+                    <li><a href="#">business</a></li>
+                    <li><a href="#">sport</a></li>
+                    <li><a href="#">special reports</a></li>
+                    <li><a href="#">culture</a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        <div class="col-md-2"></div>
+        <div class="col-md-12 text-center">
+            <img id="qrious">
+            <h3>扫描二维码观看本页</h3>
+        </div>
+        <div class="col-md-4"></div>
+        <div class="col-md-4 post-by text-center">
+            <div class="social-icons">
+                <ul>
+                    <li><a href="#" class="xlwb"></a></li>
+                    <li><a href="#" class="twitter"></a></li>
+                    <li><a href="#" class="googlepluse"></a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-4"></div>
+        <div class="clearfix"></div>
+    </div>
+    {{template "front/footer.tpl" .}}
+
+<script src="static/editor.md/editormd.js"></script>
+<script src="static/editor.md/lib/marked.min.js"></script>
+<script src="static/editor.md/lib/prettify.min.js"></script>
+<script src="static/editor.md/lib/underscore.min.js"></script>
+<script src="static/front/js/qrious.js"></script>
+<script>
+editormd.markdownToHTML("contentHtml", {
+    markdown        : $("#append-md").val(),
+    htmlDecode      : "style,script,iframe",  // you can filter tags decode
+    emoji           : true,
+    taskList        : true,
+    tex             : true,  // 默认不解析
+    flowChart       : false,  // 默认不解析
+});
+var qr = window.qr = new QRious({
+  element: document.getElementById('qrious'),
+  size: 250,
+  value: window.location.href
+})
+</script>
+</body>
+</html>

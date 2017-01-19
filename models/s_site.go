@@ -33,6 +33,7 @@ type S_Site struct {
 	SiteLogo        string    `orm:"null;column(sitelogo);size(256)"`
 	SiteBanner      string    `orm:"null;column(sitebanner);size(256)"`
 	BackgroundColor string    `orm:"null;column(backgroundcolor);size(32)"`
+	ArticleColor    string    `orm:"null;column(articlecolor);size(32)"`
 	Copyright       string    `orm:"null;column(copyright);size(128)"`
 	Memo            string    `orm:"null;column(memo);size(512)"`
 	AddTime         time.Time `orm:"auto_now_add;type(datetime);column(addtime)"`
@@ -69,7 +70,7 @@ func (c *S_Site) SetName(name string) {
 	c.SiteName = name
 }
 
-func (c *S_Site) GetSiteSubtitle() string {
+func (c *S_Site) GetSubtitle() string {
 	return c.SiteSubtitle
 }
 
@@ -99,6 +100,10 @@ func (c *S_Site) SetBanner(banner string) {
 
 func (c *S_Site) GetBackgroundColor() string {
 	return c.BackgroundColor
+}
+
+func (c *S_Site) GetArticleColor() string {
+	return c.ArticleColor
 }
 
 func (c *S_Site) GetCopyright() string {

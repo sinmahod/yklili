@@ -119,6 +119,16 @@ func GetArticle(id int) (*S_Article, error) {
 	return &a, nil
 }
 
+func GetArticleByStatus(id, status int) (*S_Article, error) {
+	o := orm.NewOrm()
+	a := S_Article{Id: id, Status: status}
+	err := o.Read(&a, "Id", "Status")
+	if err != nil {
+		return &a, fmt.Errorf("文章Id[%s]不存在", id)
+	}
+	return &a, nil
+}
+
 //得到分页的菜单
 /**
 *   size    每页查询长度

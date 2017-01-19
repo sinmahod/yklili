@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>{{.Index.title}}</title>
+	<title>{{"Name" | SiteConfig}}</title>
 
 	{{template "front/include.tpl" .}}
 
 <style type="text/css">
 	body{
-	    background-color: {{.Index.backgroundcolor}};
+	    background-color: {{"BackgroundColor" | SiteConfig}};
 	}
 	h3 {
 		font-family: cursive;
@@ -17,7 +17,7 @@
 
 </head>
 <body>
-		<div class="header" style="background-image: url('{{.Index.banner}}')">
+		<div class="header" style="background-image: url('{{"Banner" | SiteConfig}}')">
 			<div class="top-header">
 				<div class="navigation">
 					<div class="top-menu">
@@ -61,8 +61,8 @@
 				<div class="clearfix"></div>
 			</div>
 			<div class="logo logotext text-center">
-				<h3>{{.Index.subtitle}}</h3>
-				<h1>{{.Index.title}}</h1>
+				<h3>{{"Subtitle" | SiteConfig}}</h3>
+				<h1>{{"Name" | SiteConfig}}</h1>
 			</div>
 		</div>
 	

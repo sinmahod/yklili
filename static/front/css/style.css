@@ -53,6 +53,10 @@ h1.heading {
 	font-weight: 600;
 	margin-top: 2em;
 }
+.lr-20 {
+	padding-right: 20px;
+	padding-left: 20px;
+}
 .top-header {
 	padding: 2em;
     position: absolute;
@@ -190,11 +194,26 @@ span.menu{
 	.header {
 	    height: 60vh;
 	}
+	.logo h1 {
+	    font-size: 4rem;
+	    letter-spacing: -1px;
+	}
+	.logo h3 {
+	    font-size: 1.8rem;
+	    line-height: 1.5em;
+	}
+	
 }
 @media only screen and (max-width: 500px) {
     .header {
         height: 40vh;
     }
+    .logo h1 {
+	    font-size: 3rem;
+	}
+	.logo h3{
+	    font-size: 1.6rem;
+	}
 }
 .logo {
 	display: table-cell;
@@ -601,25 +620,25 @@ i.date1 {
 	border-radius:50px;
 }
 .social-icons ul {
-	padding-top:2em;
+	padding-top:5px;
 	border-top:1px solid #eee;
-	margin-top:2em;
+	margin-top:5px;
 }
 .social-icons ul li {
 	display:inline-block;
 	margin:0 1em;
 }
 .social-icons ul li a{
-	width:15px;
-	height:15px;
+	width:32px;
+	height:32px;
 	background:url(../images/img-sprite.png) no-repeat -30px 0px;
 	display:inline-block;
 }
 .social-icons ul li a:hover {
 	opacity:0.5;
 }
-.social-icons ul li a.facebook {
-	background-position:-30px 0px;	
+.social-icons ul li a.xlwb {
+	background-position:-30px -15px;
 }
 .social-icons ul li a.twitter {
 	background-position:-30px -15px;	
@@ -651,20 +670,23 @@ i.date1 {
 	background-size:cover;
 	min-height:600px;
 	margin-bottom: 15px;
+    display: table;
+    width: 100%;
 }
 .middle-banner .home {
-	padding: 2em 0 8% 2em;
+	padding: 2em;
 	display: block;
     cursor: pointer;
-    position: relative;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
 }
 
 .middle-banner span {
-	padding:25% 15%;
 	color:#cab500;
 	font-size:1em;
 	letter-spacing:1px;
-	text-transform:uppercase;
 }
 .middle-banner h3 {
 	padding: 0 15%;
@@ -675,8 +697,6 @@ i.date1 {
 	line-height:1.3em;
 }
 .author-post{
-	background:#fff;
-	padding:4em 10em;
 	margin: 0 12px;
 }
 .article-text h4 {
@@ -697,10 +717,6 @@ i.date1 {
 .article-text h3 i {
 	font-family: 'Playfair Display', serif;
 	font-weight:500;
-}
-.article-text img {
-	width: 5%;
-	margin: 5% 0 5% 47.5%;
 }
 .last-banner{
 	background: url(../images/tree.jpg) no-repeat 0px 0px;
@@ -732,6 +748,7 @@ ul.categories {
 ul.categories li {
 	display:inline-block;
 	margin:0 1em 0 0;
+    line-height: 30px;
 }
 ul.categories li a {
 	color:#74797e;
@@ -864,9 +881,6 @@ ul.share li {
 /*-- responsive-design starts-here --*/
 
 @media screen and (max-width: 1366px) {
-	.logo {
-		padding-top: 20.8em;
-	}
 	a.newsmore1 {
 		font-size: 1.15em;
 	}
@@ -890,9 +904,6 @@ ul.share li {
 	}
 	.header {
 		min-height: 678px;
-	}
-	.logo {
-		padding-top: 22em;
 	}
 	.futurestory h3 {
 		width: 80%;
@@ -919,10 +930,6 @@ ul.share li {
 @media screen and (max-width: 1024px) {
 	.sb-search.sb-search-open, .no-js .sb-search {
 		width: 26%;
-	}
-	.author-post {
-		padding: 3em 5em;
-		  margin: 0 5px;
 	}
 	.article-text {
 		width: 75%;
@@ -955,9 +962,6 @@ ul.share li {
 	}
 	.header {
 		min-height: 551px;
-	}
-	.logo {
-		padding-top: 16em;
 	}
 	.col-md-12 {
 		padding: 0 5px;
@@ -1017,9 +1021,6 @@ ul.share li {
 	.logo img {
 		width:70%;
 	}
-	.logo{
-		padding-top:11em;
-	}
 	.header {		
 		min-height: 410px;
 	}
@@ -1042,9 +1043,6 @@ ul.share li {
 	}
 	.last-banner {
 		min-height: 298px;
-	}
-	.author-post {
-		padding: 2em 4em;
 	}
 	.post-by {
 		margin-bottom: 2em;
@@ -1117,9 +1115,6 @@ ul.share li {
 	}
 }
 @media screen and (max-width: 640px) {
-	.logo {
-		padding-top: 8em;
-	}
 	.header {
 		min-height: 341px;
 	}
@@ -1160,9 +1155,6 @@ ul.share li {
 	}
 	.article-text h3 {
 		font-size: 1.8em;
-	}
-	.author-post {
-		padding: 2em 3em;
 	}
 	.last-article {
 		padding: 2em 2em;
@@ -1275,9 +1267,6 @@ ul.share li {
 		font-size: 1.7em;
 		letter-spacing: 1px;
 	}
-	.author-post {
-		padding: 2em 2em;
-	}
 	.middle-banner h3 {
 		font-size: 1.6em;
 	}
@@ -1345,9 +1334,6 @@ ul.share li {
 	.sb-search.sb-search-open, .no-js .sb-search {
 		width: 76%;
 	}
-	.author-post {
-		padding: 1.5em 1em;
-	}
 	.article-text h3 {
 		font-size: 1.5em;
 		letter-spacing: 0px;
@@ -1368,9 +1354,6 @@ ul.share li {
 	.last-article h3 {
 		font-size: 1.5em;
 		margin: 1em 0;
-	}
-	.logo {
-		padding-top: 6em;
 	}
 	.header {
 		min-height: 220px;

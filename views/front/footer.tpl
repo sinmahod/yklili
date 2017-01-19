@@ -1,7 +1,7 @@
     <div class="footer">
         <div class="footer-top">
-            <h2>{{.Index.title}}</h2> 
-            <p>{{.Index.desc}}</p>
+            <h2>{{"Name" | SiteConfig}}</h2> 
+            <p>{{"Desc" | SiteConfig}}</p>
             <div class="clearfix"></div>
         </div>
         <div class="footer-bottom">
@@ -15,7 +15,7 @@
                 </ul>
             </div>
             <div class="copy-rights">
-                <p>{{.Index.copyright}} | Proudly published with  <a href="https://yklili.com" target="target_blank">YKlili</a></p>
+                <p>{{"Copyright" | SiteConfig}} | Proudly published with  <a href="https://yklili.com" target="target_blank">YKlili</a></p>
             </div>
             <div class="clearfix"></div>
         </div>

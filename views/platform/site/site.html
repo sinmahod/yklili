@@ -4,10 +4,10 @@
     padding: 0;
 }
 .profile-info-value input {
-    width: 100%;border: 0;
+    width: 100%;border: 1px solid #ffffff;
 }
 .profile-info-value textarea{
-    width: 100%;border: 0;height: 100px;
+    width: 100%;border: 1px solid #ffffff;;height: 100px;
 }
 .profile-info-name {
     width: 130px;
@@ -15,13 +15,22 @@
 .profile-info-row {
     font-size: 14px;
 }
-#colorbut {
+#colorbut ,#colorbut2 {
     width: 22px;
     height: 22px;
 }
 .input-group-addon {
     padding: 4px 6px;
     border: 1px solid #ccc !important;
+}
+textarea:hover {
+    border: 1px solid #ffb752;
+}
+.lazy {
+    border: 1px solid #fff;
+}
+.lazy:hover {
+    border: 1px solid #ffb752;
 }
 </style>
 
@@ -36,69 +45,72 @@
 <form id="form1" init-method="/data/site/InitPage?Id={{config "String" "siteid" ""}}">
 <input type="hidden" name="Id" value="${Id}" />
 <div class="row">
-    <div class="col-sm-6">
-        <div class="widget-box">
-            <div class="widget-header">
-                <h4 class="widget-title">
-                    <i class="ace-icon fa fa-bookmark"></i>
-                    基础设置
-                </h4>
+    <div class="col-sm-8">
+        <div class="profile-user-info profile-user-info-striped" style="display:none;">
+            <div class="profile-info-row">
+                <div class="profile-info-name">站点域名：</div>
+                <div class="profile-info-value">
+                    <span class="editable editable-click" id="sitehost">
+                        <input type="text" name="SiteHost" value="${SiteHost}" placeholder="请输入站点域名"/>
+                    </span>
+                </div>
             </div>
-            <div class="profile-user-info profile-user-info-striped" style="display:none;">
-                <div class="profile-info-row">
-                    <div class="profile-info-name">站点域名：</div>
-                    <div class="profile-info-value">
-                        <span class="editable editable-click" id="sitehost">
-                            <input type="text" name="SiteHost" value="${SiteHost}" placeholder="请输入站点域名"/>
+            <div class="profile-info-row">
+                <div class="profile-info-name">站点名称：</div>
+                <div class="profile-info-value">
+                    <span class="editable editable-click" id="sitename">
+                        <input type="text" name="SiteName" value="${SiteName}" placeholder="请输入站点名称"/>
+                    </span>
+                </div>
+            </div>
+            
+            <div class="profile-info-row">
+                <div class="profile-info-name">站点副标题：</div>
+                <div class="profile-info-value">
+                    <textarea name="SiteSubtitle" placeholder="请输入站点副标题">${SiteSubtitle}</textarea>
+                </div>
+            </div>
+            <div class="profile-info-row">
+                <div class="profile-info-name">站点简介：</div>
+                <div class="profile-info-value">
+                    <textarea name="SiteDesc" placeholder="请输入站点简介">${SiteDesc}</textarea>
+                </div>
+            </div>
+            <div class="profile-info-row">
+                <div class="profile-info-name">主背景色：</div>
+                <div class="profile-info-value">
+                    <div class="input-group">
+                        <input class="form-control input-mask-date" value="${BackgroundColor}" name="BackgroundColor" type="text" id="BackgroundColor">
+                        <span class="input-group-addon">
+                            <i class="fa" id="colorbut" style="background-color: ${BackgroundColor}"></i>
                         </span>
                     </div>
                 </div>
-                <div class="profile-info-row">
-                    <div class="profile-info-name">站点名称：</div>
-                    <div class="profile-info-value">
-                        <span class="editable editable-click" id="sitename">
-                            <input type="text" name="SiteName" value="${SiteName}" placeholder="请输入站点名称"/>
+            </div>
+            <div class="profile-info-row">
+                <div class="profile-info-name">文章背景色：</div>
+                <div class="profile-info-value">
+                    <div class="input-group">
+                        <input class="form-control input-mask-date" value="${ArticleColor}" name="ArticleColor" type="text" id="ArticleColor">
+                        <span class="input-group-addon">
+                            <i class="fa" id="colorbut2" style="background-color: ${ArticleColor}"></i>
                         </span>
                     </div>
                 </div>
-                
-                <div class="profile-info-row">
-                    <div class="profile-info-name">站点副标题：</div>
-                    <div class="profile-info-value">
-                        <textarea name="SiteSubtitle" placeholder="请输入站点副标题">${SiteSubtitle}</textarea>
-                    </div>
+            </div>
+            <div class="profile-info-row">
+                <div class="profile-info-name">版权信息：</div>
+                <div class="profile-info-value">
+                    <span class="editable editable-click" id="sitename">
+                        <input type="text" name="Copyright" value="${Copyright}" placeholder="请输入版权信息"/>
+                    </span>
                 </div>
-                <div class="profile-info-row">
-                    <div class="profile-info-name">站点简介：</div>
-                    <div class="profile-info-value">
-                        <textarea name="SiteDesc" placeholder="请输入站点简介">${SiteDesc}</textarea>
-                    </div>
-                </div>
-                <div class="profile-info-row">
-                    <div class="profile-info-name">背景颜色：</div>
-                    <div class="profile-info-value">
-                        <div class="input-group">
-                            <input class="form-control input-mask-date" value="${BackgroundColor}" name="BackgroundColor" type="text" id="BackgroundColor">
-                            <span class="input-group-addon">
-                                <i class="fa" id="colorbut" style="background-color: ${BackgroundColor}"></i>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <div class="profile-info-row">
-                    <div class="profile-info-name">版权信息：</div>
-                    <div class="profile-info-value">
-                        <span class="editable editable-click" id="sitename">
-                            <input type="text" name="Copyright" value="${Copyright}" placeholder="请输入版权信息"/>
-                        </span>
-                    </div>
-                </div>
-                <div class="profile-info-row">
-                    <div class="profile-info-name">首页Banner：</div>
-                    <div class="profile-info-value">
-                        <div id="logoimage" class="wu-example">
-                            <img id="SiteBanner" src="" lazy-src="${SiteBanner}" style="max-height: 200px;" onerror="this.src='/static/front/images/banner.jpg'" class="img-responsive lazy">
-                        </div>
+            </div>
+            <div class="profile-info-row">
+                <div class="profile-info-name">首页Banner：</div>
+                <div class="profile-info-value">
+                    <div id="logoimage" class="wu-example">
+                        <img id="SiteBanner" src="" lazy-src="${SiteBanner}" style="max-height: 250px;" onerror="this.src='/static/front/images/banner.jpg'" class="img-responsive lazy">
                     </div>
                 </div>
             </div>
@@ -125,6 +137,16 @@
                         }
                         
                         $('#BackgroundColor').val(rgb);
+                        $(this).css("background-color", rgb);
+                    });
+                    $('#colorbut2').colorpicker().on('changeColor', function(ev){
+                        var r = ev.color.toRGB();
+                        var rgb = 'rgba('+r['r']+','+r['g']+','+r['b']+','+r['a']+')';
+                        if (r['a']==1){
+                            rgb = ev.color.toHex();
+                        }
+                        
+                        $('#ArticleColor').val(rgb);
                         $(this).css("background-color", rgb);
                     });
                     $('#logoimage').on('click', function(){
