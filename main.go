@@ -33,6 +33,7 @@ func main() {
 	models := map[string]beego.ControllerInterface{
 		"system":  &data.SystemController{},
 		"site":    &data.SiteController{},
+		"catalog": &data.CatalogController{},
 		"menu":    &data.MenuController{},
 		"user":    &data.UserController{},
 		"cron":    &data.CronController{},

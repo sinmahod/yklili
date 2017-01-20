@@ -1,6 +1,7 @@
 package data
 
 import (
+	"beegostudy/conf"
 	"beegostudy/models"
 	"beegostudy/models/orm"
 	"beegostudy/util/numberutil"
@@ -69,6 +70,7 @@ func (c *SiteController) Save() {
 				beego.Error(err)
 				c.fail("操作失败，数据修改时出现错误")
 			} else {
+				conf.Reload()
 				c.success("操作成功")
 			}
 		}

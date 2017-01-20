@@ -4,11 +4,11 @@
     <title>{{.Article.Title}}--{{"Name" | SiteConfig}}</title>
     
     {{template "front/include.tpl" .}}
-
+<link rel="stylesheet" href="static/front/css/BackToTop.jquery.css" />
 <link rel="stylesheet" href="static/editor.md/css/editormd.min.css" />
 <style type="text/css">
     .author-post {
-        background: {{"ArticleColor" | SiteConfig}};
+        background-color: {{"ArticleColor" | SiteConfig}};
     }
     .markdown-body pre code {
         white-space: pre;
@@ -22,6 +22,9 @@
     }
     li.L1, li.L3, li.L5, li.L7, li.L9 {
         background: inherit;
+    }
+    #qrcode canvas {
+        border: 5px solid #fff;
     }
 </style>
 </head>
@@ -58,7 +61,7 @@
         <div class="col-md-2"></div>
         <div class="col-md-12 text-center">
             <div id="qrcode"></div>
-            <h3>扫描二维码观看本页</h3>
+            <h3 style="color: #fff;">扫描二维码观看本页</h3>
         </div>
         <div class="col-md-4"></div>
         <div class="col-md-4 post-by text-center">
@@ -80,6 +83,7 @@
 <script src="static/editor.md/lib/prettify.min.js"></script>
 <script src="static/editor.md/lib/underscore.min.js"></script>
 <script src="static/js/jquery.qrcode.min.js"></script>
+<script src="static/front/js/BackToTop.min.jquery.js"></script>
 <script>
 jQuery(function($) {
     editormd.markdownToHTML("contentHtml", {
@@ -90,7 +94,18 @@ jQuery(function($) {
         tex             : true,  // 默认不解析
         flowChart       : false,  // 默认不解析
     });
-    $('#qrcode').qrcode(window.location.href)
+    $('#qrcode').qrcode(window.location.href);
+     //Top
+    BackToTop({
+        text : '▲',
+        autoShow : true,
+        appearMethod : 'liji',
+        timeEffect : 500,
+        effectScroll :  'linear',
+        autoShowOffset :  '0',
+        opacity :  1,
+        top :  100
+    });
 }); 
 </script>
 </body>

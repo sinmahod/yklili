@@ -13,6 +13,9 @@
         <!-- jquery gritter -->
         <link rel="stylesheet" href="/static/css/jquery.gritter.min.css" />
 
+        <!-- colorpicker -->
+        <link rel="stylesheet" href="/static/css/bootstrap-colorpicker.min.css" />
+
         <!-- image view -->
         <link rel="stylesheet" href="/static/css/colorbox.min.css" />
 

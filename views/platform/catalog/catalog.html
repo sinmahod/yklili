@@ -1,0 +1,82 @@
+<style type="text/css">
+    .ui-icon-triangle-1-s {
+        background-image: inherit;
+        background-position: -64px -16px;
+    }
+    .ui-accordion .ui-accordion-header {
+        padding: 5px;
+        font-weight: initial;
+    }
+    input {
+        font-weight: initial;
+    }
+    .w-30{
+        width: 20%;
+    }
+    .w-60 {
+        width: 60%;
+    }
+    .arrows {
+         cursor:move;
+    }
+</style>
+<div class="page-header">
+    <button class="btn btn-info btn-success" id='savebut'>
+        <i class="ace-icon fa fa-rocket bigger-125"></i>
+        <span class="bigger-115 no-text-shadow">保存</span>
+    </button>
+</div><!-- /.page-header -->
+
+<div class="bottom-border"></div>
+<div class="col-sm-12">
+    <div id="accordion" class="accordion-style2">
+
+        <div class="group"><input type="hidden" class="orderflag" value="1"/>
+            <div class="accordion-header"><i class="ace-icon fa fa-arrows bigger-125 arrows"></i>
+                <input class="w-30" data-placement="bottom" value="" type="text" placeholder="请输入用户名称" name="UserName" id="UserName" data-bv-field="UserName">
+                <input class="w-60" data-placement="bottom" value="" type="text" placeholder="请输入用户名称" name="UserName" id="UserName" data-bv-field="UserName">
+            </div>
+        </div>
+
+        <div class="group"><input type="hidden" class="orderflag" value="1"/>
+            <div class="accordion-header"><i class="ace-icon fa fa-arrows bigger-125 arrows"></i>
+                <input data-placement="bottom" value="" type="text" placeholder="请输入用户名称" name="UserName" id="UserName" data-bv-field="UserName">
+                <input data-placement="bottom" value="" type="text" placeholder="请输入用户名称" name="UserName" id="UserName" data-bv-field="UserName">
+            </div>
+        </div>
+
+    </div><!-- #accordion -->
+</div><!-- ./span -->
+
+<script type="text/javascript">
+    jQuery(function($) {
+        var icon = {
+          header: "ace-icon fa fa-arrows",
+          activeHeader: "ace-icon fa fa-arrows"
+        };
+        //jquery accordion
+        $( "#accordion" ).accordion({
+            collapsible: false ,
+            heightStyle: "content",
+            animate: 250,
+            icons: null,
+            header: ".accordion-header"
+        }).sortable({
+            axis: "y",
+            handle: ".accordion-header",
+            stop: function( event, ui ) {
+                ui.item.children( ".accordion-header" ).triggerHandler( "focusout" );
+            }
+        });
+
+        $('#savebut').on('click',function(){
+            test();
+        })
+    });
+
+    function test(){
+        $('.aa').each(function(i,d){
+            
+        });
+    }
+</script>

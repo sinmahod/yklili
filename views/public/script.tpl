@@ -38,6 +38,8 @@
         <script src="/static/js/jquery.lazyload.js"></script>
         <script src="/static/js/jquery.colorbox.js"></script>
 
+        <!-- colorpicker -->
+        <script src="/static/js/bootstrap-colorpicker.min.js"></script>
         <!-- ace scripts -->
         <script src="/static/js/ace-elements.min.js"></script>
         <script src="/static/js/ace.min.js"></script>
