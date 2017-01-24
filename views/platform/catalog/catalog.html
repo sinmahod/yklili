@@ -57,7 +57,7 @@
         <i class="ace-icon fa fa-rocket bigger-125"></i>
         <span class="bigger-115 no-text-shadow">保存</span>
     </button>
-    <button class="btn btn-sm btn-info btn-primary" id='newbut'>
+    <button class="btn btn-sm btn-info btn-primary" id='addbut'>
         <i class="ace-icon fa fa-plus bigger-125"></i>
         <span class="bigger-115 no-text-shadow">新增</span>
     </button>
@@ -66,60 +66,7 @@
 <div class="bottom-border"></div>
     <div id="accordion" class="accordion-style2">
 
-        <div class="group" style="display: flex;">
-            <input type="hidden" class="orderflag" value="1"/>
-            <div class="accordion-header">
-                <i class="ace-icon fa fa-arrows bigger-125 arrows"></i>
-            </div><div class="hidediv"></div>
-            <div class="divgroup">
-            <input data-placement="bottom" value="" type="text" placeholder="请输入栏目名称" name="UserName" id="UserName" data-bv-field="UserName">
-            </div>
-            <div class="divgroupright">
-                <input class="w-60" data-placement="bottom" value="" type="text" placeholder="请输入栏目链接" name="UserName" id="UserName" data-bv-field="UserName">
-            </div>
-            <div class="remove">
-                <i class="ace-icon fa fa-remove bigger-150 arrows"></i>
-            </div>
-        </div>
-
-        <div class="group" style="display: flex;">
-            <input type="hidden" class="orderflag" value="1"/>
-            <div class="accordion-header">
-                <i class="ace-icon fa fa-arrows bigger-125 arrows"></i>
-            </div><div class="hidediv"></div>
-            <div class="divgroup">
-            <input data-placement="bottom" value="" type="text" placeholder="请输入用户名称" name="UserName" id="UserName" data-bv-field="UserName">
-            </div>
-            <div class="divgroupright">
-                <input class="w-60" data-placement="bottom" value="" type="text" placeholder="请输入用户名称" name="UserName" id="UserName" data-bv-field="UserName">
-            </div>
-            <div class="remove">
-                <i class="ace-icon fa fa-remove bigger-150 arrows"></i>
-            </div>
-        </div>
-
-        <div class="group" style="display: flex;">
-            <input type="hidden" class="orderflag" value="1"/>
-            <div class="accordion-header">
-                <i class="ace-icon fa fa-arrows bigger-125 arrows"></i>
-            </div><div class="hidediv"></div>
-            <div class="divgroup">
-            <input data-placement="bottom" value="" type="text" placeholder="请输入用户名称" name="UserName" id="UserName" data-bv-field="UserName">
-            </div>
-            <div class="divgroupright">
-                <input class="w-60" data-placement="bottom" value="" type="text" placeholder="请输入用户名称" name="UserName" id="UserName" data-bv-field="UserName">
-            </div>
-            <div class="remove">
-                <i class="ace-icon fa fa-remove bigger-150 arrows"></i>
-            </div>
-        </div>
-
-       <!--  <div class="group"><input type="hidden" class="orderflag" value="1"/>
-            <div class="accordion-header"><i class="ace-icon fa fa-arrows bigger-125 arrows"></i>
-                <input data-placement="bottom" value="" type="text" placeholder="请输入用户名称" name="UserName" id="UserName" data-bv-field="UserName">
-                <input data-placement="bottom" value="" type="text" placeholder="请输入用户名称" name="UserName" id="UserName" data-bv-field="UserName">
-            </div>
-        </div> -->
+       
 
     </div><!-- #accordion -->
 
@@ -145,13 +92,27 @@
         });
 
         $('#savebut').on('click',function(){
-            test();
-        })
+            var data = {};
+            $("input[name='CatalogName']").each(function(i,d){
+                data[i] = {"CatalogName" : $(d).val()};
+            });
+            $("input[name='CatalogLink']").each(function(i,d){
+                data[i]["CatalogLink"] = $(d).val();
+            });
+            SendData.Post('/data/catalog/Save',data,function(response){
+                BootFrame.gritter(response.MESSAGE);
+            });
+        });
+
+
+        $('#addbut').on('click',function(){
+            var html = '<div class="group" style="display: flex;"><input type="hidden" class="orderflag" value="0"><div class="accordion-header ui-accordion-header ui-state-default ui-sortable-handle ui-corner-all" role="tab" id="ui-id-1" aria-controls="ui-id-2" aria-selected="false" aria-expanded="false" tabindex="-1"><i class="ace-icon fa fa-arrows bigger-125 arrows"></i></div><div class="hidediv ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom" id="ui-id-2" aria-labelledby="ui-id-1" role="tabpanel" style="display: none;" aria-hidden="true"></div><div class="divgroup"><input data-placement="bottom" value="" type="text" placeholder="请输入栏目名称" name="CatalogName" id="CatalogName" data-bv-field="CatalogName"></div><div class="divgroupright"><input class="w-60" data-placement="bottom" value="" type="text" placeholder="请输入栏目链接" name="CatalogLink" id="CatalogLink" data-bv-field="CatalogLink"></div><div class="remove"><i class="ace-icon fa fa-remove bigger-150 arrows" onclick="delline(this);"></i></div></div>';
+            $('#accordion').append(html);
+        });
     });
 
-    function test(){
-        $('.aa').each(function(i,d){
-            
-        });
+    function delline(ele){
+        $(ele).parent().parent('.group').remove();
     }
+
 </script>

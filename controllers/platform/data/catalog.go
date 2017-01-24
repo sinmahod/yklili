@@ -97,12 +97,12 @@ func (c *CatalogController) Save() {
 				tran.Add(catalog, orm.UPDATE)
 			}
 
-			if err = tran.Commit(); err != nil {
-				beego.Error(err)
-				c.fail("操作失败，数据修改时出现错误")
-			} else {
-				c.success("操作成功")
-			}
+			//if err = tran.Commit(); err != nil {
+			beego.Error(err)
+			c.fail("操作失败，数据修改时出现错误")
+			//} else {
+			c.success("操作成功")
+			//}
 		}
 	} else {
 		c.fail("操作失败，传递参数为空")
