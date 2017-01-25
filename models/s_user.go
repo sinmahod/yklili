@@ -35,8 +35,8 @@ type S_User struct {
 	Phone      string    `orm:"null;column(phone);size(32)"`
 	AddTime    time.Time `orm:"auto_now_add;type(datetime);column(addtime)"`
 	AddUser    string    `orm:"column(adduser);size(64)"`
-	ModifyTime time.Time `orm:"type(datetime);column(modifytime)"`
-	ModifyUser string    `orm:"column(modifyuser);size(64)"`
+	ModifyTime time.Time `orm:"null;type(datetime);column(modifytime)"`
+	ModifyUser string    `orm:"null;column(modifyuser);size(64)"`
 }
 
 //自定义表名

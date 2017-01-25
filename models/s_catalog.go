@@ -34,11 +34,11 @@ type S_Catalog struct {
 	Link        string       `orm:"null;column(link);size(256)"`
 	InnerCode   string       `orm:"column(innercode);size(128)"`
 	Level       int          `orm:"column(level)"`
-	OrderFlag   int          `orm:"column(orderflag)"`
+	PreviousId  int          `orm:"column(previousid)"`
 	AddTime     time.Time    `orm:"auto_now_add;type(datetime);column(addtime)"`
 	AddUser     string       `orm:"column(adduser)"`
-	ModifyTime  time.Time    `orm:"type(datetime);column(modifytime)"`
-	ModifyUser  string       `orm:"column(modifyuser);size(64)"`
+	ModifyTime  time.Time    `orm:"null;type(datetime);column(modifytime)"`
+	ModifyUser  string       `orm:"null;column(modifyuser);size(64)"`
 	Checked     bool         `orm:"-"`
 	Expanded    bool         `orm:"-"`
 	ChildNode   []*S_Catalog `orm:"-"`
@@ -68,8 +68,20 @@ func (c *S_Catalog) GetPid() int {
 	return c.Pid
 }
 
+func (c *S_Catalog) GetCatalogName() string {
+	return c.CatalogName
+}
+
+func (c *S_Catalog) GetLink() string {
+	return c.Link
+}
+
 func (c *S_Catalog) SetLevel(l int) {
 	c.Level = l
+}
+
+func (c *S_Catalog) GetLevel() int {
+	return c.Level
 }
 
 func (c *S_Catalog) SetInnerCode(code string) {
@@ -78,6 +90,10 @@ func (c *S_Catalog) SetInnerCode(code string) {
 
 func (c *S_Catalog) GetInnerCode() string {
 	return c.InnerCode
+}
+
+func (c *S_Catalog) SetPreviousId(preid int) {
+	c.PreviousId = preid
 }
 
 //是否为叶子节点
@@ -170,11 +186,22 @@ func GetCatalogInnerCode(id int) string {
 	return c.InnerCode
 }
 
+func GetPreviousId(level int) int {
+	o := orm.NewOrm()
+	var c S_Catalog
+	err := o.Raw("select max(id) id from s_catalog where level = ?", level).QueryRow(&c)
+	if err == orm.ErrNoRows {
+		// 没有找到记录
+		return 0
+	}
+	return c.Id
+}
+
 //得到所有的栏目
 func GetCatalogs() ([]*S_Catalog, error) {
 	var cs []*S_Catalog
 	o := orm.NewOrm()
-	_, err := o.QueryTable("s_catalog").OrderBy("orderflag").All(&cs)
+	_, err := o.QueryTable("s_catalog").OrderBy("previousid").All(&cs)
 	return cs, err
 }
 
@@ -221,7 +248,7 @@ func GetCatalogsLevel(url string) ([]*S_Catalog, error) {
 **/
 func GetCatalogsPage(size, index int, ordercolumn, orderby string) (*DataGrid, error) {
 	if ordercolumn == "" {
-		ordercolumn = "orderflag"
+		ordercolumn = "previousid"
 	} else if strings.EqualFold(orderby, "desc") {
 		ordercolumn = "-" + ordercolumn
 	}
@@ -252,6 +279,8 @@ func GetCatalogsPage(size, index int, ordercolumn, orderby string) (*DataGrid, e
 			}
 		}
 
+		fmt.Println(tempcs)
+
 		return GetDataGrid(tempcs, index, int(pagetotal), cnt), err
 	}
 
@@ -262,7 +291,7 @@ func GetCatalogsPage(size, index int, ordercolumn, orderby string) (*DataGrid, e
 func GetCatalogsByLevel(level int) ([]*S_Catalog, error) {
 	var cs []*S_Catalog
 	o := orm.NewOrm()
-	_, err := o.QueryTable("s_catalog").Filter("Level", level).OrderBy("orderflag").All(&cs)
+	_, err := o.QueryTable("s_catalog").Filter("Level", level).OrderBy("previousid").All(&cs)
 	return cs, err
 }
 

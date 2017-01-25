@@ -37,8 +37,8 @@ type S_Menu struct {
 	OrderFlag  int       `orm:"column(orderflag)"`
 	AddTime    time.Time `orm:"auto_now_add;type(datetime);column(addtime)"`
 	AddUser    string    `orm:"column(adduser)"`
-	ModifyTime time.Time `orm:"type(datetime);column(modifytime)"`
-	ModifyUser string    `orm:"column(modifyuser);size(64)"`
+	ModifyTime time.Time `orm:"null;type(datetime);column(modifytime)"`
+	ModifyUser string    `orm:"null;column(modifyuser);size(64)"`
 	Checked    bool      `orm:"-"`
 	Expanded   bool      `orm:"-"`
 	ChildNode  []*S_Menu `orm:"-"`

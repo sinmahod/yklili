@@ -24,23 +24,6 @@ func (c *CatalogController) List() {
 
 //修改/新建初始化
 func (c *CatalogController) InitPage() {
-	var cs []models.CatalogSelectInit
-
-	if numberutil.IsNumber(c.RequestData["Id"]) {
-		id := numberutil.Atoi(c.RequestData["Id"])
-
-		catalog, err := models.GetCatalog(id)
-		if err != nil {
-			beego.Error(err)
-			return
-		}
-		c.Data["Catalog"] = catalog
-
-		cs, _ = models.GetTopCatalogs(catalog.GetPid(), id)
-	} else {
-		cs, _ = models.GetTopCatalogs(0, 0)
-	}
-	c.Data["ParentCatalogs"] = cs
 	c.TplName = "platform/catalog/catalogDialog.html"
 	c.addScript()
 }
@@ -74,6 +57,7 @@ func (c *CatalogController) Save() {
 					catalog.SetLevel(2)
 					catalog.SetInnerCode(models.GetMaxNo("catalog", models.GetCatalogInnerCode(pid), 4))
 				}
+				catalog.SetPreviousId(models.GetPreviousId(catalog.GetLevel()))
 				catalog.SetId(models.GetMaxId("S_CatalogID"))
 				catalog.SetAddUser(sysuser.GetUserName())
 				tran.Add(catalog, orm.INSERT)
@@ -82,7 +66,7 @@ func (c *CatalogController) Save() {
 					if pid != 0 {
 						//如果不是叶子节点则不允许改变父级ID
 						if !catalog.GetIsLeaf() {
-							c.fail("操作失败，当前菜单存在子级菜单，请先清空子级菜单")
+							c.fail("操作失败，当前栏目存在子级栏目，请先清空子级栏目")
 							goto END
 						}
 						catalog.SetLevel(2)
@@ -97,12 +81,14 @@ func (c *CatalogController) Save() {
 				tran.Add(catalog, orm.UPDATE)
 			}
 
-			//if err = tran.Commit(); err != nil {
-			beego.Error(err)
-			c.fail("操作失败，数据修改时出现错误")
-			//} else {
-			c.success("操作成功")
-			//}
+			if err = tran.Commit(); err != nil {
+				beego.Error(err)
+				c.fail("操作失败，数据修改时出现错误")
+			} else {
+				c.put("CatalogName", catalog.GetCatalogName())
+				c.put("Link", catalog.GetLink())
+				c.success("操作成功")
+			}
 		}
 	} else {
 		c.fail("操作失败，传递参数为空")
