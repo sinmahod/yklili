@@ -16,7 +16,7 @@
         height: 35px;
     }
     .divgroup {
-        padding: 4px;
+        padding: 12px;
         border-right-width: 0 ;
         border: 1px solid #CDD8E3;
         width: 30%;
@@ -70,64 +70,65 @@
 <div class="bottom-border"></div>
 <div id="accordion" class="accordion-style2" list="true" dataurl="/data/catalog/List" page="true" size="100" ></div><!-- #accordion -->
 
-<div class="profile-user-info profile-user-info-striped">
-    <div class="profile-info-row">
-        <div class="profile-info-name"> Username </div>
-
-        <div class="profile-info-value">
-            <span class="editable" id="username">alexdoe</span>
-        </div>
-    </div>
-    <div class="profile-info-row">
-        <div class="profile-info-name"> Location </div>
-
-        <div class="profile-info-value">
-            <i class="fa fa-map-marker light-orange bigger-110"></i>
-            <span class="editable" id="country">Netherlands</span>
-            <span class="editable" id="city">Amsterdam</span>
-        </div>
-    </div>
-
-    <div class="profile-info-row">
-        <div class="profile-info-name"> Age </div>
-
-        <div class="profile-info-value">
-            <span class="editable" id="age">38</span>
-        </div>
-    </div>
-
-</div>
-
  <!-- edittable -->
-<script src="/static/js/bootstrap-editable.min.js"></script>
-<script src="/static/js/ace-editable.min.js"></script>
 <script type="text/javascript">
     jQuery(function($) {
-        $.fn.editable.defaults.mode = 'inline';
-        $.fn.editableform.loading = "<div class='editableform-loading'><i class='ace-icon fa fa-spinner fa-spin fa-2x light-blue'></i></div>";
-        $.fn.editableform.buttons = '<button type="submit" class="btn btn-info editable-submit"><i class="ace-icon fa fa-check"></i></button>'+
-                                    '<button type="button" class="btn editable-cancel"><i class="ace-icon fa fa-times"></i></button>';    
-                
-        $('#username').editable({
-            type: 'text',
-            name: 'username',
-            success: function(response, newValue) {
-                alert(newValue);
-            }
+        jQuery.getScript("/static/js/bootstrap-editable.min.js",function(){
+            jQuery.getScript("/static/js/ace-editable.min.js",function(){
+                $.fn.editable.defaults.mode = 'inline';
+                $.fn.editableform.loading = "<div class='editableform-loading'><i class='ace-icon fa fa-spinner fa-spin fa-2x light-blue'></i></div>";
+                $.fn.editableform.buttons = '<button type="submit" class="btn btn-info editable-submit"><i class="ace-icon fa fa-check"></i></button>'+
+                                            '<button type="button" class="btn editable-cancel"><i class="ace-icon fa fa-times"></i></button>';  
+                DataList({
+                    list: "accordion",
+                    html: '<div class="group" style="display: flex;">'+
+                            '<input type="hidden" class="orderflag" value="0">'+
+                            '<div class="accordion-header ui-accordion-header ui-state-default ui-sortable-handle ui-corner-all" role="tab" id="ui-id-1" aria-controls="ui-id-2" aria-selected="false" aria-expanded="false" tabindex="-1">'+
+                                '<i class="ace-icon fa fa-arrows bigger-125 arrows"></i>'+
+                            '</div>'+
+                            '<div class="hidediv ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom" id="ui-id-2" aria-labelledby="ui-id-1" role="tabpanel" style="display: none;" aria-hidden="true"></div>'+
+                            '<div class="divgroup">'+
+                                '<span class="CatalogName" val="${Id}">${CatalogName}</span>'+
+                            '</div>'+
+                            '<div class="divgroupright">'+
+                                '<input class="w-60" data-placement="bottom" value="${Link}" type="text" placeholder="请输入栏目链接" name="Link" id="Link" data-bv-field="Link">'+
+                            '</div>'+
+                            '<div class="remove">'+
+                                '<i class="ace-icon fa fa-remove bigger-150 arrows" onclick="delline(this);"></i>'+
+                            '</div>'+
+                        '</div>',
+                    fn: function(){
+                        $('.CatalogName').editable({
+                            type: 'text',
+                            url: '/data/catalog/Save',
+                            pk: 1,
+                            params: function(e){
+                                var params = {};
+                                params['Id'] = $(this).attr('val');
+                                params['CatalogName'] = e['value'];
+                                return params;
+                            },
+                            validate: function(value) {
+                                if($.trim(value) == '') {
+                                    return '内容不可为空';
+                                }
+                            },
+                            success: function(response, newValue) {
+                                if (response.STATUS == 1){
+                                    BootFrame.gritter(response.MESSAGE);
+                                    return true;
+                                }else{
+                                    BootFrame.alert(response.MESSAGE,null,"操作失败",true);
+                                    return false;
+                                }
+                            }
+                        });
+                    }
+                });  
+            });
+
         });
-
-
-        $('#age').editable({
-            type: 'text',
-            name : 'age',
-            spinner : {
-                min : 16,
-                max : 99,
-                step: 1,
-                on_sides: true
-            }
-        });
-
+        
         var icon = {
           header: "ace-icon fa fa-arrows",
           activeHeader: "ace-icon fa fa-arrows"
@@ -170,10 +171,7 @@
             bf.show();
         });
 
-        DataList({
-            list: "accordion",
-            html: '<div class="group" style="display: flex;"><input type="hidden" class="orderflag" value="0"><div class="accordion-header ui-accordion-header ui-state-default ui-sortable-handle ui-corner-all" role="tab" id="ui-id-1" aria-controls="ui-id-2" aria-selected="false" aria-expanded="false" tabindex="-1"><i class="ace-icon fa fa-arrows bigger-125 arrows"></i></div><div class="hidediv ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom" id="ui-id-2" aria-labelledby="ui-id-1" role="tabpanel" style="display: none;" aria-hidden="true"></div><div class="divgroup"><span id="CatalogName">${CatalogName}</span></div><div class="divgroupright"><input class="w-60" data-placement="bottom" value="${Link}" type="text" placeholder="请输入栏目链接" name="Link" id="Link" data-bv-field="Link"></div><div class="remove"><i class="ace-icon fa fa-remove bigger-150 arrows" onclick="delline(this);"></i></div></div>'
-        });
+        
     });
 
     function save(bf,but){ //默认接收两个参数，1 BootFrame ，2 当前按钮
@@ -185,8 +183,31 @@
         SendData.Post("/data/catalog/Save",bf.getFormData(),function(response){
             if ( response.STATUS==1){
                 bf.close();
-                var html = '<div class="group" style="display: flex;"><input type="hidden" class="orderflag" value="0"><div class="accordion-header ui-accordion-header ui-state-default ui-sortable-handle ui-corner-all" role="tab" id="ui-id-1" aria-controls="ui-id-2" aria-selected="false" aria-expanded="false" tabindex="-1"><i class="ace-icon fa fa-arrows bigger-125 arrows"></i></div><div class="hidediv ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom" id="ui-id-2" aria-labelledby="ui-id-1" role="tabpanel" style="display: none;" aria-hidden="true"></div><div class="divgroup"><input data-placement="bottom" value="'+response.CatalogName+'" type="text" placeholder="请输入栏目名称" name="CatalogName" id="CatalogName" data-bv-field="CatalogName"></div><div class="divgroupright"><input class="w-60" data-placement="bottom" value="'+response.Link+'" type="text" placeholder="请输入栏目链接" name="Link" id="Link" data-bv-field="Link"></div><div class="remove"><i class="ace-icon fa fa-remove bigger-150 arrows" onclick="delline(this);"></i></div></div>';
+                var html = '<div class="group" style="display: flex;">'+
+                            '<input type="hidden" class="orderflag" value="0">'+
+                            '<div class="accordion-header ui-accordion-header ui-state-default ui-sortable-handle ui-corner-all" role="tab" id="ui-id-1" aria-controls="ui-id-2" aria-selected="false" aria-expanded="false" tabindex="-1">'+
+                                '<i class="ace-icon fa fa-arrows bigger-125 arrows"></i>'+
+                            '</div>'+
+                            '<div class="hidediv ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom" id="ui-id-2" aria-labelledby="ui-id-1" role="tabpanel" style="display: none;" aria-hidden="true"></div>'+
+                            '<div class="divgroup">'+
+                                '<span class="CatalogName">'+response.CatalogName+'</span>'+
+                            '</div>'+
+                            '<div class="divgroupright">'+
+                                '<input class="w-60" data-placement="bottom" value="'+response.Link+'" type="text" placeholder="请输入栏目链接" name="Link" id="Link" data-bv-field="Link">'+
+                            '</div>'+
+                            '<div class="remove">'+
+                                '<i class="ace-icon fa fa-remove bigger-150 arrows" onclick="delline(this);"></i>'+
+                            '</div>'+
+                        '</div>';
+                        
                 $('#accordion').append(html);
+                $('.CatalogName').editable({
+                    type: 'text',
+                    name: 'username',
+                    success: function(response, newValue) {
+                        alert(newValue);
+                    }
+                });
             }else{
                 BootFrame.alert(response.MESSAGE,function(){
                     but.enable();   //解除按钮点击
