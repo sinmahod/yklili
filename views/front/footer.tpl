@@ -6,12 +6,7 @@
         </div>
         <div class="footer-bottom">
             <div class="bottom-menu">
-                <ul>
-                    <li><a href="#">News</a></li>
-                    <li><a href="#">gallery</a></li>
-                    <li><a href="#">blog</a></li>
-                    <li><a href="#">about</a></li>
-                    <li><a href="#">contacts</a></li>
+                 <ul id="list3" dataurl="/catalog/List?Status=1" page="false">
                 </ul>
             </div>
             <div class="copy-rights">

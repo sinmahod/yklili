@@ -10,6 +10,7 @@ func init() {
 	//数据控制器
 	models := map[string]beego.ControllerInterface{
 		"article": &front.ArticleController{},
+		"catalog": &front.CatalogController{},
 	}
 
 	for name, controller := range models {

@@ -96,6 +96,10 @@ func (c *S_Catalog) SetPreviousId(preid int) {
 	c.PreviousId = preid
 }
 
+func (c *S_Catalog) GetPreviousId() int {
+	return c.PreviousId
+}
+
 //是否为叶子节点
 func (c *S_Catalog) GetIsLeaf() bool {
 	o := orm.NewOrm()
@@ -201,8 +205,32 @@ func GetPreviousId(level int) int {
 func GetCatalogs() ([]*S_Catalog, error) {
 	var cs []*S_Catalog
 	o := orm.NewOrm()
-	_, err := o.QueryTable("s_catalog").OrderBy("previousid").All(&cs)
+	_, err := o.QueryTable("s_catalog").OrderBy("-previousid").All(&cs)
+	mp := make(map[int]*S_Catalog)
+	for _, c := range cs {
+		mp[c.PreviousId] = c
+	}
+	var pid = 0
+	for i := 0; i < len(cs); i++ {
+		if c, ok := mp[pid]; !ok {
+			return cs[:i], err
+		} else {
+			cs[i] = c
+			pid = c.Id
+		}
+	}
 	return cs, err
+}
+
+//修改PreviousId，从id1改为id2
+func GetCatalogByPrevId(id int) *S_Catalog {
+	o := orm.NewOrm()
+	var c S_Catalog
+	err := o.Raw("select * from s_catalog where previousid = ?", id).QueryRow(&c)
+	if err == orm.ErrNoRows {
+		return nil
+	}
+	return &c
 }
 
 //得到所有栏目并按级别排序
@@ -248,14 +276,30 @@ func GetCatalogsLevel(url string) ([]*S_Catalog, error) {
 **/
 func GetCatalogsPage(size, index int, ordercolumn, orderby string) (*DataGrid, error) {
 	if ordercolumn == "" {
+		ordercolumn = "-previousid"
+	} else if strings.EqualFold(orderby, "asc") {
 		ordercolumn = "previousid"
-	} else if strings.EqualFold(orderby, "desc") {
-		ordercolumn = "-" + ordercolumn
 	}
 	var cs []*S_Catalog
 	o := orm.NewOrm()
 	_, err := o.QueryTable("s_catalog").OrderBy(ordercolumn).Limit(size, (index-1)*size).All(&cs)
 	if err == nil {
+
+		mp := make(map[int]*S_Catalog)
+		for _, c := range cs {
+			mp[c.PreviousId] = c
+		}
+		var pid = 0
+		for i := 0; i < len(cs); i++ {
+			if c, ok := mp[pid]; !ok {
+				cs = cs[:i]
+				break
+			} else {
+				cs[i] = c
+				pid = c.Id
+			}
+		}
+
 		cnt, err := o.QueryTable("s_catalog").Count()
 		pagetotal := cnt / int64(size)
 		if cnt%int64(size) > 0 {
@@ -278,8 +322,6 @@ func GetCatalogsPage(size, index int, ordercolumn, orderby string) (*DataGrid, e
 				}
 			}
 		}
-
-		fmt.Println(tempcs)
 
 		return GetDataGrid(tempcs, index, int(pagetotal), cnt), err
 	}

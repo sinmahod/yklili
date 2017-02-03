@@ -97,18 +97,69 @@ END:
 	c.ServeJSON()
 }
 
+func (c *CatalogController) Sort() {
+	id, err := c.GetInt("Id")
+	pid, err := c.GetInt("Pid")
+	nid, err := c.GetInt("Nid")
+	if err != nil {
+		c.fail("操作失败，请先确定栏目id是否传递正确")
+		c.ServeJSON()
+		return
+	}
+	tran := new(orm.Transaction)
+	catalog, err := models.GetCatalog(id)
+	if err != nil {
+		c.fail("操作失败，要移动的栏目不存在")
+		c.ServeJSON()
+		return
+	}
+	pc := models.GetCatalogByPrevId(id)
+	if pc != nil {
+		pc.SetPreviousId(catalog.GetPreviousId())
+		tran.Add(pc, orm.UPDATE)
+	}
+	catalog.SetPreviousId(pid)
+	tran.Add(catalog, orm.UPDATE)
+	if nid != 0 {
+		nc, err := models.GetCatalog(nid)
+		if err != nil {
+			c.fail("操作失败，要移动的栏目不存在")
+			c.ServeJSON()
+			return
+		}
+		nc.SetPreviousId(id)
+		tran.Add(nc, orm.UPDATE)
+	}
+	if err := tran.Commit(); err != nil {
+		beego.Error(err)
+		c.fail("操作失败，操作数据库时出现错误")
+	} else {
+		c.success("操作成功")
+	}
+	c.ServeJSON()
+}
+
 func (c *CatalogController) Del() {
 	ids := c.GetString("Ids")
 	if ids != "" {
 		tran := new(orm.Transaction)
 		idList := strings.Split(ids, ",")
 		for _, id := range idList {
-			catalog := new(models.S_Catalog)
-			catalog.SetId(id)
+			catalog, err := models.GetCatalog(numberutil.Atoi(id))
+			if err != nil {
+				c.fail("操作失败，要删除的栏目不存在")
+				c.ServeJSON()
+				return
+			}
 			if !catalog.GetIsLeaf() {
 				c.fail("操作失败，要删除的栏目存在子级栏目，请先删除子级栏目")
 				c.ServeJSON()
 				return
+			}
+			pc := models.GetCatalogByPrevId(numberutil.Atoi(id))
+			if pc != nil {
+				pc.SetPreviousId(catalog.GetPreviousId())
+				tran.Add(pc, orm.UPDATE)
 			}
 			tran.Add(catalog, orm.DELETE)
 		}
