@@ -7,9 +7,6 @@
         <link rel="stylesheet" href="/static/css/bootstrap-datepicker3.min.css" />
         <link rel="stylesheet" href="/static/css/ui.jqgrid.min.css" />
 
-        <!-- text fonts -->
-        <link rel="stylesheet" href="/static/css/fonts.googleapis.com.css" />
-
         <!-- jquery gritter -->
         <link rel="stylesheet" href="/static/css/jquery.gritter.min.css" />
 
@@ -48,7 +45,7 @@
 
         {{str2html "<!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->"}}
 
-        {{str2html "<!--[if lte IE 8]>"}}
+        {{str2html "<!--[if lte IE 9]>"}}
         <script src="/static/js/html5shiv.min.js"></script>
         <script src="/static/js/respond.min.js"></script>
         {{str2html "<<![endif]-->"}}

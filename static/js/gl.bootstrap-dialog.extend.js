@@ -149,7 +149,6 @@
 			                draggable: true,
 			                buttons: b,
 			                onshown:function(){  //增加verify属性检查(注册校验)
-			                	BValidate({dialogId:this.id});
 			                	if(onfn){
 			                		onfn();
 			                	}
@@ -160,7 +159,14 @@
 				  	id = dobj.$modal[0].id;
 				},
 				verifyForm: function(warn){
+					BValidate({dialogId:id});
 					var s = $("#"+id + " form");
+
+					if(typeof(s)=="undefined"){ 
+						BootFrame.alert("未找到form标签",null,"警告",true);
+						return false;
+					}
+
 					if (s.length == 0) {
 						BootFrame.alert("未找到form标签",null,"警告",true);
 						return false;

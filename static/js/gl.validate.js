@@ -63,29 +63,29 @@
                 form = "#" + options.dialogId + " form";
           }
 
-            $(form).each(function(){
-		f = $(this).attr("id");  					                    //form id
-		if (f != undefined){
-			$(this).find("[verify]").each(function(){
-				var v = $(this).attr("verify"); 	                               //校验值  verify="notEmpty"  返回 notEmpty
-				var name = $(this).attr("name");
-				var id = $(this).attr("id");
-				if (id == undefined && name == undefined){
-					return true;					//相当于for循环的continue
-				}
-				if (name == undefined && id != undefined){	//填充id，保证id与name两个属性都有
-					$(this).attr("name",id);
-					name = id;
-				}
-				if (name != undefined && id == undefined){	//填充name，保证id与name两个属性都有
-					$(this).attr("id",name);
-					id = name;
-				}
-				//开始添加校验参数
-                                         fields[name] = verifyToJson(v);
-			});
-		}	
-	});
+        $(form).each(function(){
+    		f = $(this).attr("id");  	
+    		if (f != undefined){
+    			$(this).find("[verify]").each(function(){
+    				var v = $(this).attr("verify"); 	                               //校验值  verify="notEmpty"  返回 notEmpty
+    				var name = $(this).attr("name");
+    				var id = $(this).attr("id");
+    				if (id == undefined && name == undefined){
+    					return true;					//相当于for循环的continue
+    				}
+    				if (name == undefined && id != undefined){	//填充id，保证id与name两个属性都有
+    					$(this).attr("name",id);
+    					name = id;
+    				}
+    				if (name != undefined && id == undefined){	//填充name，保证id与name两个属性都有
+    					$(this).attr("id",name);
+    					id = name;
+    				}
+    				//开始添加校验参数
+                                             fields[name] = verifyToJson(v);
+    			});
+    		}	
+    	});
 
 	options = $.extend({
             message: '表单验证',

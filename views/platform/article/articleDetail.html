@@ -46,8 +46,6 @@
 
 </form>
 
-<!-- markdown -->
-<script src="/static/editor.md/editormd.js"></script>
         
 <script type="text/javascript">
 
@@ -95,24 +93,7 @@
                         bf.close();
                     },null,13);
                     bf.onshow(function(){
-                        var w = $("#list1").width();
-                        var h = $("#imageselect").find('.modal-body').height();
-                        var s = 0;
-                        if (w > 600){
-                            w = parseInt(w / 153);
-                            h = parseInt(h / 153);
-                            s = w * h;
-                            $("#list1").css("max-width",w * 153);
-                        }else{
-                            s = parseInt(w / 150) * 3;
-                        }
-                        $('.imgli').show();
-                        DataList({
-                            list: "list1",
-                            pagebar: "pagebar",
-                            size: parseInt(s),
-                            fn: initColorBox
-                        });
+                       
                     });
                     bf.show();
                 }

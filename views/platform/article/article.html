@@ -19,7 +19,7 @@
 </style>
 
 <div class="page-header">
-    <button class="btn btn-sm btn-primary" onclick="addArticle()">
+    <button class="btn btn-sm btn-primary" id="add-btn">
         <i class="ace-icon fa fa-plus bigger-125"></i>
         <span class="bigger-115 no-text-shadow">新建文章</span>
     </button>
@@ -97,19 +97,20 @@
                 });
             },
             onbdclickfn: function(rowid){
-                $('#main').load('/data/article/InitPage?Id='+rowid); 
+                $('#main').load('/data/article/InitPage?Id='+rowid+'&tm='+new Date().getTime()); 
             },
             gridfn: function(){
                 $("#datatable").setSelection(1,true);
             }
         });
+
+        $('#add-btn').on(ace.click_event, function () {
+            $('#main').load('/data/article/InitPage?'+new Date().getTime()); 
+        });
     }); 
 
-    function addArticle(){
-        $('#main').load('/data/article/InitPage'); 
-    }
 
     function editArticle(rowid){
-        $('#main').load('/data/article/InitPage?Id='+rowid); 
+        $('#main').load('/data/article/InitPage?Id='+rowid+'&tm='+new Date().getTime()); 
     }
 </script>
