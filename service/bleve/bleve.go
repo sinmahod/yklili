@@ -145,12 +145,17 @@ func (b *Bleve) Or(query string, column ...string) *Bleve {
 	}
 }
 
-func (b *Bleve) Search() {
+func (b *Bleve) Search(size, index int, obj interface{}) []interface{} {
+	index--
+
+	from := size * index
+
 	query := strings.Join(b.querys, " ")
 
 	que := bleve.NewQueryStringQuery(query)
 
-	req := bleve.NewSearchRequest(que)
+	req := bleve.NewSearchRequestOptions(query, size, from, false)
+
 	req.Highlight = bleve.NewHighlight()
 
 	res, err := index.Search(req)
@@ -175,68 +180,4 @@ func prettify(res *bleve.SearchResult) string {
 		panic(err)
 	}
 	return string(b)
-}
-
-func Example() {
-	messages := []struct {
-		Id    string
-		Body  string
-		Title string
-		Type  int
-	}{
-		{
-			Id:    "6",
-			Body:  "你好，世界dafdsafdsfasd",
-			Title: "你好",
-			Type:  1,
-		},
-		{
-			Id:    "2",
-			Body:  "世界你好啊fewfwef",
-			Title: "你好",
-			Type:  2,
-		},
-		{
-			Id:    "3",
-			Body:  "sdfsdaf亲口",
-			Title: "你好",
-			Type:  2,
-		},
-		{
-			Id:    "4",
-			Body:  "交代cdscsdc",
-			Title: "你好",
-			Type:  1,
-		},
-	}
-
-	querys := []string{
-		"你好，世界",
-		"亲口交代",
-	}
-
-	for _, q := range querys {
-		que := bleve.NewQueryStringQuery(q)
-
-		//bleve.NewBooleanQuery().AddMust(...)
-
-		// bleve.NewBoolFieldQuery(val)
-
-		req := bleve.NewSearchRequest(que)
-		req.Highlight = bleve.NewHighlight()
-		//req.Highlight.AddField("Type")
-
-		//req.AddFacet(facetName, f)
-
-		res, err := index.Search(req)
-		if err != nil {
-			panic(err)
-		}
-		fmt.Println(res)
-		fmt.Println(prettify(res))
-	}
-}
-
-func main() {
-	Example()
 }
