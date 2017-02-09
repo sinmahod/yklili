@@ -1,15 +1,16 @@
 package models
 
 import (
+	"beegostudy/service/bleve"
+	"beegostudy/service/progress"
 	"beegostudy/util/modelutil"
 	"encoding/json"
 	"fmt"
+	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/orm"
 	"strconv"
 	"strings"
 	"time"
-
-	"github.com/astaxie/beego"
-	"github.com/astaxie/beego/orm"
 )
 
 /**
@@ -175,4 +176,49 @@ func GetArticlesPage(size, index int, ordercolumn, orderby string, data map[stri
 	}
 
 	return nil, err
+}
+
+//全库重建索引
+func RebuildIndex(prog *progress.ProgressTask) error {
+	err := bleve.ClearIndex()
+	if err != nil {
+		return err
+	}
+
+	var size int64 = 100
+
+	var as []*S_Article
+	o := orm.NewOrm()
+	qt := o.QueryTable("s_article")
+	qt = qt.Filter("Status", 1)
+
+	cnt, err := qt.Count()
+
+	page := cnt / size
+
+	if cnt%size > 0 {
+		page++
+	}
+
+	for i := int64(0); i < page; i++ {
+		_, err = qt.Limit(size, i*size).All(&as)
+		if err != nil {
+			return err
+		}
+
+		for _, a := range as {
+			err = bleve.AddIndex(strconv.Itoa(a.Id), a)
+			if err != nil {
+				return err
+			}
+		}
+
+		f := (i + 1) * 100 / page
+
+		prog.SetPerc(int(f))
+		prog.SetMsg("任务已执行到了%d%s", int(f), "%")
+
+	}
+
+	return nil
 }

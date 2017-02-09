@@ -1,14 +1,17 @@
 package main
 
 import (
-	_ "beegostudy/conf"
+	_ "beegostudy/conf" //初始化配置信息
+
+	_ "beegostudy/routers" //加载前台路由
+
+	_ "beegostudy/service/bleve" //初始化索引
+
 	"beegostudy/controllers/platform"
 	"beegostudy/controllers/platform/data"
 	"beegostudy/controllers/template"
-	_ "beegostudy/routers"
-	"beegostudy/service/cron"
-	_ "beegostudy/task"
-
+	"beegostudy/service/cron" //定时任务准备
+	_ "beegostudy/task"       //初始化定时任务
 	"fmt"
 
 	"github.com/astaxie/beego"

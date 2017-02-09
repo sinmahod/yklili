@@ -38,6 +38,11 @@ textarea:hover {
         <i class="ace-icon fa fa-rocket bigger-125"></i>
         <span class="bigger-115 no-text-shadow">保存</span>
     </button>
+
+     <button class="btn btn-sm btn-info btn-purple" id='reindex'>
+        <i class="ace-icon fa fa-space-shuttle bigger-125"></i>
+        <span class="bigger-115 no-text-shadow">重建索引</span>
+    </button>
 </div><!-- /.page-header -->
 
 <div class="bottom-border"></div>
@@ -184,6 +189,12 @@ textarea:hover {
                 data['SiteBanner'] = $('#SiteBanner').attr('src');
                 SendData.Post('/data/site/Save',data,function(response){
                     BootFrame.gritter(response.MESSAGE);
+                });
+            });
+
+            $('#reindex').on('click', function(){
+                SendData.Post("/data/article/RebuildIndex",null,function(response){
+                    BootFrame.progressbar(response.TaskId);
                 });
             });
         });
