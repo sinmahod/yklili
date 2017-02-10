@@ -43,6 +43,7 @@ func main() {
 		"image":   &data.ImageController{},
 		"article": &data.ArticleController{},
 		"upload":  &data.UploadController{},
+		"search":  &data.SearchController{},
 		"test":    &data.TestController{},
 	}
 

@@ -3,6 +3,7 @@ package conf
 import (
 	"beegostudy/models"
 	"github.com/astaxie/beego"
+	"runtime"
 	"strconv"
 )
 
@@ -48,6 +49,11 @@ func Reload() {
 	configItem["Desc"] = "请前往后台设置站点"
 	configItem["Copyright"] = "&copy; 2017 All rights  Reserved"
 	configItem["ArticleColor"] = "#fff"
+}
+
+func GetCurrentFilePath() string {
+	_, filePath, _, _ := runtime.Caller(1)
+	return filePath
 }
 
 // 清空配置

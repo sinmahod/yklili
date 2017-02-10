@@ -5,11 +5,12 @@ import (
 	"fmt"
 	"github.com/blevesearch/bleve"
 	"github.com/blevesearch/bleve/mapping"
-	"github.com/yanyiwu/gojieba"
 	_ "github.com/yanyiwu/gojieba/bleve"
 	"log"
 	"os"
+	"path"
 	"reflect"
+	"runtime"
 	"strconv"
 	"strings"
 	"time"
@@ -21,21 +22,38 @@ const (
 )
 
 var (
+	DICT_DIR        string
+	DICT_PATH       string
+	HMM_PATH        string
+	USER_DICT_PATH  string
+	IDF_PATH        string
+	STOP_WORDS_PATH string
+)
+
+var (
 	index        bleve.Index
 	indexMapping *mapping.IndexMappingImpl
 )
 
 //初始化
 func init() {
+
+	DICT_DIR = path.Join(path.Dir(getCurrentFilePath()), "dict")
+	DICT_PATH = path.Join(DICT_DIR, "jieba.dict.utf8")
+	HMM_PATH = path.Join(DICT_DIR, "hmm_model.utf8")
+	USER_DICT_PATH = path.Join(DICT_DIR, "user.dict.utf8")
+	IDF_PATH = path.Join(DICT_DIR, "idf.utf8")
+	STOP_WORDS_PATH = path.Join(DICT_DIR, "stop_words.utf8")
+
 	indexMapping = bleve.NewIndexMapping()
 
 	err := indexMapping.AddCustomTokenizer(FENCI_TYPE,
 		map[string]interface{}{
-			"dictpath":     gojieba.DICT_PATH,
-			"hmmpath":      gojieba.HMM_PATH,
-			"userdictpath": gojieba.USER_DICT_PATH,
-			"idf":          gojieba.IDF_PATH,
-			"stop_words":   gojieba.STOP_WORDS_PATH,
+			"dictpath":     DICT_PATH,
+			"hmmpath":      HMM_PATH,
+			"userdictpath": USER_DICT_PATH,
+			"idf":          IDF_PATH,
+			"stop_words":   STOP_WORDS_PATH,
 			"type":         FENCI_TYPE,
 		},
 	)
@@ -63,6 +81,12 @@ func init() {
 			}
 		}
 	}
+}
+
+func getCurrentFilePath() string {
+	_, filePath, _, _ := runtime.Caller(1)
+	idx := strings.LastIndex(filePath, "service")
+	return filePath[:idx]
 }
 
 //清除索引文件，用于索引重建（慎用）
