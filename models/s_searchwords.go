@@ -2,6 +2,7 @@ package models
 
 import (
 	transaction "beegostudy/models/orm"
+	"beegostudy/util/fileutil"
 	"beegostudy/util/modelutil"
 	"encoding/json"
 	"fmt"
@@ -118,7 +119,7 @@ func GetWordsPage(size, index int, ordercolumn, orderby string, data map[string]
 }
 
 //重新导入词典(会删除原词典包含同义词关联关系，慎用)
-func ImportWords(wordfile string) error {
+func ImportWords(wordfile, uname string) error {
 	//清空原词典
 	o := orm.NewOrm()
 	_, err := o.Raw("delete from s_searchwords").Exec()
@@ -126,13 +127,11 @@ func ImportWords(wordfile string) error {
 		return err
 	}
 
-	ns := struct{}()
-
 	tmpMap := make(map[string]interface{})
 
 	tran := new(transaction.Transaction)
 
-	str := FileToString(wordfile)
+	str := fileutil.FileToString(wordfile)
 
 	words := strings.Split(str, "\n")
 
@@ -140,11 +139,13 @@ func ImportWords(wordfile string) error {
 		if strings.Trim(words[i], " ") != "" {
 			ws := strings.Split(words[i], " ")[0]
 			if _, ok := tmpMap[ws]; !ok {
-				tmpMap[ws] = ns
+				tmpMap[ws] = nil
 				ssw := new(S_SearchWords)
-				ssw.SetSWords()
+				ssw.SetSWords(ws)
 				ssw.SetAddUser(uname)
+				tran.Add(ssw, transaction.INSERT)
 			}
 		}
 	}
+	return nil
 }
