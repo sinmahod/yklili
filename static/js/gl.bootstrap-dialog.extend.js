@@ -218,7 +218,7 @@
 			}//<! return >
 		},//<! dialog >
 		//Dialog
-		progressbar: function(taskid){
+		progressbar: function(taskid,fn){
 	 		var dialog = new BootstrapDialog({
 		 		message: function(dialogRef){
 		                		var $message = $('<div id="progressbar"><div class="progress-label">加载中...</div></div>');
@@ -249,6 +249,9 @@
 					     	},
 				      		complete: function() {
 					        		$( ".progress-label" ).text( "完成！" );
+					        		if (fn) {
+					        			fn();
+					        		}
 					      	}
 					});
 					var interval = setInterval(function(){

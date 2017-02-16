@@ -1,16 +1,25 @@
                          <div class="page-header">
-                             <button class="btn btn-sm btn-info" onclick="editUser()">
+                            <button class="btn btn-sm btn-primary" onclick="addWords()">
+                                <i class="ace-icon fa fa-plus bigger-125"></i>
+                                <span class="bigger-115 no-text-shadow">新建</span>
+                            </button>
+                             <button class="btn btn-sm btn-info" onclick="editWords()">
                                 <i class="ace-icon fa fa-pencil bigger-125"></i>
                                 <span class="bigger-115 no-text-shadow">修改</span>
                             </button>
-                             <button class="btn btn-sm btn-success" onclick="delUser()">
+                             <button class="btn btn-sm btn-success" id="removewords">
                                 <i class="ace-icon fa fa-minus bigger-125"></i>
                                 <span class="bigger-115 no-text-shadow">删除</span>
                             </button>
-                            <button class="btn btn-sm btn-pink" onclick="editPassword()">
+                            <button class="btn btn-sm btn-pink" onclick="publishWords()">
                                 <i class="ace-icon fa fa-cog bigger-125"></i>
                                 <span class="bigger-115 no-text-shadow">发布词典</span>
                             </button>
+                            <button class="btn btn-sm btn-inverse" id="importwords">
+                                <i class="ace-icon fa fa-cog bigger-125"></i>
+                                <span class="bigger-115 no-text-shadow">导入词典</span>
+                            </button>
+                            
                              <button class="btn btn-sm btn-purple search-button">
                                 <i class="ace-icon fa fa-search-plus bigger-125"></i>
                                 <span class="bigger-115 no-text-shadow">展开查询</span>
@@ -25,14 +34,14 @@
                                     <div class="search-form col-md-4 col-sm-6">
                                         <div class="search-title"> 根词 </div>
                                         <div class="search-value">
-                                            <input type="text" placeholder="请输入根词" id="words" class="search-text">
+                                            <input type="text" placeholder="请输入根词" id="SWords" class="search-text">
                                         </div>
                                     </div>
 
                                     <div class="search-form col-md-4 col-sm-6">
                                         <div class="search-title"> 同义词 </div>
                                         <div class="search-value">
-                                            <input type="text" placeholder="请输入同义词" id="words2" class="search-text">
+                                            <input type="text" placeholder="请输入同义词" id="Synonym" class="search-text">
                                         </div>
                                     </div>
 
@@ -65,75 +74,86 @@
         <script type="text/javascript">
 
         jQuery(function($) {
-                var dataGrid = new DataGrid({  
-                    title: '通用词管理',
-                    tableName: 'datatable',  
-                    pageName: 'datapager', 
-                    // 设置数据表格列
-                    columnModel: [  
-                        {name:'Id',index:'Id',hidden:true,key:true},
-                        {label:'用户名称',name:'UserName',index:'UserName',align:"center",width:100},
-                        {label:'真实姓名',name:'RealName',index:'RealName',align:"center",width:100},
-                        {label:'邮箱',name:'Email',index:'Email', width:100},
-                        {label:'联系电话',name:'Phone',index:'Phone', width:100},
-                        {label:'添加人',name:'AddUser',index:'AddUser',align:"center", width:100},
-                        {label:'添加时间',name:'AddTime',index:'AddTime',align:"center", width:150,formatter: 'date',formatoptions:{srcformat: 'Y-m-dTH:i:s',newformat: 'Y-m-d H:i:s'}}
-                    ],
-                    onbdclickfn: function(rowid){
-                        editUser(rowid); 
-                    },
+            var dataGrid = new DataGrid({  
+                title: '通用词管理',
+                tableName: 'datatable',  
+                pageName: 'datapager', 
+                // 设置数据表格列
+                columnModel: [  
+                    {name:'Id',index:'Id',hidden:true,key:true},
+                    {label:'根词',name:'SWords',index:'SWords',align:"center",width:100},
+                    {label:'同义词',name:'Synonym',index:'Synonym',align:"center",width:100},
+                    {label:'添加人',name:'AddUser',index:'AddUser',align:"center", width:100},
+                    {label:'添加时间',name:'AddTime',index:'AddTime',align:"center", width:150,formatter: 'date',formatoptions:{srcformat: 'Y-m-dTH:i:s',newformat: 'Y-m-d H:i:s'}}
+                ],
+                onbdclickfn: function(rowid){
+                    editWords(rowid); 
+                },
+            });
+            $(".search-button").click(function(){
+                if ($(".table-detail").css("display") == 'none'){
+                    $(this).children("span").text("收起查询")
+                }else{
+                    $(this).children("span").text("展开查询")
+                }
+                $(".table-detail").slideToggle("slow");
+            });
+
+            $('#importwords').on('click', function(){
+                BootFrame.confirm("执行导入词典会将数据库中现有词典删除（包括同义词）并重新导入，确定执行吗？", function(){
+                        SendData.Post("/data/search/ImportWords",null,function(response){
+                            BootFrame.progressbar(response.TaskId,function(){
+                                DataGrid.loadData("datatable");
+                            });
+                        });
                 });
-                $(".search-button").click(function(){
-                    if ($(".table-detail").css("display") == 'none'){
-                        $(this).children("span").text("收起查询")
-                    }else{
-                        $(this).children("span").text("展开查询")
-                    }
-                    $(".table-detail").slideToggle("slow");
-                    
+            });
+
+            $('#removewords').on('click', function(){
+                var ids = DataGrid.getSelectRowIds("datatable");
+                if (ids.length == 0){
+                    BootFrame.alert("请选择要删除的用户");
+                    return;
+                }
+                BootFrame.confirm("您确定要删除这些词吗？", function(){
+                    var data = {Ids: ids.join()};
+                    SendData.Post("/data/search/Del",data,function(response){
+                        if ( response.STATUS==1){
+                            BootFrame.alert(response.MESSAGE,function(){
+                                DataGrid.loadData('datatable');
+                            });
+                        }else{
+                            BootFrame.alert(response.MESSAGE,null,"操作失败",true);
+                        }
+                    });
                 });
+            });
         }); 
 
-        function editUser(id){
+        function editWords(id){
              if (!id){
                 var ids = DataGrid.getSelectRowIds("datatable");
                 if (ids.length == 0){
-                    BootFrame.alert("请选择要修改的用户");
+                    BootFrame.alert("请选择要修改的根词");
                     return;
                 }
                 id = ids[0];
             }
             var bf = BootFrame.dialog();
-            bf.title("修改用户");
-            bf.url('/data/user/InitPage?Id=' + id );
+            bf.title("修改根词");
+            bf.url('/data/search/InitPage?Id=' + id );
             bf.width(400);
-            bf.height(300);
+            bf.height(150);
             bf.addButton("确认",save,null,13);
             bf.show();
         }
 
-        function editPassword(){
-            var ids = DataGrid.getSelectRowIds("datatable");
-            
-            if (ids.length == 0){
-                BootFrame.alert("请选择要修改密码的用户");
-                return;
-            }
-            var bf = BootFrame.dialog();
-            bf.title("修改密码");
-            bf.url('/data/user/EditPassword?Id='+ids[0]);
-            bf.width(400);
-            bf.height(180);
-            bf.addButton("确认",savePassword,null,13);
-            bf.show();
-        }
-
-        function addUser(){
+        function addWords(){
            var bf = BootFrame.dialog();
-            bf.title("新建用户");
-            bf.url('/data/user/InitPage');
+            bf.title("新建根词");
+            bf.url('/data/search/InitPage');
             bf.width(400);
-            bf.height(350);
+            bf.height(150);
             bf.addButton("确认",save,null,13);
             bf.show();
         }
@@ -144,7 +164,7 @@
             }
             but.disable();  //禁止点击按钮
             but.spin();     //增加按钮等待图标
-            SendData.Post("/data/user/Save",bf.getFormData(),function(response){
+            SendData.Post("/data/search/Save",bf.getFormData(),function(response){
                 if ( response.STATUS==1){
                     BootFrame.alert(response.MESSAGE,function(){
                         DataGrid.loadData('datatable');
@@ -159,53 +179,13 @@
             });
         }
 
-        function savePassword(bf,but){ //默认接收两个参数，1 BootFrame ，2 当前按钮
-            if (!bf.verifyForm()){
-                return;
-            }
-            but.disable();  //禁止点击按钮
-            but.spin();     //增加按钮等待图标
-            SendData.Post("/data/user/Save",bf.getFormData(),function(response){
-                if ( response.STATUS==1){
-                    BootFrame.alert(response.MESSAGE,function(){
-                        DataGrid.loadData('datatable');
-                        bf.close()
-                    });
-                }else{
-                    BootFrame.alert(response.MESSAGE,function(){
-                        but.enable();   //解除按钮点击
-                        but.stopSpin(); //清楚等待图标
-                    },"操作失败",true);
-                }
-            });
-        }
+        function publishWords(){
 
-        function delUser(){
-            var ids = DataGrid.getSelectRowIds("datatable");
-            
-            if (ids.length == 0){
-                BootFrame.alert("请选择要删除的用户");
-                return;
-            }
-            BootFrame.confirm("您确定要删除这些用户吗？", function(){
-                var data = {Ids: ids.join()};
-                SendData.Post("/data/user/Del",data,function(response){
-                    if ( response.STATUS==1){
-                        BootFrame.alert(response.MESSAGE,function(){
-                            DataGrid.loadData('datatable');
-                        });
-                    }else{
-                        BootFrame.alert(response.MESSAGE,null,"操作失败",true);
-                    }
-                });
-            });
         }
 
         function doSearch(){
-            DataGrid.setParams("datatable","UserName",$("#UserName").val());
-            DataGrid.setParams("datatable","RealName",$("#RealName").val());
-            DataGrid.setParams("datatable","Email",$("#Email").val());
-            DataGrid.setParams("datatable","Phone",$("#Phone").val());
+            DataGrid.setParams("datatable","SWords",$("#SWords").val());
+            DataGrid.setParams("datatable","Synonym",$("#Synonym").val());
             DataGrid.loadData('datatable');
         }
              

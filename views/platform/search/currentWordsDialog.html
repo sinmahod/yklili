@@ -1,0 +1,14 @@
+    <div class="row">
+        <div class="col-xs-12">
+            <form class="form-horizontal" id="userform" role="form">
+                <input type="hidden" id="Id" value="{{.Words.Id}}" />
+{{if .Words.Id}}
+                <gotext data-rel="tooltip" type="text" placeholder="请输入根词词汇" data-placement="bottom" readonly="readonly" id="SWords" value="{{.Words.SWords}}" verify="notEmpty" >根词词汇</gotext>
+{{else}}
+                <gotext data-rel="tooltip" type="text" placeholder="请输入根词词汇" data-placement="bottom" id="SWords"  value="{{.Words.SWords}}" verify="notEmpty|remote(/data/search/VerifyWords,2)|根词已存在">根词词汇</gotext>
+{{end}}
+                <gotext data-rel="tooltip" type="text" placeholder="请输入同义词" data-placement="bottom" id="Synonym"  value="{{.Words.Synonym}}" >同义词</gotext>
+                
+            </form>
+        </div>
+    </div>

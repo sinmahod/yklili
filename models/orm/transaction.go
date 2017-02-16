@@ -28,6 +28,10 @@ func (t *Transaction) Add(model interface{}, operate int) {
 	t.models = append(t.models, modeloper{model, operate})
 }
 
+func (t *Transaction) Clear() {
+	t.models = nil
+}
+
 func (t *Transaction) Commit() error {
 	o := orm.NewOrm()
 	o.Begin()

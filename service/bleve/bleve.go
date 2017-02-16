@@ -38,7 +38,7 @@ var (
 //初始化
 func init() {
 
-	DICT_DIR = path.Join(path.Dir(getCurrentFilePath()), "dict")
+	DICT_DIR = path.Join(path.Dir(GetCurrentFilePath()), "dict")
 	DICT_PATH = path.Join(DICT_DIR, "jieba.dict.utf8")
 	HMM_PATH = path.Join(DICT_DIR, "hmm_model.utf8")
 	USER_DICT_PATH = path.Join(DICT_DIR, "user.dict.utf8")
@@ -83,7 +83,7 @@ func init() {
 	}
 }
 
-func getCurrentFilePath() string {
+func GetCurrentFilePath() string {
 	_, filePath, _, _ := runtime.Caller(1)
 	idx := strings.LastIndex(filePath, "service")
 	return filePath[:idx]
