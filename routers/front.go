@@ -11,6 +11,7 @@ func init() {
 	models := map[string]beego.ControllerInterface{
 		"article": &front.ArticleController{},
 		"catalog": &front.CatalogController{},
+		"search":  &front.SearchController{},
 	}
 
 	for name, controller := range models {
