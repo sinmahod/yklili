@@ -193,7 +193,7 @@ textarea:hover {
             });
 
             $('#reindex').on('click', function(){
-                SendData.Post("/data/article/RebuildIndex",null,function(response){
+                SendData.Post("/data/search/RebuildIndex",null,function(response){
                     BootFrame.progressbar(response.TaskId);
                 });
             });
