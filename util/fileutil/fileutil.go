@@ -8,10 +8,27 @@ import (
 	"path"
 )
 
+// 文件末尾追加
+// fileName:文件名字(带全路径)
+// content: 写入的内容
+func AppendWriteFile(fileName string, content string) error {
+	// 以只写的模式，打开文件
+	f, err := os.OpenFile(fileName, os.O_WRONLY, 0644)
+	defer f.Close()
+	if err == nil {
+		// 查找文件末尾的偏移量
+		n, _ := f.Seek(0, os.SEEK_END)
+		// 从末尾的偏移量开始写入内容
+		_, err = f.WriteAt([]byte(content), n)
+	}
+
+	return err
+}
+
 // 写入文件
-func WriteFileByReadCloser(filename string, file io.ReadCloser) error {
+func WriteFileByReadCloser(fileName string, file io.ReadCloser) error {
 	defer file.Close()
-	dstFile, err := os.Create(filename)
+	dstFile, err := os.Create(fileName)
 	if err != nil {
 		return err
 	}
@@ -21,8 +38,8 @@ func WriteFileByReadCloser(filename string, file io.ReadCloser) error {
 }
 
 // 写入文件
-func WriteFileByReader(filename string, file io.Reader) error {
-	dstFile, err := os.Create(filename)
+func WriteFileByReader(fileName string, file io.Reader) error {
+	dstFile, err := os.Create(fileName)
 	if err != nil {
 		return err
 	}
@@ -32,9 +49,9 @@ func WriteFileByReader(filename string, file io.Reader) error {
 }
 
 // 写入文件
-func WriteFileByByte(filename string, data []byte) error {
-	os.MkdirAll(path.Dir(filename), os.ModePerm)
-	return ioutil.WriteFile(filename, data, 0655)
+func WriteFileByByte(fileName string, data []byte) error {
+	os.MkdirAll(path.Dir(fileName), os.ModePerm)
+	return ioutil.WriteFile(fileName, data, 0655)
 }
 
 // 得到文件大小
@@ -70,15 +87,15 @@ func IsDir(dir string) bool {
 }
 
 // 检查文件或目录是否存在
-// 如果由 filename 指定的文件或目录存在则返回 true，否则返回 false
-func Exist(filename string) bool {
-	_, err := os.Stat(filename)
+// 如果由 fileName 指定的文件或目录存在则返回 true，否则返回 false
+func Exist(fileName string) bool {
+	_, err := os.Stat(fileName)
 	return err == nil || os.IsExist(err)
 }
 
 // 读取文件内容
-func FileToString(filepath string) string {
-	fi, err := os.Open(filepath)
+func FileToString(filePath string) string {
+	fi, err := os.Open(filePath)
 	if err != nil {
 		panic(err)
 	}
@@ -88,8 +105,8 @@ func FileToString(filepath string) string {
 }
 
 // 读取XML到结构
-func XMLToStruct(filepath string, result interface{}) error {
-	content, err := ioutil.ReadFile(filepath)
+func XMLToStruct(filePath string, result interface{}) error {
+	content, err := ioutil.ReadFile(filePath)
 	if err != nil {
 		return err
 	}
@@ -119,7 +136,7 @@ func XMLToStruct(filepath string, result interface{}) error {
  *   </resources>
  *------------------------------------------------------------------------------------
  */
-func XMLStructToFile(filepath string, result interface{}) error {
+func XMLStructToFile(filePath string, result interface{}) error {
 	//保存修改后的内容
 	xmlOutPut, err := xml.MarshalIndent(result, "    ", "")
 	if err != nil {
@@ -130,5 +147,5 @@ func XMLStructToFile(filepath string, result interface{}) error {
 	//拼接XML头和实际XML内容
 	xmlOutPutData := append(headerBytes, xmlOutPut...)
 	//写入文件
-	return ioutil.WriteFile(filepath, xmlOutPutData, os.ModeAppend)
+	return ioutil.WriteFile(filePath, xmlOutPutData, os.ModeAppend)
 }

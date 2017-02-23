@@ -251,7 +251,7 @@ input[type=text]:hover,select:hover{
 }
 
 /*  dialog宽度，只有在大屏时才生效 */
-@media (min-width: 768px) {
+@media (min-width: 769px) {
 
 .dialog-50 .modal-dialog {width: 50px;}
 .dialog-55 .modal-dialog {width: 55px;}

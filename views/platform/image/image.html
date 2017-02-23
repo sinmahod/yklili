@@ -10,25 +10,7 @@
                         <div class="row">
                             <div style="position: relative;">
                                     <ul class="ace-thumbnails clearfix" id="list1" list="true" dataurl="/data/image/List" page="true" size="18" style="margin: 0 auto;position: relative;max-width:1557px;">
-                                        <li>
-                                            <a href="/data/image/Img?sn=${Sign}" style="width: 165px;height: 165px;overflow: hidden" data-rel="colorbox">
-                                                <img class="lazy" data-original="/data/image/Img?sn=${Sign}" style="min-width: 180px;max-width: 270px;min-height: 180px;max-height: 270px;" />
-                                            </a>
-
-                                            <div class="tools tools-bottom">
-                                                <a href="#">
-                                                    <i class="ace-icon fa fa-link"></i>
-                                                </a>
-
-                                                <a href="#">
-                                                    <i class="ace-icon fa fa-pencil"></i>
-                                                </a>
-
-                                                <a href="#">
-                                                    <i class="ace-icon fa fa-times red"></i>
-                                                </a>
-                                            </div>
-                                        </li>
+                                        
                                     </ul>
 
                                 </div><!-- PAGE CONTENT ENDS -->
@@ -54,6 +36,7 @@
             DataList({
                 list: "list1",
                 pagebar: "pagebar",
+                html: "<li><a href=\"/data/image/Img?sn=${Sign}\" style=\"width: 165px;height: 165px;overflow: hidden\" data-rel=\"colorbox\"><img class=\"lazy\" data-original=\"/data/image/Img?sn=${Sign}\" style=\"min-width: 180px;max-width: 270px;min-height: 180px;max-height: 270px;\" /></a><div class=\"tools tools-bottom\"><a href=\"#\"><i class=\"ace-icon fa fa-link\"></i></a><a href=\"#\"><i class=\"ace-icon fa fa-pencil\"></i></a><a href=\"#\"><i class=\"ace-icon fa fa-times red\"></i></a></div></li>",
                 size: parseInt(s),
                 fn: initColorBox
             });

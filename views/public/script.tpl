@@ -59,6 +59,8 @@
         <!-- get form data -->
         <script src="/static/js/jquery.formHelp.js"></script>
 
+        <script src="/static/js/echarts.min.js"></script>
+
         <script type="text/javascript">
             $(function(){
               $(document).pjax('.menu-pjax-a', '#main')

@@ -1,3 +1,9 @@
+<style>
+.h-300 {
+    height: 300px;
+}
+</style>
+
 <div class="page-header">
     <button class="btn btn-sm btn-success">
         <i class="ace-icon fa fa-rocket bigger-125"></i>
@@ -6,24 +12,114 @@
 </div><!-- /.page-header -->
 
 <div class="bottom-border"></div>
-
+<div class="row">
+    <div id="Memory" class="col-xs-12 col-sm-6 h-300"></div>
+    <div id="HD" class="col-xs-12 col-sm-6 h-300"></div>
+</div>
 <div class="row">
     <div class="col-xs-12">
-       <div class="profile-user-info profile-user-info-striped" id="list1" list="true" dataurl="/data/system/List" page="true" size="20">
+        <div class="profile-user-info profile-user-info-striped" id="list1" list="true" dataurl="/data/system/List" page="true" size="20">
             <div class="profile-info-row">
-                <div class="profile-info-name"> ${Key} </div>
+                <div class="profile-info-name"> ${Name} </div>
 
                 <div class="profile-info-value">
                     <span class="editable editable-click" id="username">${Value}</span>
                 </div>
             </div>
-
         </div>
+        
+
     </div><!-- /.col -->
 </div><!-- /.row -->
 
  <script type="text/javascript">
         jQuery(function($) {
+            var option = {
+                tooltip : {
+                    formatter: "{a} <br/>{c} {b}"
+                },
+                toolbox: {
+                    show: true,
+                    feature: {
+                        restore: {show: true},
+                        saveAsImage: {show: true}
+                    }
+                },
+                series : [
+                    {
+                        name: '内存使用',
+                        type: 'gauge',
+                        z: 3,
+                        min: 0,
+                        max: 100,
+                        splitNumber: 10,
+                        radius: '90%',
+                        title : {
+                            textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                fontWeight: 'bolder',
+                                fontSize: 18
+                            }
+                        },
+                        detail : {
+                            textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                fontWeight: 'bolder',
+                                fontSize: 18
+                            }
+                        },
+                        data:[{value: 0, name: '内存'}]
+                    }
+                ]
+            };
+             var option2 = {
+                tooltip : {
+                    formatter: "{a} <br/>{c} {b}"
+                },
+                toolbox: {
+                    show: true,
+                    feature: {
+                        restore: {},
+                        saveAsImage: {}
+                    }
+                },
+                series : [
+                    {
+                        name: '硬盘使用',
+                        type: 'gauge',
+                        z: 3,
+                        min: 0,
+                        max: 100,
+                        splitNumber: 10,
+                        radius: '90%',
+                        title : {
+                            textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                fontWeight: 'bolder',
+                                fontSize: 18
+                            }
+                        },
+                        detail : {
+                            textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                fontWeight: 'bolder',
+                                fontSize: 18
+                            }
+                        },
+                        data:[{value: 0, name: '硬盘'}]
+                    }
+                ]
+            };
+            var memory = echarts.init(document.getElementById('Memory'));
+            var hd = echarts.init(document.getElementById('HD'));
+            memory.setOption(option);
+            hd.setOption(option2);
+
+            SendData.Post("/data/system/UsedPercent",null,function(response){
+                
+                option.series[0].data[0].value = response["MemoryUsedPercent"];
+                memory.setOption(option,true);
+                option2.series[0].data[0].value = response["HeadUsedPercent"];
+                hd.setOption(option2,true);
+            });
+            
             DataList({list: "list1"});
+
         });
 </script>       

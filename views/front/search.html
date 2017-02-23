@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{"Name" | SiteConfig}}</title>
+
+    {{template "front/include.tpl" .}}
+    <link rel="stylesheet" href="static/front/css/autocomplete.css">
+
+<style type="text/css">
+    body{
+        background-color: {{"BackgroundColor" | SiteConfig}};
+    }
+    h3 {
+        font-family: cursive;
+        padding-bottom: 15px;
+    }
+    .autocomplete-input {
+        box-sizing: initial;
+    }
+    .autocomplete-button {
+        box-sizing: initial;
+    }
+
+    #search-form {
+        padding-top: 5%;
+    }
+    @media (max-width: 380px) {
+        .autocomplete-input {
+            width: 260px !important;
+        }
+        .autocomplete-container {
+            width: 330px !important;
+        }
+    }
+</style>
+
+</head>
+<body>
+    
+    <div class="clearfix"></div>
+
+    <div id="search-form" style="height: 60px;"></div>
+    
+    <div class="clearfix"></div>
+
+    <div class="total-content">
+            <div class="col-md-12 col-xs-12">
+                <div class="top-news" id="list1" dataurl="/article/List?Status=1" page="true">
+                    
+                </div>
+                <div align="center">
+                    <ul class="pagination" pagebar="true" id="pagebar"></ul>
+                </div>
+            </div>
+    </div>
+
+    <div class="clearfix"></div>
+
+     {{template "front/footer.tpl" .}}
+
+    <script type="text/javascript" src="static/front/js/autocomplete.js"></script>
+     <!-- pagebar -->
+    <script src="static/js/bootstrap-paginator.min.js"></script>
+    <script src="static/js/gl.paginator.extend.js"></script>
+    <script type="text/javascript">
+        jQuery(function($) {
+
+            var proposals = ['百度1', '百度2', '百度3', '百度4', '百度5', '百度6', '百度7','呵呵呵呵呵呵呵','百度','新浪','a1','a2','a3','a4','b1','b2','b3','b4'];
+
+            $('#search-form').autocomplete({
+                hints: proposals,
+                width: 500,
+                height: 30,
+                buttonText: '搜索',
+                onSubmit: function(text){
+                    alert(text);           
+                }
+            });
+
+            var html = '<a href="article?id=${Id}" class="morenews">${Title}</a><p><a href="#"><i class="commenticon"></i></a><a href="#"></a> <i class="date"></i>${AddTime}</p>'
+            DataList({
+                list: "list1",
+                pagebar: "pagebar",
+                size: 2,
+                html: html
+            });
+            var html2 = '<li><a href="${Link}">${CatalogName}</a></li>';
+            DataList({
+                list: "list2",
+                size: 100,
+                html: html2
+            });
+            DataList({
+                list: "list3",
+                size: 100,
+                html: html2
+            });
+        });
+    </script>
+</body>
+</html>
