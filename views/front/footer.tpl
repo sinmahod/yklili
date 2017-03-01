@@ -15,3 +15,12 @@
             <div class="clearfix"></div>
         </div>
     </div>
+    <script type="text/javascript">
+        jQuery(function($) {
+            DataList({
+                    list: "list3",
+                    size: 10,
+                    html: '<li><a href="${Link}">${CatalogName}</a></li>'
+            });
+        });
+    </script>

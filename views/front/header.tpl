@@ -12,7 +12,13 @@
                     $(".top-menu ul").slideToggle(500, function(){
                     });
                 });
-
+                jQuery(function($) {
+                    DataList({
+                        list: "list2",
+                        size: 100,
+                        html: '<li><a href="${Link}">${CatalogName}</a></li>'
+                    });
+                });
             </script>
             <!--script for menu-->
         </div>

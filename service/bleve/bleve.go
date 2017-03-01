@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/blevesearch/bleve"
 	"github.com/blevesearch/bleve/mapping"
+	"github.com/blevesearch/bleve/numeric"
 	_ "github.com/yanyiwu/gojieba/bleve"
 	"log"
 	"os"
@@ -251,7 +252,22 @@ func (b *Bleve) SearchToData(size, page int) (*Data, error) {
 		mp := make(map[string]interface{})
 
 		for _, field := range doc.Fields {
-			mp[field.Name()] = string(field.Value())
+			fieldVal := reflect.ValueOf(field)
+			if fieldVal.Type().String() == "*document.DateTimeField" {
+				p := numeric.PrefixCoded(field.Value())
+				i, _ := p.Int64()
+
+				tm := time.Unix(i/1e9, 0)
+				mp[field.Name()] = tm.Format("2006-01-02 15:04:05")
+			} else if fieldVal.Type().String() == "*document.NumericField" {
+				p := numeric.PrefixCoded(field.Value())
+				i, _ := p.Int64()
+
+				f := numeric.Int64ToFloat64(i)
+				mp[field.Name()] = strconv.FormatFloat(f, 'f', -1, 64)
+			} else {
+				mp[field.Name()] = string(field.Value())
+			}
 		}
 
 		for fragmentField, fragments := range item.Fragments {
@@ -340,7 +356,22 @@ func prettify(res *bleve.SearchResult, obj interface{}) error {
 		doc, _ := index.Document(item.ID)
 
 		for _, field := range doc.Fields {
-			setField(v, field.Name(), string(field.Value()))
+			fieldVal := reflect.ValueOf(field)
+			if fieldVal.Type().String() == "*document.DateTimeField" {
+				p := numeric.PrefixCoded(field.Value())
+				i, _ := p.Int64()
+
+				tm := time.Unix(i/1e9, 0)
+				setField(v, field.Name(), tm.Format("2006-01-02 15:04:05"))
+			} else if fieldVal.Type().String() == "*document.NumericField" {
+				p := numeric.PrefixCoded(field.Value())
+				i, _ := p.Int64()
+
+				f := numeric.Int64ToFloat64(i)
+				setField(v, field.Name(), strconv.FormatFloat(f, 'f', -1, 64))
+			} else {
+				setField(v, field.Name(), string(field.Value()))
+			}
 		}
 
 		for fragmentField, fragments := range item.Fragments {

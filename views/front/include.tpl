@@ -12,6 +12,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 {{str2html "<<![endif]-->"}}
 <!-- Custom Theme files -->
 <script src="static/js/jquery-1.11.3.min.js"></script>
+<!-- pagebar -->
+<script src="static/js/bootstrap-paginator.min.js"></script>
+<script src="static/js/gl.paginator.extend.js"></script>
 <script type="application/x-javascript"> 
     addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } 
 </script>

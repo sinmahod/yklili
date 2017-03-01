@@ -61,7 +61,10 @@ func (c *FrontController) Prepare() {
 		}
 	}
 
+	c.Data["Request"] = c.RequestData
+
 	c.ResponseData = make(map[string]interface{})
+
 }
 
 func (c *FrontController) methodNotFind() {

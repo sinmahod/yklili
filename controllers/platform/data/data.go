@@ -62,6 +62,8 @@ func (c *DataController) Prepare() {
 		}
 	}
 
+	c.Data["Request"] = c.RequestData
+
 	//文件上传
 	c.FileMap = make(map[string][]*multipart.FileHeader)
 	if c.Ctx.Request.MultipartForm != nil && c.Ctx.Request.MultipartForm.File != nil {

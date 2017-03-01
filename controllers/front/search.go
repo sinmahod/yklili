@@ -18,7 +18,7 @@ func (c *SearchController) Search() {
 
 	p, _ := c.GetInt("p")
 
-	var as []*models.S_Article
+	var as []models.S_Article
 
 	var size = 10
 
@@ -27,7 +27,7 @@ func (c *SearchController) Search() {
 			p++
 		}
 
-		cnt, err := bleve.And(q).Search(size, p, as)
+		cnt, err := bleve.And(q).Search(size, p, &as)
 		if err != nil {
 			panic(err)
 		} else {

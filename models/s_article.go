@@ -187,7 +187,7 @@ func RebuildIndex(prog *progress.ProgressTask) error {
 
 	var size int64 = 100
 
-	var as []*S_Article
+	var as []S_Article
 	o := orm.NewOrm()
 	qt := o.QueryTable("s_article")
 	qt = qt.Filter("Status", 1)

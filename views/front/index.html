@@ -46,32 +46,17 @@
 			</div>
 	</div>
 	<div class="clearfix"></div>
-
-	 {{template "front/footer.tpl" .}}
-
-	 <!-- pagebar -->
-    <script src="static/js/bootstrap-paginator.min.js"></script>
-    <script src="static/js/gl.paginator.extend.js"></script>
+ 	{{template "front/footer.tpl" .}}
 	<script type="text/javascript">
 		jQuery(function($) {
-			var html = '<a href="article?id=${Id}" class="morenews">${Title}</a><p><a href="#"><i class="commenticon"></i></a><a href="#"></a> <i class="date"></i>${AddTime}</p>'
+			var html = '<a href="article?id=${Id}" class="morenews">${Title}</a><p><a href="#"><i class="commenticon"></i></a><a href="#"></a> <i class="date"></i>${AddTime_DATE_yyyy-MM-dd hh:mm:ss}</p>'
 		    DataList({
 		        list: "list1",
 		        pagebar: "pagebar",
 		        size: 2,
 		        html: html
 		    });
-		    var html2 = '<li><a href="${Link}">${CatalogName}</a></li>';
-			DataList({
-		        list: "list2",
-		        size: 100,
-		        html: html2
-		    });
-		    DataList({
-		        list: "list3",
-		        size: 100,
-		        html: html2
-		    });
+		  
 		});
 	</script>
 </body>
