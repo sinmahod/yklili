@@ -49,7 +49,7 @@
  	{{template "front/footer.tpl" .}}
 	<script type="text/javascript">
 		jQuery(function($) {
-			var html = '<a href="article?id=${Id}" class="morenews">${Title}</a><p><a href="#"><i class="commenticon"></i></a><a href="#"></a> <i class="date"></i>${AddTime_DATE_yyyy-MM-dd hh:mm:ss}</p>'
+			var html = '<a href="article?id=${Id}" class="morenews">${Title}</a><p><a href="#"><i class="commenticon"></i></a><a href="#">${AddUser}</a> <i class="date"></i>${AddTime_DATE_yyyy-MM-dd hh:mm:ss}</p>'
 		    DataList({
 		        list: "list1",
 		        pagebar: "pagebar",

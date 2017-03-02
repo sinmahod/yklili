@@ -453,7 +453,7 @@ a.morenews {
 	font-size: 1.15em;
 	font-weight: 600;
 	line-height: 1.4em;
-	margin: 1.5em 0 1em 0;
+	margin: 1.5em 0 0.5em 0;
 	text-decoration:none;
 	display:block;
 }
@@ -476,15 +476,40 @@ img.ribbon {
 	letter-spacing:1px;
 	position:relative;
 }
+.top-news div {
+    max-height: 5em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #aaaaaa;
+    font-family: "Merriweather", serif;
+    letter-spacing: 0.01rem;
+    font-size: 1.1em;
+    line-height: 1.7em;
+}
 .top-news p {
 	letter-spacing: 1px;
-	padding-bottom: 2em;
+	line-height: 3em;
 	border-bottom: 1px solid #EDE7E7;
 	font-size: 0.85em;
-	color: #aaaaaa;
+	color: #fff;
+    margin: 1.75rem 0 0 0;
+    font-family: "Open Sans", sans-serif;
+}
+.top-news p:after {
+    display: block;
+    content: "";
+    width: 7px;
+    height: 7px;
+    border: #ffffff 1px solid;
+    position: absolute;
+    left: 50%;
+    margin-top: -2px;
+    background: #000;
+    border-radius: 100%;
+    box-shadow: #fff 0 0 0 6px;
 }
 .top-news p a {
-	color: #aaaaaa;
+	color: #fff;
 }
 .content-bottom {
 	margin-top:2em;

@@ -161,6 +161,23 @@ window.DataList = function(options){
             alignment: "center",//居中显示
             currentPage: cpage,//当前页码
             totalPages: total,//总页码
+            itemContainerClass: function(type, page, current){
+                switch (type) {
+                case "first":
+                    return "notcurrent";
+                case "prev":
+                    return "notcurrent";
+                case "next":
+                    return "notcurrent";
+                case "last":
+                    return "notcurrent";
+                case "page":
+                    if (page == current) {
+                        return "current";
+                    }
+                    return "notcurrent";
+                } 
+            },
             numberOfPages: n,//最多显示几个页码按钮
             itemTexts: function (type, page, current) {
                     switch (type) {
@@ -230,6 +247,10 @@ window.DataList = function(options){
                     var n = name.split("_DATE_");
                     if (n.length > 1){
                         return new Date(data[n[0]]).Format(n[1]);
+                    }
+                    if (name.indexOf("_TEXT") > 0){
+                        n = n[0].split("_TEXT");
+                        return $('<div>').text(data[n[0]]).html();
                     }
                     return data[n[0]];
                 });

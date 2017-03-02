@@ -357,6 +357,7 @@ func prettify(res *bleve.SearchResult, obj interface{}) error {
 
 		for _, field := range doc.Fields {
 			fieldVal := reflect.ValueOf(field)
+
 			if fieldVal.Type().String() == "*document.DateTimeField" {
 				p := numeric.PrefixCoded(field.Value())
 				i, _ := p.Int64()
@@ -369,6 +370,13 @@ func prettify(res *bleve.SearchResult, obj interface{}) error {
 
 				f := numeric.Int64ToFloat64(i)
 				setField(v, field.Name(), strconv.FormatFloat(f, 'f', -1, 64))
+			} else if fieldVal.Type().String() == "*document.TextField" {
+				if len(field.Value()) > 512 {
+					setField(v, field.Name(), string(field.Value()[0:512]))
+				} else {
+					setField(v, field.Name(), string(field.Value()))
+				}
+
 			} else {
 				setField(v, field.Name(), string(field.Value()))
 			}

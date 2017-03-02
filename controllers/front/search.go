@@ -3,6 +3,8 @@ package front
 import (
 	"beegostudy/models"
 	"beegostudy/service/bleve"
+	"html/template"
+	"strings"
 )
 
 type SearchController struct {
@@ -16,7 +18,7 @@ func (c *SearchController) Page() {
 func (c *SearchController) Search() {
 	q := c.GetString("q")
 
-	p, _ := c.GetInt("p")
+	p, _ := c.GetInt("page")
 
 	var as []models.S_Article
 
@@ -35,6 +37,15 @@ func (c *SearchController) Search() {
 
 			if cnt%uint64(size) > 0 {
 				pagetotal++
+			}
+
+			for i, _ := range as {
+				as[i].Content = strings.Replace(as[i].Content, "<mark>", "{MARK}", 0)
+				as[i].Content = strings.Replace(as[i].Content, "</mark>", "{/MARK}", 0)
+				//转义html
+				as[i].Content = template.HTMLEscapeString(as[i].Content)
+				as[i].Content = strings.Replace(as[i].Content, "{MARK}", "<mark>", 0)
+				as[i].Content = strings.Replace(as[i].Content, "{/MARK}", "</mark>", 0)
 			}
 
 			datagrid := models.GetDataGrid(as, p, int(pagetotal), int64(cnt))
