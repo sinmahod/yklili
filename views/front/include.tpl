@@ -6,6 +6,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <link href="static/css/bootstrap.min.css" rel='stylesheet' type='text/css' />
 <!-- Custom Theme files -->
 <link href="static/front/css/style.css" rel="stylesheet" type="text/css" media="all" />
+<link href="static/front/css/animate.min.css" rel="stylesheet" type="text/css" />
 {{str2html "<!--[if lte IE 8]>"}}
 <script src="static/js/html5shiv.min.js"></script>
 <script src="static/js/respond.min.js"></script>

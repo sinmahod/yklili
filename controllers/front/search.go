@@ -40,12 +40,12 @@ func (c *SearchController) Search() {
 			}
 
 			for i, _ := range as {
-				as[i].Content = strings.Replace(as[i].Content, "<mark>", "{MARK}", 0)
-				as[i].Content = strings.Replace(as[i].Content, "</mark>", "{/MARK}", 0)
+				as[i].Content = strings.Replace(as[i].Content, "<mark>", "{MARK}", -1)
+				as[i].Content = strings.Replace(as[i].Content, "</mark>", "{/MARK}", -1)
 				//转义html
 				as[i].Content = template.HTMLEscapeString(as[i].Content)
-				as[i].Content = strings.Replace(as[i].Content, "{MARK}", "<mark>", 0)
-				as[i].Content = strings.Replace(as[i].Content, "{/MARK}", "</mark>", 0)
+				as[i].Content = strings.Replace(as[i].Content, "{MARK}", "<mark>", -1)
+				as[i].Content = strings.Replace(as[i].Content, "{/MARK}", "</mark>", -1)
 			}
 
 			datagrid := models.GetDataGrid(as, p, int(pagetotal), int64(cnt))

@@ -25,6 +25,9 @@ input[type="button"],input[type="submit"]{
 	-o-transition:0.5s all;
 	-ms-transition:0.5s all;
 }
+.mark, mark {
+    padding: 0;
+}
 .logotext {
 	font-family: fantasy;
 	color: #fff;
@@ -441,6 +444,9 @@ a.newsmore1 {
 	font-weight: 700;
 	line-height: 1.4em;
 	margin-top:2em;
+}
+.total-content {
+	min-height: 500px;
 }
 .top-news{
 	padding:3em 1.5em;
@@ -901,6 +907,37 @@ ul.share li {
 	font-size:1em;
 	line-height:1.9em;
 	font-family: 'Playfair Display', serif;
+}
+.current a{
+    box-shadow: 0 1px 0 rgba(255,255,255,0.2), 0 0 1px 1px rgba(0, 0, 0, 0.1) inset;
+    cursor: default;
+    color: #fff !important;
+    font-size: 14px;
+    font-weight: normal;
+    text-align: center;
+    min-width: 14px;
+    margin: 0 5px 0 0;
+    border-radius: 3px;
+    background-color: initial !important;
+    border: 0px !important;
+}   
+.nocurrent a{
+    cursor:pointer;
+    color: #fff !important;
+    font-size:14px;
+    font-weight: normal;
+    text-align: center;
+    border: 1px solid #333 !important;
+    min-width: 14px;
+    margin: 0 5px 0 0;
+    border-radius: 3px;
+    background: #555 !important; 
+}
+.nocurrent a:hover {
+    background: #444 !important;
+}
+.content-hide {
+    display: none;
 }
 /*-- responsive-design starts-here --*/
 

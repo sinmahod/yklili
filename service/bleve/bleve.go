@@ -124,6 +124,7 @@ type Bleve struct {
 
 //And形式添加检索条件
 func And(query string, column ...string) *Bleve {
+	query = strings.Replace(query, "~", " ", -1)
 	q := make([]string, 0)
 	if len(column) > 0 {
 		for _, c := range column {
@@ -140,6 +141,7 @@ func And(query string, column ...string) *Bleve {
 
 //Not形式添加检索条件
 func Not(query string, column ...string) *Bleve {
+	query = strings.Replace(query, "~", " ", -1)
 	q := make([]string, 0)
 	if len(column) > 0 {
 		for _, c := range column {
@@ -156,6 +158,7 @@ func Not(query string, column ...string) *Bleve {
 
 //Or形式添加检索条件
 func Or(query string, column ...string) *Bleve {
+	query = strings.Replace(query, "~", " ", -1)
 	q := make([]string, 0)
 	if len(column) > 0 {
 		for _, c := range column {
@@ -171,6 +174,7 @@ func Or(query string, column ...string) *Bleve {
 }
 
 func (b *Bleve) And(query string, column ...string) *Bleve {
+	query = strings.Replace(query, "~", " ", -1)
 	if len(column) > 0 {
 		for _, c := range column {
 			b.querys = append(b.querys, "+"+c+":"+query)
@@ -182,6 +186,7 @@ func (b *Bleve) And(query string, column ...string) *Bleve {
 }
 
 func (b *Bleve) Not(query string, column ...string) *Bleve {
+	query = strings.Replace(query, "~", " ", -1)
 	if len(column) > 0 {
 		for _, c := range column {
 			b.querys = append(b.querys, "-"+c+":"+query)
@@ -193,6 +198,7 @@ func (b *Bleve) Not(query string, column ...string) *Bleve {
 }
 
 func (b *Bleve) Or(query string, column ...string) *Bleve {
+	query = strings.Replace(query, "~", " ", -1)
 	if len(column) > 0 {
 		for _, c := range column {
 			b.querys = append(b.querys, c+":"+query)

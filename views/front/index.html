@@ -24,8 +24,14 @@
 
 	<div class="total-content">
 			<div class="col-md-9 col-xs-12">
-				<div class="top-news" id="list1" dataurl="/article/List?Status=1" page="true">
-					
+				<div class="top-news content-hide" id="list1" dataurl="/article/List?Status=1" page="true" autoshow="true">
+					<h2><a href="article?id=${Id}" class="morenews">${Title}</a></h2>
+					<p>
+						<a href="#"><i class="commenticon"></i></a>
+						<a href="#">${AddUser}</a> 
+						<i class="date"></i>
+						${AddTime_DATE_yyyy-MM-dd hh:mm:ss}
+					</p>
 				</div>
 				<div align="center">
                     <ul class="pagination" pagebar="true" id="pagebar"></ul>
@@ -49,12 +55,12 @@
  	{{template "front/footer.tpl" .}}
 	<script type="text/javascript">
 		jQuery(function($) {
-			var html = '<a href="article?id=${Id}" class="morenews">${Title}</a><p><a href="#"><i class="commenticon"></i></a><a href="#">${AddUser}</a> <i class="date"></i>${AddTime_DATE_yyyy-MM-dd hh:mm:ss}</p>'
 		    DataList({
 		        list: "list1",
 		        pagebar: "pagebar",
-		        size: 2,
-		        html: html
+		        currentClass: "current",
+                nocurrentClass: "nocurrent",
+		        size: 5
 		    });
 		  
 		});

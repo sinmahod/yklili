@@ -54,7 +54,10 @@
         <script src="/static/js/gl.senddata.js"></script>
 
         <!-- markdown -->
-        <script src="/static/editor.md/editormd.min.js"></script>
+        <script src="/static/editor.md/lib/marked.min.js"></script>
+        <script src="/static/editor.md/lib/prettify.min.js"></script>
+        <script src="/static/editor.md/lib/underscore.min.js"></script>
+        <script src="/static/editor.md/editormd.js"></script>
 
         <!-- get form data -->
         <script src="/static/js/jquery.formHelp.js"></script>

@@ -20,7 +20,8 @@ Author: Lorenzo Cioni - https://github.com/lorecioni
 			showButton: true,
 			buttonText: 'Search',
 			onSubmit: function(text){},
-			onBlur: function(){}
+			onBlur: function(){},
+			value: ''
 		}, params);
 
 		//Build messagess
@@ -41,6 +42,10 @@ Author: Lorenzo Cioni - https://github.com/lorecioni
 			
 			if(params.showButton){
 				input.css('border-radius', '3px 0 0 3px');
+			}
+
+			if(params.value){
+				input.val(params.value);
 			}
 
 			//Proposals

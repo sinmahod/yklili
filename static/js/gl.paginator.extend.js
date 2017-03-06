@@ -61,7 +61,7 @@ Date.prototype.Format = function (fmt) { //author: meizz
 var DataListMap = {};
 
 window.DataList = function(options){
-    var $pagebar,$list,html,url,size,fn; 
+    var $pagebar,$list,html,url,size,fn,currentClass,nocurrentClass,emptyHtml; 
     var cpage = 1;
     var total = 0;
 
@@ -83,6 +83,9 @@ window.DataList = function(options){
         if (typeof(options["html"]) != "undefined" ) html = options["html"];
         size = typeof(options["size"]) != "undefined" ? options["size"] : 10000;
         fn = typeof(options["fn"]) != "undefined" ? options["fn"] : null;
+        currentClass = typeof(options["currentClass"]) != "undefined" ? options["currentClass"] : "active";
+        nocurrentClass = typeof(options["nocurrentClass"]) != "undefined" ? options["nocurrentClass"] : "";
+        emptyHtml = typeof(options["emptyHtml"]) != "undefined" ? options["emptyHtml"] : "";
     }
 
     if (!$pagebar){
@@ -131,16 +134,26 @@ window.DataList = function(options){
 
         readData(url,1,function(result){
             newHtml = renderList(result);
-            if (newHtml != null){
+            if (newHtml != ""){
                 $list.html(newHtml);
                 if (newHtml != ""){
                     if (fn){
                         fn();
                     }
+                    if ($list.attr("autoshow")){
+                        $list.show();
+                    }
                     if($pagebar){
                         initPagebar($pagebar);    
                     }
                 }
+            }else{
+                if (emptyHtml){
+                    $list.replaceWith(emptyHtml);    
+                }else{
+                    $list.hide();
+                }
+                
             }
         });
     }
@@ -162,21 +175,12 @@ window.DataList = function(options){
             currentPage: cpage,//当前页码
             totalPages: total,//总页码
             itemContainerClass: function(type, page, current){
-                switch (type) {
-                case "first":
-                    return "notcurrent";
-                case "prev":
-                    return "notcurrent";
-                case "next":
-                    return "notcurrent";
-                case "last":
-                    return "notcurrent";
-                case "page":
+                if (type == "page") {
                     if (page == current) {
-                        return "current";
+                        return currentClass;
                     }
-                    return "notcurrent";
                 } 
+                return nocurrentClass;
             },
             numberOfPages: n,//最多显示几个页码按钮
             itemTexts: function (type, page, current) {
@@ -197,11 +201,18 @@ window.DataList = function(options){
             onPageClicked: function (event, originalEvent, type, page) {
                 readData(url,page,function(result){
                     newHtml = renderList(result);
-                    if (newHtml != null){
+                    if (newHtml != ""){
                         $list.html(newHtml);
                         if (fn){
                             fn();
                         }
+                    }else{
+                        if (emptyHtml){
+                            $list.replaceWith(emptyHtml);    
+                        }else{
+                            $list.hide();
+                        }
+                        
                     }
                 });
             }
@@ -234,7 +245,7 @@ window.DataList = function(options){
 
     //渲染列表
     function renderList(result){
-        if (result["rows"].length == 0){
+        if (!result["rows"] || result["rows"].length == 0){
             return "";
         }
         if (result["records"] > 0){

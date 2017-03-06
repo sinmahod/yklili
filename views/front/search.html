@@ -21,9 +21,6 @@
         box-sizing: initial;
     }
 
-    #search-form {
-        padding-top: 5%;
-    }
     @media (max-width: 380px) {
         .autocomplete-input {
             width: 260px !important;
@@ -32,57 +29,35 @@
             width: 330px !important;
         }
     }
-    .current {
-        
-        
-    }
-    .current a{
-        box-shadow: 0 1px 0 rgba(255,255,255,0.2), 0 0 1px 1px rgba(0, 0, 0, 0.1) inset;
-        cursor: default;
-        color: #fff !important;
-        font-size: 14px;
-        font-weight: normal;
-        text-align: center;
-        min-width: 14px;
-        margin: 0 5px 0 0;
-        border-radius: 3px;
-        background-color: initial !important;
-        border: 0px !important;
-    }
-    .notcurrent {
-            
-    }
-    .notcurrent a{
-        cursor:pointer;
-        color: #fff !important;
-        font-size:14px;
-        font-weight: normal;
-        text-align: center;
-        border: 1px solid #333 !important;
-        min-width: 14px;
-        margin: 0 5px 0 0;
-        border-radius: 3px;
-        background: #555 !important; 
-    }
-
-    .notcurrent a:hover {
-        background: #444 !important;
-    }
 </style>
 
 </head>
 <body>
 
-    <div class="clearfix"></div>
+    <div class="middle-banner">
+        <div class="home">
+            <div class="top-menu">
+            <span class="menu"><a href="{{"Host" | SiteConfig}}"><img src="static/front/images/home.png" alt=""></a></span>
+            </div>
+        </div>
+        <div class="logo text-center">
+             <div id="search-form" style="height: 60px;"></div>
+        </div>
+    </div>
 
-    <div id="search-form" style="height: 60px;"></div>
-    
     <div class="clearfix"></div>
 
     <div class="total-content">
             <div class="col-md-8 col-md-offset-2 col-xs-12">
-                <div class="top-news" id="list1" dataurl="/search/Search?q={{.Request.q}}" page="true">
-                    
+                <div class="top-news content-hide" id="list1" dataurl="/search/Search?q={{.Request.q}}" page="true" autoshow="true">
+                    <h2><a href="article?id=${Id}" class="morenews">${Title}</a></h2>
+                    <div>${Content}</div>
+                    <p>
+                        <a href="#"><i class="commenticon"></i></a>
+                        <a href="#">${AddUser}</a> 
+                        <i class="date"></i>
+                        ${AddTime_DATE_yyyy-MM-dd hh:mm:ss}
+                    </p>
                 </div>
                 <div align="center">
                     <ul class="pagination" pagebar="true" id="pagebar"></ul>
@@ -101,18 +76,23 @@
             $('#search-form').autocomplete({
                 width: 500,
                 height: 30,
+                placeholder: '请输入您要搜索的关键词',
                 buttonText: '搜索',
+                value: '{{.Request.q}}',
                 onSubmit: function(text){
-                    alert(text);           
+                    if(text){
+                        window.location.href = "search?q=" + text;               
+                    }
                 }
             });
 
-            var html = '<h2><a href="article?id=${Id}" class="morenews">${Title}</a></h2><div>${Content}</div><p><a href="#"><i class="commenticon"></i></a><a href="#">${AddUser}</a> <i class="date"></i>${AddTime_DATE_yyyy-MM-dd hh:mm:ss}</p>'
             DataList({
                 list: "list1",
                 pagebar: "pagebar",
-                size: 10,
-                html: html
+                currentClass: "current",
+                nocurrentClass: "nocurrent",
+                emptyHtml: '<div class="shake animated" style="font-size:1.5em;margin-top:5em;color:#fff;text-align:center;">没有查询到包含<mark>{{.Request.q}}</mark>的文章，请换一个关键词试试。</div>',
+                size: 10
             });
            
         });
