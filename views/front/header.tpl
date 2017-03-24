@@ -45,6 +45,6 @@
     </div>
     <div class="logo logotext text-center">
         <h3>{{"Subtitle" | SiteConfig}}</h3>
-        <h1>{{"Name" | SiteConfig}}</h1>
+        <h1 style="letter-spacing: 3px;font-weight: 700;">{{"Name" | SiteConfig}}</h1>
     </div>
 </div>

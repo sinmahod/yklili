@@ -12,6 +12,7 @@
 	h3 {
 		font-family: cursive;
 	    padding-bottom: 15px;
+	    letter-spacing: 0.01rem;
 	}
 </style>
 
@@ -27,8 +28,8 @@
 				<div class="top-news content-hide" id="list1" dataurl="/article/List?Status=1" page="true" autoshow="true">
 					<h2><a href="article?id=${Id}" class="morenews">${Title}</a></h2>
 					<p>
-						<a href="#"><i class="commenticon"></i></a>
-						<a href="#">${AddUser}</a> 
+						<a href="#;"><i class="commenticon"></i></a>
+						<a href="#;">${AddUser}</a> 
 						<i class="date"></i>
 						${AddTime_DATE_yyyy-MM-dd hh:mm:ss}
 					</p>
@@ -39,15 +40,10 @@
 			</div>
 			<div class="col-md-3 col-xs-12">
 				<div class="top-news">
-					<h3>分类</h3>
-					<a href="#" class="morenews">This Is the Trader Behind Some of Deutsche Bank's Most Embarrassing Messages</a>
-					<p><a href="#"><i class="commenticon"></i></a><a href="#">12</a> <i class="date"></i>Apr 25, 2015</p>
-					<a href="#" class="morenews">If You Like the Breakfast at the National in New York, Then Try These Other Spots</a>
-					<p><a href="#"><i class="commenticon"></i></a><a href="#">12</a> <i class="date"></i>Apr 25, 2015</p>
-					<a href="#" class="morenews">Nasdaq Composite Gains as Google, Amazon.com Rally on Earnings</a>
-					<p><a href="#"><i class="commenticon"></i></a><a href="#">12</a> <i class="date"></i>Apr 25, 2015</p>
-					<a href="#" class="morenews">Here’s What It’s Like to Eat in the House of Lords’ Exclusive Parliament Dining Room</a>
-					<p><a href="#"><i class="commenticon"></i></a><a href="#">12</a> <i class="date"></i>Apr 25, 2015</p>
+					<h3>&nbsp;</h3>
+					<ul class="content-hide" id="packagelist" dataurl="/article/PackageList" autoshow="true">
+						<li id="package_${Id}"><a href="#;" onclick="searchData(${Id},this)" class="morenews">${Title} （${ArticleCount}）</a></li>
+					</ul>
 				</div>
 			</div>
 	</div>
@@ -62,8 +58,19 @@
                 nocurrentClass: "nocurrent",
 		        size: 5
 		    });
+
+	     	DataList({
+		        list: "packagelist"
+		    });
 		  
 		});
+
+		function searchData(id,ele){
+			DataList.setParam("list1","PackageId",id);
+			DataList.loadData("list1");
+			$(ele).parent("li").addClass("active");
+			$(ele).parent("li").siblings().removeClass("active");
+		}
 	</script>
 </body>
 </html>

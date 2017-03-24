@@ -18,6 +18,15 @@ func (c *ArticleController) List() {
 	}
 }
 
+func (c *ArticleController) PackageList() {
+	if datagrid, err := models.GetFrontPackages(c.PageSize, c.PageIndex, c.OrderColumn, c.OrderSord, c.RequestData); err != nil {
+		beego.Error(err)
+	} else {
+		c.Data["json"] = datagrid
+		c.ServeJSON()
+	}
+}
+
 func (c *ArticleController) Page() {
 	if id, err := c.GetInt("id"); err != nil {
 		beego.Error(err)

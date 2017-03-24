@@ -24,7 +24,30 @@
     background-color: rgb(34, 42, 45) !important;
     border-color: rgb(34, 42, 45) !important;
 }
-
+.skin-1 .bootstrap-dialog.type-primary .modal-header{
+    background-color: rgb(34, 42, 45) !important;
+}
+.skin-1 .pagination>li.active>a, .pagination>li.active>a:focus, .pagination>li.active>a{
+    background-color: rgb(34, 42, 45) !important;
+    border-color: rgb(34, 42, 45) !important;
+}
+.skin-1 .pager>li>a, .pagination>li>a{
+    color: rgb(34, 42, 45) !important;
+    border-color: rgb(34, 42, 45) !important;
+}
+.skin-1 .pagination>li.active>a{
+    color: #fff !important;
+}
+.skin-1 .profile-user-info-striped .profile-info-name{
+    color: #fff !important;
+    background-color: rgb(34, 42, 45) !important;
+}
+.skin-1 .remove i, .skin-1 .fa-arrows, .skin-1 .ui-jqgrid .ui-icon-pencil{
+    color: rgb(34, 42, 45) !important;
+}
+.skin-1 .ace-nav>li.grey>a, .skin-1 .ace-nav>li.dark>a, .skin-1 .ace-nav>li.light-blue>a, .skin-1 .ace-nav>li.green>a, .skin-1 .ace-nav>li.purple>a{
+    background-color: rgb(34, 42, 45) !important;
+}
 
 
 body {
@@ -94,7 +117,12 @@ body {
 .ui-icon-radio-off { background-image: url(/static/images/ui-icons_256x240.png);background-position: -96px -144px; }
 .ui-icon-radio-on { background-image: url(/static/images/ui-icons_256x240.png);background-position: -112px -144px; }
 
-
+.jqgrid-title-span {
+    cursor:pointer;
+}
+.jqgrid-title-span:hover{
+    color: #6fb3e0;
+}
 
 /* jqGrid 的第一列被ace在修改页面给隐藏了这里展示 */
 .EditTable tr:first-child  {

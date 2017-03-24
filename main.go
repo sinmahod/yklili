@@ -3,9 +3,11 @@ package main
 import (
 	_ "beegostudy/conf" //初始化配置信息
 
-	_ "beegostudy/routers" //加载前台路由
+	_ "beegostudy/routers" //加载路由
 
 	_ "beegostudy/service/bleve" //初始化索引
+
+	_ "beegostudy/service/cache" //初始化缓存
 
 	"beegostudy/controllers/platform"
 	"beegostudy/controllers/platform/data"
@@ -30,6 +32,7 @@ func main() {
 	beego.BConfig.EnableGzip = true                  //启用gzip压缩
 
 	beego.Router("/login", &platform.LoginController{})
+	beego.Router("/logout", &platform.LogoutController{})
 	beego.Router("/register", &platform.RegisterController{})
 
 	//数据控制器
@@ -41,6 +44,7 @@ func main() {
 		"user":    &data.UserController{},
 		"cron":    &data.CronController{},
 		"image":   &data.ImageController{},
+		"package": &data.PackageController{},
 		"article": &data.ArticleController{},
 		"upload":  &data.UploadController{},
 		"search":  &data.SearchController{},

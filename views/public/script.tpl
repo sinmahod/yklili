@@ -90,16 +90,16 @@
               $('.colorpick-btn').click(function(){
                     var c = $(this).attr('data-color');
                     if(c && c == '#438EB9'){
-                        $.cookie('skin',null);
+                        $.cookie('skin',null,{ path: '/' });
                     }
                     if(c && c == '#222A2D'){
-                        $.cookie('skin','1');
+                        $.cookie('skin','1',{ expires: 30, path: '/' });
                     }
                     if(c && c == '#C6487E'){
-                        $.cookie('skin','2');
+                        $.cookie('skin','2',{ expires: 30, path: '/' });
                     }
                     if(c && c == '#D0D0D0'){
-                        $.cookie('skin','3');
+                        $.cookie('skin','3',{ expires: 30, path: '/' });
                     }
               });
 

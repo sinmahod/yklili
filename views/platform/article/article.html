@@ -19,7 +19,11 @@
 </style>
 
 <div class="page-header">
-    <button class="btn btn-sm btn-primary" id="add-btn">
+    <button class="btn btn-sm btn-primary" id="adddir-btn">
+        <span class="bigger-115 no-text-shadow">新建文件夹</span>
+    </button>
+
+    <button class="btn btn-sm btn-primary hide" id="add-btn">
         <i class="ace-icon fa fa-plus bigger-125"></i>
         <span class="bigger-115 no-text-shadow">新建文章</span>
     </button>
@@ -28,7 +32,7 @@
 <div class="bottom-border"></div>
 
 <div class="row">
-    <div class="col-sm-4 col-xs-12">
+     <div class="col-sm-4 col-xs-12">
         <!-- PAGE CONTENT BEGINS -->
         <table id="datatable" url="/data/article/List" ></table>
 
@@ -43,6 +47,9 @@
 </div><!-- /.row -->
         
 <script type="text/javascript">
+    var type = "package";
+    var packageid = 0;
+    var isarticle = false;
     jQuery(function($) {
         var dataGrid = new DataGrid({  
             title: '文章管理',
@@ -56,14 +63,18 @@
             // 设置数据表格列
             columnModel: [
                 {name:'Id',index:'Id',hidden:true,key:true},
-                {label:'用户名称',name:'Title',index:'Title',align:"center",width:100},
+                {label:'Title',name:'Title',index:'Title',align:"center",width:100},
                 {name:'',index:'', width:30, fixed:true,align:"center", sortable:false, resize:false,
                     formatter : function(value, grid, rows, state){
                         var checked = "";
                         if (rows.Status){
                             checked = "checked=\"checked\"";
                         }
-                        return '<div title="" style="float:left;cursor:pointer;" class="ui-pg-div ui-inline-edit" id="jEditButton_5" onclick="editArticle('+rows.Id+')"  data-original-title="Edit selected row"><span class="ui-icon ui-icon-pencil"></span></div>';
+                        if(typeof(rows.PackageId) != 'undefined'){
+                             return '<div title="" style="float:left;cursor:pointer;" class="ui-pg-div ui-inline-edit" id="jEditButton_5" onclick="editArticle('+rows.Id+')"  data-original-title="Edit selected row"><span class="ui-icon ui-icon-pencil"></span></div>';
+                         }else{
+                            return '<div title="" style="float:left;cursor:pointer;" class="ui-pg-div ui-inline-edit" id="jEditButton_5" onclick="goArticles('+rows.Id+',\''+rows.Title+'\')"  data-original-title="Edit selected row"><span class="ui-icon fa fa-share"></span></div>';
+                         }
                     }
                 },
             ],
@@ -73,6 +84,13 @@
                 $('#contentHtml').show();
             },
             selectfn: function(rowid){
+                if(type == "package"){
+                    return;
+                }
+                if (!isarticle){
+                    isarticle = true;
+                    return;
+                }
                 var data = {Id: rowid};
                 SendData.Post("/data/article/InitArticle",data,function(response){
                     if (response.STATUS==1){
@@ -91,8 +109,13 @@
                     }
                 });
             },
-            onbdclickfn: function(rowid){
-                $('#main').load('/data/article/InitPage?Id='+rowid+'&tm='+new Date().getTime()); 
+            onbdclickfn: function(rowid,iRow,iCol,e){
+                if(type == "package"){
+                    isarticle = true;
+                    goArticles(rowid,$(e.target).html());
+                }else{
+                    $('#main').load('/data/article/InitPage?Id='+rowid+'&tm='+new Date().getTime());     
+                }
             },
             gridfn: function(){
                 $("#datatable").setSelection(1,true);
@@ -100,10 +123,62 @@
         });
 
         $('#add-btn').on(ace.click_event, function () {
-            $('#main').load('/data/article/InitPage?'+new Date().getTime()); 
+            $('#main').load('/data/article/InitPage?PackageId='+packageid+'&tm='+new Date().getTime()); 
+        });
+
+        $('#adddir-btn').on(ace.click_event, function () {
+            var bf = BootFrame.dialog();
+            bf.title("新建文件夹");
+            bf.url('/data/package/InitPage');
+            bf.width(500);
+            bf.height(80);
+            bf.addButton("确认",save,null,13);
+            bf.show();
         });
     }); 
 
+    function save(bf, but){
+        if (!bf.verifyForm()){
+                return;
+        }
+        but.disable();  //禁止点击按钮
+        but.spin();     //增加按钮等待图标
+        SendData.Post("/data/package/Save",bf.getFormData(),function(response){
+            if ( response.STATUS==1){
+                BootFrame.alert(response.MESSAGE,function(){
+                    DataGrid.loadData('datatable');
+                    bf.close()
+                });
+            }else{
+                BootFrame.alert(response.MESSAGE,function(){
+                    but.enable();   //解除按钮点击
+                    but.stopSpin(); //清楚等待图标
+                },"操作失败",true);
+            }
+        });
+    }
+    
+    function backDir(){
+        DataGrid.setParams("datatable","type","package");
+        DataGrid.loadData("datatable");
+        type = "package";
+        DataGrid.setTitle("datatable","文章管理");
+        $('#add-btn').hide();
+        $('#adddir-btn').show();
+        isarticle = false;
+    }
+
+    function goArticles(rowid,title){
+        DataGrid.setParams("datatable","type","article");
+        DataGrid.setParams("datatable","PackageId",rowid);
+        DataGrid.loadData("datatable");
+        DataGrid.setTitle("datatable",'<span class="jqgrid-title-span" onclick="backDir()"><i class="fa fa-reply"></i>  '+title+'</span>')  
+        packageid = rowid;
+        $('#add-btn').removeClass('hide');
+        $('#add-btn').show();
+        $('#adddir-btn').hide();
+        type = "article";
+    }
 
     function editArticle(rowid){
         $('#main').load('/data/article/InitPage?Id='+rowid+'&tm='+new Date().getTime()); 

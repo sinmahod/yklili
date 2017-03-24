@@ -15,12 +15,21 @@ type ArticleController struct {
 
 //DataGrid列表数据加载
 func (c *ArticleController) List() {
-	if datagrid, err := models.GetArticlesPage(c.PageSize, c.PageIndex, c.OrderColumn, c.OrderSord, c.RequestData); err != nil {
-		beego.Error(err)
+
+	var datagrid *models.DataGrid
+	var err error
+
+	if c.GetString("type") == "article" {
+		datagrid, err = models.GetArticlesPage(c.PageSize, c.PageIndex, c.OrderColumn, c.OrderSord, c.RequestData)
 	} else {
-		c.Data["json"] = datagrid
-		c.ServeJSON()
+		datagrid, err = models.GetPackages(c.PageSize, c.PageIndex, c.OrderColumn, c.OrderSord, c.RequestData)
 	}
+	if err != nil {
+		beego.Error(err)
+	}
+
+	c.Data["json"] = datagrid
+	c.ServeJSON()
 }
 
 //修改/新建初始化

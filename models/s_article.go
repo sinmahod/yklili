@@ -28,6 +28,7 @@ import (
 **/
 type S_Article struct {
 	Id         int       `orm:"pk;column(id)"`
+	PackageId  int       `orm:"column(packageid)"`
 	Title      string    `orm:"column(title);size(128)"`
 	Content    string    `orm:"null;column(content);type(text)"`
 	Logo       int       `orm:"column(logo)"`
@@ -60,12 +61,27 @@ func (a *S_Article) SetId(id interface{}) error {
 	return err
 }
 
+func (a *S_Article) SetPackageId(id interface{}) error {
+	tmpId := fmt.Sprintf("%v", id)
+	aid, err := strconv.Atoi(tmpId)
+	if err == nil {
+		a.PackageId = aid
+	} else {
+		beego.Error("PackageId字段必须为正整数型【%v】\n", id)
+	}
+	return err
+}
+
 func (a *S_Article) SetStatus(state int) {
 	a.Status = state
 }
 
 func (a *S_Article) GetId() int {
 	return a.Id
+}
+
+func (a *S_Article) GetPackageId() int {
+	return a.PackageId
 }
 
 func (a *S_Article) SetAddTime(t time.Time) {
@@ -148,12 +164,20 @@ func GetArticlesPage(size, index int, ordercolumn, orderby string, data map[stri
 	var as []*S_Article
 	o := orm.NewOrm()
 	qt := o.QueryTable("s_article")
-	if data["AddUser"] != nil {
-		qt = qt.Filter("AddUser__icontains", data["AddUser"])
+
+	if data["User"] != nil {
+		user := data["User"].(*S_User)
+		qt = qt.Filter("AddUser", user.GetUserName())
 	}
+
 	if data["Status"] != nil {
 		qt = qt.Filter("Status", data["Status"])
 	}
+
+	if data["PackageId"] != nil {
+		qt = qt.Filter("PackageId", data["PackageId"])
+	}
+
 	qt = qt.Exclude("Status", DELETE)
 	_, err := qt.OrderBy(ordercolumn).Limit(size, (index-1)*size).All(&as)
 

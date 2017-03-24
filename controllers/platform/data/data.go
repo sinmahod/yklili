@@ -62,6 +62,8 @@ func (c *DataController) Prepare() {
 		}
 	}
 
+	c.RequestData["User"] = c.GetSession("User")
+
 	c.Data["Request"] = c.RequestData
 
 	//文件上传

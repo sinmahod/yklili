@@ -3,6 +3,7 @@ package bleve
 import (
 	"errors"
 	"fmt"
+	"github.com/astaxie/beego"
 	"github.com/blevesearch/bleve"
 	"github.com/blevesearch/bleve/mapping"
 	"github.com/blevesearch/bleve/numeric"
@@ -38,6 +39,7 @@ var (
 
 //初始化
 func init() {
+	beego.Info("正在加载索引文件...")
 
 	DICT_DIR = path.Join(path.Dir(GetCurrentFilePath()), "dict")
 	DICT_PATH = path.Join(DICT_DIR, "jieba.dict.utf8")
@@ -82,6 +84,8 @@ func init() {
 			}
 		}
 	}
+
+	beego.Info("索引文件加载完成")
 }
 
 func GetCurrentFilePath() string {

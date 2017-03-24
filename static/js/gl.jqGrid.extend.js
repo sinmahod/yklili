@@ -72,7 +72,6 @@
 		url: dataGrid.attr('url'),
 		mtype: "GET", 
 		datatype: "json",
-
 		
 		caption: options.title,  	//表格名称
 		rowNum: rows, 		// 显示行数，-1为显示全部,默认自适应
@@ -135,13 +134,13 @@
 	 	onSelectRow: function(rowid,s) {
 	 		//点击行时触发
 	 		if(s && selectfn){
-				selectfn(rowid);
+				selectfn(rowid,s);
 			}
 	 	},
-	 	ondblClickRow: function(rowid){
+	 	ondblClickRow: function(rowid,iRow,iCol,e){
 	 		//选中行双击时触发
 	 		if(onbdclickfn){
-				onbdclickfn(rowid);
+				onbdclickfn(rowid,iRow,iCol,e);
 			}
 	 	}
       }, options);
@@ -277,9 +276,16 @@ DataGrid.setParams = function(tableid , key , value){
 *    @Return 无
 */
 DataGrid.loadData = function(tableid){
-    $('#'+tableid).jqGrid("setGridParam", { postData: DataGrid.Params }).trigger('reloadGrid');
+    $('#'+tableid).jqGrid("setGridParam", { postData: DataGrid.Params }).trigger('reloadGrid'); 
     /** 使用完毕后清空 **/
     DataGrid.Params = {};
+}
+
+/**
+*	 更改标题
+*/
+DataGrid.setTitle = function(tableid , title){
+	$('#'+tableid).jqGrid("setCaption",title);
 }
 
 

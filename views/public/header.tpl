@@ -311,7 +311,7 @@
                                 <li class="divider"></li>
 
                                 <li>
-                                    <a href="#" id="logout">
+                                    <a href="/logout" id="logout">
                                         <i class="ace-icon fa fa-power-off"></i>
                                         Logout
                                     </a>

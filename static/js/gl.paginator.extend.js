@@ -61,7 +61,7 @@ Date.prototype.Format = function (fmt) { //author: meizz
 var DataListMap = {};
 
 window.DataList = function(options){
-    var $pagebar,$list,html,url,size,fn,currentClass,nocurrentClass,emptyHtml; 
+    var $pagebar,$list,html,url,size,fn,currentClass,nocurrentClass,emptyHtml,data; 
     var cpage = 1;
     var total = 0;
 
@@ -86,17 +86,8 @@ window.DataList = function(options){
         currentClass = typeof(options["currentClass"]) != "undefined" ? options["currentClass"] : "active";
         nocurrentClass = typeof(options["nocurrentClass"]) != "undefined" ? options["nocurrentClass"] : "";
         emptyHtml = typeof(options["emptyHtml"]) != "undefined" ? options["emptyHtml"] : "";
+        data = typeof(options["data"]) != "undefined" ? options["data"] : null;
     }
-
-    if (!$pagebar){
-        $("[pagebar='true']").each(function(){
-            $pagebar = $(this);
-        });
-        // if (!$pagebar){
-        //     throw new Error( 'not find pagebar' );
-        // }
-    }
-
 
     if (!$list){
         //检查所有带有List属性的标签，开始循环当前标签（包含子dom）
@@ -162,7 +153,8 @@ window.DataList = function(options){
 
     //分页条初始化
     function initPagebar(pagebar){
-        if (total <= 1) {
+        if (total <= 1){
+            pagebar.hide();
             return;
         }
         var n = 5;
@@ -226,10 +218,17 @@ window.DataList = function(options){
     //size = 每页请求的数据量
     //fn = 后执行函数
     function readData(url,page,fn){
+        if(data){
+            data['page'] = page;
+            data['rows'] = size; 
+        }else{
+            data = {page:page, rows:size};
+        }
+
         $.ajax({
             url : url,
             type : 'post',
-            data : {page:page, rows:size},//这里使用json对象
+            data : data,//这里使用json对象
             success : function(result){
                 if (result != null ){
                     fn(result);
@@ -275,6 +274,8 @@ window.DataList = function(options){
    
  };
 
+ DataList.Params = {};
+
  DataList.loadData = function(listid){
     var map = DataListMap[listid];
     DataList({
@@ -282,8 +283,13 @@ window.DataList = function(options){
         pagebar: map["pagebar"],
         html: map["template"],
         size: map["size"],
-        fn: map["fn"]
+        fn: map["fn"],
+        data: DataList.Params
     });
+ }
+
+ DataList.setParam = function(listid,key,value){
+    DataList.Params[key] = value;
  }
 
  })(jQuery);
