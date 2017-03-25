@@ -11,5 +11,7 @@ install:
   - go get github.com/shirou/gopsutil
   - go get github.com/tealeg/xlsx
   - go get github.com/PuerkitoBio/goquery
+  - go get github.com/garyburd/redigo
+  - go get github.com/huichen/wukong
 script:
   - go test -v ./...
