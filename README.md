@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/sinmahod/yklili.svg?branch=master)](https://travis-ci.org/sinmahod/yklili)
 
-简易个人博客系统，使用`Golang 1.7.4`+[`Beego 1.6.1`](https://github.com/astaxie/beego)。
+简易个人博客系统，使用`Golang 1.7.4`+[`Beego 1.7.2`](https://github.com/astaxie/beego)。
 后台使用[`ace admin`](https://github.com/bopoda/ace)。
 
 初学Go语言练手，目前只实现了比较简单的一些功能。
