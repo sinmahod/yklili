@@ -1,8 +1,8 @@
 package test
 
 import (
+	"github.com/sinmahod/yklili/util/cron"
 	"testing"
-	"yklili/util/cron"
 )
 
 func Test_ReadTaskFile(t *testing.T) {

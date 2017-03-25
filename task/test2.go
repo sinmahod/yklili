@@ -2,7 +2,7 @@ package task
 
 import (
 	"fmt"
-	"yklili/service/cron"
+	"github.com/sinmahod/yklili/service/cron"
 )
 
 func init() {

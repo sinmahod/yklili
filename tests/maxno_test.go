@@ -1,8 +1,8 @@
 package test
 
 import (
+	"github.com/sinmahod/yklili/models"
 	"testing"
-	"yklili/models"
 
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"

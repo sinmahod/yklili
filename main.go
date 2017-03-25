@@ -1,20 +1,20 @@
 package main
 
 import (
-	_ "yklili/conf" //初始化配置信息
+	_ "github.com/sinmahod/yklili/conf" //初始化配置信息
 
-	_ "yklili/routers" //加载路由
+	_ "github.com/sinmahod/yklili/routers" //加载路由
 
-	_ "yklili/service/bleve" //初始化索引
+	_ "github.com/sinmahod/yklili/service/bleve" //初始化索引
 
-	_ "yklili/service/cache" //初始化缓存
+	_ "github.com/sinmahod/yklili/service/cache" //初始化缓存
 
 	"fmt"
-	"yklili/controllers/platform"
-	"yklili/controllers/platform/data"
-	"yklili/controllers/template"
-	"yklili/service/cron" //定时任务准备
-	_ "yklili/task"       //初始化定时任务
+	"github.com/sinmahod/yklili/controllers/platform"
+	"github.com/sinmahod/yklili/controllers/platform/data"
+	"github.com/sinmahod/yklili/controllers/template"
+	"github.com/sinmahod/yklili/service/cron" //定时任务准备
+	_ "github.com/sinmahod/yklili/task"       //初始化定时任务
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/context"

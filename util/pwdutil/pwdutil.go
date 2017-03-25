@@ -1,10 +1,10 @@
 package pwdutil
 
 import (
+	"github.com/sinmahod/yklili/util/numberutil"
+	"github.com/sinmahod/yklili/util/stringutil"
 	"strconv"
 	"strings"
-	"yklili/util/numberutil"
-	"yklili/util/stringutil"
 )
 
 //密码生成与密码校验

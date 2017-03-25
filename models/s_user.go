@@ -3,11 +3,11 @@ package models
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/sinmahod/yklili/util/modelutil"
+	"github.com/sinmahod/yklili/util/pwdutil"
 	"strconv"
 	"strings"
 	"time"
-	"yklili/util/modelutil"
-	"yklili/util/pwdutil"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"

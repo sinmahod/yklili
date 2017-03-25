@@ -1,10 +1,10 @@
 package front
 
 import (
+	"github.com/sinmahod/yklili/models"
+	"github.com/sinmahod/yklili/service/bleve"
 	"html/template"
 	"strings"
-	"yklili/models"
-	"yklili/service/bleve"
 )
 
 type SearchController struct {

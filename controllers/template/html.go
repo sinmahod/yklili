@@ -1,8 +1,8 @@
 package template
 
 import (
+	"github.com/sinmahod/yklili/models"
 	"strings"
-	"yklili/models"
 
 	"github.com/astaxie/beego"
 )

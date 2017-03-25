@@ -2,13 +2,13 @@ package data
 
 import (
 	"github.com/astaxie/beego"
+	"github.com/sinmahod/yklili/models"
+	"github.com/sinmahod/yklili/models/orm"
+	"github.com/sinmahod/yklili/service/bleve"
+	"github.com/sinmahod/yklili/service/progress"
+	"github.com/sinmahod/yklili/util/numberutil"
 	"strconv"
 	"strings"
-	"yklili/models"
-	"yklili/models/orm"
-	"yklili/service/bleve"
-	"yklili/service/progress"
-	"yklili/util/numberutil"
 )
 
 type SearchController struct {

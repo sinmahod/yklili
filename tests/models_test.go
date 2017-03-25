@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/sinmahod/yklili/models"
+	"github.com/sinmahod/yklili/util/numberutil"
+	"github.com/sinmahod/yklili/util/pwdutil"
+	"github.com/sinmahod/yklili/util/stringutil"
 	"testing"
-	"yklili/models"
-	"yklili/util/numberutil"
-	"yklili/util/pwdutil"
-	"yklili/util/stringutil"
 )
 
 func init() {

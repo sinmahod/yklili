@@ -3,7 +3,7 @@ package routers
 import (
 	"fmt"
 	"github.com/astaxie/beego"
-	"yklili/controllers/front"
+	"github.com/sinmahod/yklili/controllers/front"
 )
 
 func init() {

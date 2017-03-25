@@ -1,8 +1,8 @@
 package data
 
 import (
+	"github.com/sinmahod/yklili/service/progress"
 	"time"
-	"yklili/service/progress"
 )
 
 type TestController struct {

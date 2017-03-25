@@ -2,12 +2,12 @@ package data
 
 import (
 	"github.com/astaxie/beego"
+	"github.com/sinmahod/yklili/conf"
+	"github.com/sinmahod/yklili/models"
+	"github.com/sinmahod/yklili/util/dateutil"
+	"github.com/sinmahod/yklili/util/fileutil"
+	"github.com/sinmahod/yklili/util/stringutil"
 	"path"
-	"yklili/conf"
-	"yklili/models"
-	"yklili/util/dateutil"
-	"yklili/util/fileutil"
-	"yklili/util/stringutil"
 )
 
 type UploadController struct {

@@ -1,8 +1,8 @@
 package platform
 
 import (
-	"yklili/models"
-	"yklili/util/pwdutil"
+	"github.com/sinmahod/yklili/models"
+	"github.com/sinmahod/yklili/util/pwdutil"
 
 	"github.com/astaxie/beego"
 )

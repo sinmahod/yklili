@@ -1,11 +1,11 @@
 package data
 
 import (
+	"github.com/sinmahod/yklili/util"
 	"mime/multipart"
 	"net/http"
 	"reflect"
 	"regexp"
-	"yklili/util"
 
 	"github.com/astaxie/beego"
 )

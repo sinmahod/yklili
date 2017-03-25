@@ -1,8 +1,8 @@
 package data
 
 import (
-	"yklili/models"
-	"yklili/service/cron"
+	"github.com/sinmahod/yklili/models"
+	"github.com/sinmahod/yklili/service/cron"
 )
 
 type CronController struct {

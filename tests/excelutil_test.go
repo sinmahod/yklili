@@ -2,8 +2,8 @@ package test
 
 import (
 	"fmt"
+	"github.com/sinmahod/yklili/util/fileutil"
 	"testing"
-	"yklili/util/fileutil"
 )
 
 type ExcelData struct {

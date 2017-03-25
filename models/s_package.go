@@ -3,10 +3,10 @@ package models
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/sinmahod/yklili/util/modelutil"
 	"strconv"
 	"strings"
 	"time"
-	"yklili/util/modelutil"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"

@@ -2,10 +2,10 @@ package test
 
 import (
 	"fmt"
+	"github.com/sinmahod/yklili/util"
 	"regexp"
 	"strings"
 	"testing"
-	"yklili/util"
 )
 
 func Test_AnalysisGoTag(t *testing.T) {

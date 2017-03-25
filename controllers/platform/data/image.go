@@ -2,11 +2,11 @@ package data
 
 import (
 	"github.com/astaxie/beego"
+	"github.com/sinmahod/yklili/conf"
+	"github.com/sinmahod/yklili/models"
+	"github.com/sinmahod/yklili/util/stringutil"
 	"io/ioutil"
 	"os"
-	"yklili/conf"
-	"yklili/models"
-	"yklili/util/stringutil"
 )
 
 type ImageController struct {

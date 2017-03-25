@@ -2,9 +2,9 @@ package conf
 
 import (
 	"github.com/astaxie/beego"
+	"github.com/sinmahod/yklili/models"
 	"runtime"
 	"strconv"
-	"yklili/models"
 )
 
 var configItem map[string]string

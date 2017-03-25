@@ -5,13 +5,13 @@ import (
 	"fmt"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
+	transaction "github.com/sinmahod/yklili/models/orm"
+	"github.com/sinmahod/yklili/service/progress"
+	"github.com/sinmahod/yklili/util/fileutil"
+	"github.com/sinmahod/yklili/util/modelutil"
 	"strconv"
 	"strings"
 	"time"
-	transaction "yklili/models/orm"
-	"yklili/service/progress"
-	"yklili/util/fileutil"
-	"yklili/util/modelutil"
 )
 
 /**

@@ -7,9 +7,9 @@ import (
 	"github.com/shirou/gopsutil/disk"
 	"github.com/shirou/gopsutil/host"
 	"github.com/shirou/gopsutil/mem"
+	"github.com/sinmahod/yklili/models"
 	"strconv"
 	"strings"
-	"yklili/models"
 )
 
 type SystemController struct {

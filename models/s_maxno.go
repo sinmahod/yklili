@@ -1,10 +1,10 @@
 package models
 
 import (
+	"github.com/sinmahod/yklili/util/stringutil"
 	"strconv"
 	"strings"
 	"sync"
-	"yklili/util/stringutil"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"

@@ -2,7 +2,7 @@ package front
 
 import (
 	"github.com/astaxie/beego"
-	"yklili/models"
+	"github.com/sinmahod/yklili/models"
 )
 
 type ArticleController struct {
