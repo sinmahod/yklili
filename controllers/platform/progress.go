@@ -2,7 +2,7 @@
 package platform
 
 import (
-	"beegostudy/service/progress"
+	"yklili/service/progress"
 
 	"github.com/astaxie/beego"
 )

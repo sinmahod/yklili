@@ -1,10 +1,10 @@
 package front
 
 import (
-	"beegostudy/models"
-	"beegostudy/service/bleve"
 	"html/template"
 	"strings"
+	"yklili/models"
+	"yklili/service/bleve"
 )
 
 type SearchController struct {

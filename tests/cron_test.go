@@ -1,8 +1,8 @@
 package test
 
 import (
-	"beegostudy/util/cron"
 	"testing"
+	"yklili/util/cron"
 )
 
 func Test_ReadTaskFile(t *testing.T) {

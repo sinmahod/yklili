@@ -24,7 +24,7 @@
 	<div class="clearfix"></div>
 
 	<div class="total-content">
-			<div class="col-md-9 col-xs-12">
+			<div class="col-md-6 col-md-offset-3 col-xs-12">
 				<div class="top-news content-hide" id="list1" dataurl="/article/List?Status=1" page="true" autoshow="true">
 					<h2><a href="article?id=${Id}" class="morenews">${Title}</a></h2>
 					<p>
@@ -34,15 +34,17 @@
 						${AddTime_DATE_yyyy-MM-dd hh:mm:ss}
 					</p>
 				</div>
+				<div id="emptyDiv" class="shake animated" style="font-size:1.5em;margin-top:5em;color:#fff;text-align:center;display: none;">作者很懒，还没有创建相关文章哟。</div>
 				<div align="center">
                     <ul class="pagination" pagebar="true" id="pagebar"></ul>
                 </div>
 			</div>
-			<div class="col-md-3 col-xs-12">
+			<div class="col-md-2 col-xs-12">
 				<div class="top-news">
 					<h3>&nbsp;</h3>
+					<a href="javascript:void();" onclick="searchData(0,this)" class="morenews">全部</a>
 					<ul class="content-hide" id="packagelist" dataurl="/article/PackageList" autoshow="true">
-						<li id="package_${Id}"><a href="#;" onclick="searchData(${Id},this)" class="morenews">${Title} （${ArticleCount}）</a></li>
+						<li id="package_${Id}"><a href="javascript:void();" onclick="searchData(${Id},this)" class="morenews">${Title} （${ArticleCount}）</a></li>
 					</ul>
 				</div>
 			</div>
@@ -56,6 +58,7 @@
 		        pagebar: "pagebar",
 		        currentClass: "current",
                 nocurrentClass: "nocurrent",
+             	emptyEle: 'emptyDiv',
 		        size: 5
 		    });
 

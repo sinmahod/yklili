@@ -1,10 +1,10 @@
 package pwdutil
 
 import (
-	"beegostudy/util/numberutil"
-	"beegostudy/util/stringutil"
 	"strconv"
 	"strings"
+	"yklili/util/numberutil"
+	"yklili/util/stringutil"
 )
 
 //密码生成与密码校验

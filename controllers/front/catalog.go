@@ -1,8 +1,8 @@
 package front
 
 import (
-	"beegostudy/models"
 	"github.com/astaxie/beego"
+	"yklili/models"
 )
 
 type CatalogController struct {

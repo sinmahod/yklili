@@ -1,8 +1,8 @@
 package task
 
 import (
-	"beegostudy/service/cron"
 	"fmt"
+	"yklili/service/cron"
 )
 
 func init() {

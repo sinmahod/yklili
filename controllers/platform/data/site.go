@@ -1,12 +1,12 @@
 package data
 
 import (
-	"beegostudy/conf"
-	"beegostudy/models"
-	"beegostudy/models/orm"
-	"beegostudy/util/numberutil"
 	"strconv"
 	"strings"
+	"yklili/conf"
+	"yklili/models"
+	"yklili/models/orm"
+	"yklili/util/numberutil"
 
 	"github.com/astaxie/beego"
 )

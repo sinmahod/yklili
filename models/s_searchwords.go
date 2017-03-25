@@ -1,10 +1,6 @@
 package models
 
 import (
-	transaction "beegostudy/models/orm"
-	"beegostudy/service/progress"
-	"beegostudy/util/fileutil"
-	"beegostudy/util/modelutil"
 	"encoding/json"
 	"fmt"
 	"github.com/astaxie/beego"
@@ -12,6 +8,10 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	transaction "yklili/models/orm"
+	"yklili/service/progress"
+	"yklili/util/fileutil"
+	"yklili/util/modelutil"
 )
 
 /**

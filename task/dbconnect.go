@@ -1,7 +1,7 @@
 package task
 
 import (
-	"beegostudy/service/cron"
+	"yklili/service/cron"
 
 	"github.com/astaxie/beego/orm"
 )

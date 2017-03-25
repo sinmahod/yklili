@@ -1,7 +1,6 @@
 package data
 
 import (
-	"beegostudy/models"
 	"fmt"
 	"github.com/astaxie/beego"
 	"github.com/shirou/gopsutil/cpu"
@@ -10,6 +9,7 @@ import (
 	"github.com/shirou/gopsutil/mem"
 	"strconv"
 	"strings"
+	"yklili/models"
 )
 
 type SystemController struct {

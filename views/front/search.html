@@ -48,7 +48,7 @@
     <div class="clearfix"></div>
 
     <div class="total-content">
-            <div class="col-md-8 col-md-offset-2 col-xs-12">
+            <div class="col-md-6 col-md-offset-3 col-xs-12">
                 <div class="top-news content-hide" id="list1" dataurl="/search/Search?q={{.Request.q}}&p={{.Request.p}}" page="true" autoshow="true">
                     <h2><a href="article?id=${Id}" class="morenews">${Title}</a></h2>
                     <div>${Content}</div>
@@ -59,6 +59,7 @@
                         ${AddTime_DATE_yyyy-MM-dd hh:mm:ss}
                     </p>
                 </div>
+                <div id="emptyDiv" class="shake animated" style="font-size:1.5em;margin-top:5em;color:#fff;text-align:center;display: none;">没有查询到包含<mark>{{.Request.q}}</mark>的文章，请换一个关键词试试。</div>
                 <div align="center">
                     <ul class="pagination" pagebar="true" id="pagebar"></ul>
                 </div>
@@ -91,7 +92,7 @@
                 pagebar: "pagebar",
                 currentClass: "current",
                 nocurrentClass: "nocurrent",
-                emptyHtml: '<div class="shake animated" style="font-size:1.5em;margin-top:5em;color:#fff;text-align:center;">没有查询到包含<mark>{{.Request.q}}</mark>的文章，请换一个关键词试试。</div>',
+                emptyEle: 'emptyDiv',
                 size: 10
             });
            

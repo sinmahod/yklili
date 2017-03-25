@@ -61,7 +61,7 @@ Date.prototype.Format = function (fmt) { //author: meizz
 var DataListMap = {};
 
 window.DataList = function(options){
-    var $pagebar,$list,html,url,size,fn,currentClass,nocurrentClass,emptyHtml,data; 
+    var $pagebar,$list,html,url,size,fn,currentClass,nocurrentClass,emptyEle,data; 
     var cpage = 1;
     var total = 0;
 
@@ -85,7 +85,7 @@ window.DataList = function(options){
         fn = typeof(options["fn"]) != "undefined" ? options["fn"] : null;
         currentClass = typeof(options["currentClass"]) != "undefined" ? options["currentClass"] : "active";
         nocurrentClass = typeof(options["nocurrentClass"]) != "undefined" ? options["nocurrentClass"] : "";
-        emptyHtml = typeof(options["emptyHtml"]) != "undefined" ? options["emptyHtml"] : "";
+        emptyEle = typeof(options["emptyEle"]) != "undefined" ? options["emptyEle"] : "";
         data = typeof(options["data"]) != "undefined" ? options["data"] : null;
     }
 
@@ -108,7 +108,7 @@ window.DataList = function(options){
         if(!html){
              html = $list.html();
         }   
-        DataListMap[id] = {template:html,pagebar:$pagebar,size:size,fn:fn};
+        DataListMap[id] = {template:html,pagebar:$pagebar,size:size,fn:fn,currentClass:currentClass,nocurrentClass: nocurrentClass,emptyEle:emptyEle};
         execute();
     }
 
@@ -133,18 +133,23 @@ window.DataList = function(options){
                     }
                     if ($list.attr("autoshow")){
                         $list.show();
+                        if (emptyEle){
+                            $("#"+emptyEle).hide();
+                        }
                     }
                     if($pagebar){
                         initPagebar($pagebar);    
                     }
                 }
             }else{
-                if (emptyHtml){
-                    $list.replaceWith(emptyHtml);    
-                }else{
-                    $list.hide();
+                $list.hide();
+                if (emptyEle){
+                    $("#"+emptyEle).show();
                 }
-                
+                if($pagebar){
+                    $pagebar.hide();  
+                }
+               
             }
         });
     }
@@ -210,6 +215,7 @@ window.DataList = function(options){
             }
         };
         pagebar.bootstrapPaginator(options);
+        pagebar.show();
     }
 
     //ajax同步方式读取数据
@@ -284,6 +290,9 @@ window.DataList = function(options){
         html: map["template"],
         size: map["size"],
         fn: map["fn"],
+        emptyEle: map["emptyEle"],
+        currentClass: map["currentClass"],
+        nocurrentClass: map["nocurrentClass"],
         data: DataList.Params
     });
  }

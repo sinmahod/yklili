@@ -1,14 +1,14 @@
 package data
 
 import (
-	"beegostudy/models"
-	"beegostudy/models/orm"
-	"beegostudy/service/bleve"
-	"beegostudy/service/progress"
-	"beegostudy/util/numberutil"
 	"github.com/astaxie/beego"
 	"strconv"
 	"strings"
+	"yklili/models"
+	"yklili/models/orm"
+	"yklili/service/bleve"
+	"yklili/service/progress"
+	"yklili/util/numberutil"
 )
 
 type SearchController struct {

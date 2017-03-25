@@ -1,9 +1,9 @@
 package routers
 
 import (
-	"beegostudy/controllers/front"
 	"fmt"
 	"github.com/astaxie/beego"
+	"yklili/controllers/front"
 )
 
 func init() {

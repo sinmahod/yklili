@@ -1,8 +1,8 @@
 package data
 
 import (
-	"beegostudy/models"
-	"beegostudy/service/cron"
+	"yklili/models"
+	"yklili/service/cron"
 )
 
 type CronController struct {

@@ -1,20 +1,20 @@
 package main
 
 import (
-	_ "beegostudy/conf" //初始化配置信息
+	_ "yklili/conf" //初始化配置信息
 
-	_ "beegostudy/routers" //加载路由
+	_ "yklili/routers" //加载路由
 
-	_ "beegostudy/service/bleve" //初始化索引
+	_ "yklili/service/bleve" //初始化索引
 
-	_ "beegostudy/service/cache" //初始化缓存
+	_ "yklili/service/cache" //初始化缓存
 
-	"beegostudy/controllers/platform"
-	"beegostudy/controllers/platform/data"
-	"beegostudy/controllers/template"
-	"beegostudy/service/cron" //定时任务准备
-	_ "beegostudy/task"       //初始化定时任务
 	"fmt"
+	"yklili/controllers/platform"
+	"yklili/controllers/platform/data"
+	"yklili/controllers/template"
+	"yklili/service/cron" //定时任务准备
+	_ "yklili/task"       //初始化定时任务
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/context"

@@ -1,9 +1,9 @@
 package platform
 
 import (
-	"beegostudy/models"
-	"beegostudy/util/pwdutil"
 	"fmt"
+	"yklili/models"
+	"yklili/util/pwdutil"
 
 	"github.com/astaxie/beego"
 )

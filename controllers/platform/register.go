@@ -1,8 +1,8 @@
 package platform
 
 import (
-	"beegostudy/models"
-	"beegostudy/util/pwdutil"
+	"yklili/models"
+	"yklili/util/pwdutil"
 
 	"github.com/astaxie/beego"
 )

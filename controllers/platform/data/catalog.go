@@ -1,11 +1,11 @@
 package data
 
 import (
-	"beegostudy/models"
-	"beegostudy/models/orm"
-	"beegostudy/util/numberutil"
 	"github.com/astaxie/beego"
 	"strings"
+	"yklili/models"
+	"yklili/models/orm"
+	"yklili/util/numberutil"
 )
 
 type CatalogController struct {

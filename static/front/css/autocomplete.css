@@ -34,7 +34,7 @@ https://github.com/lorecioni
 	cursor: pointer;
 	border-radius: 0px 3px 3px 0px;
 	transition: all 0.2s ease-out 0s;
-	margin: 0.5px 0px 0px -1px;
+	/*margin: 0.5px 0px 0px -1px;*/
 }
 
 .autocomplete-button:HOVER {

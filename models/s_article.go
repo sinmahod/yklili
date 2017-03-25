@@ -1,9 +1,6 @@
 package models
 
 import (
-	"beegostudy/service/bleve"
-	"beegostudy/service/progress"
-	"beegostudy/util/modelutil"
 	"encoding/json"
 	"fmt"
 	"github.com/astaxie/beego"
@@ -11,6 +8,9 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"yklili/service/bleve"
+	"yklili/service/progress"
+	"yklili/util/modelutil"
 )
 
 /**
@@ -175,7 +175,10 @@ func GetArticlesPage(size, index int, ordercolumn, orderby string, data map[stri
 	}
 
 	if data["PackageId"] != nil {
-		qt = qt.Filter("PackageId", data["PackageId"])
+		tmpId := fmt.Sprintf("%v", data["PackageId"])
+		if pid, err := strconv.Atoi(tmpId); err == nil && pid != 0 {
+			qt = qt.Filter("PackageId", pid)
+		}
 	}
 
 	qt = qt.Exclude("Status", DELETE)

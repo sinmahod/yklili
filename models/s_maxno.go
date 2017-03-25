@@ -1,10 +1,10 @@
 package models
 
 import (
-	"beegostudy/util/stringutil"
 	"strconv"
 	"strings"
 	"sync"
+	"yklili/util/stringutil"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"

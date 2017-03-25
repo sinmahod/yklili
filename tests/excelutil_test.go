@@ -1,9 +1,9 @@
 package test
 
 import (
-	"beegostudy/util/fileutil"
 	"fmt"
 	"testing"
+	"yklili/util/fileutil"
 )
 
 type ExcelData struct {

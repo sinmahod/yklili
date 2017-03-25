@@ -1,13 +1,13 @@
 package models
 
 import (
-	"beegostudy/util/modelutil"
-	"beegostudy/util/stringutil"
 	"encoding/json"
 	"fmt"
 	"strconv"
 	"strings"
 	"time"
+	"yklili/util/modelutil"
+	"yklili/util/stringutil"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"

@@ -1,11 +1,11 @@
 package data
 
 import (
-	"beegostudy/util"
 	"mime/multipart"
 	"net/http"
 	"reflect"
 	"regexp"
+	"yklili/util"
 
 	"github.com/astaxie/beego"
 )

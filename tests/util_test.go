@@ -1,11 +1,11 @@
 package test
 
 import (
-	"beegostudy/util"
 	"fmt"
 	"regexp"
 	"strings"
 	"testing"
+	"yklili/util"
 )
 
 func Test_AnalysisGoTag(t *testing.T) {

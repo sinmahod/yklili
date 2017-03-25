@@ -1,7 +1,6 @@
 package models
 
 import (
-	"beegostudy/util/modelutil"
 	"encoding/json"
 	"fmt"
 	"github.com/astaxie/beego"
@@ -9,6 +8,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"yklili/util/modelutil"
 )
 
 /**

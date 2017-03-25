@@ -1,11 +1,11 @@
 package models
 
 import (
-	"beegostudy/util/modelutil"
 	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
+	"yklili/util/modelutil"
 
 	"github.com/astaxie/beego/orm"
 )

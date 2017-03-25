@@ -1,8 +1,8 @@
 package template
 
 import (
-	"beegostudy/models"
 	"strings"
+	"yklili/models"
 
 	"github.com/astaxie/beego"
 )

@@ -1,14 +1,14 @@
 package test
 
 import (
-	"beegostudy/models"
-	"beegostudy/util/numberutil"
-	"beegostudy/util/pwdutil"
-	"beegostudy/util/stringutil"
 	"fmt"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
 	"testing"
+	"yklili/models"
+	"yklili/util/numberutil"
+	"yklili/util/pwdutil"
+	"yklili/util/stringutil"
 )
 
 func init() {
