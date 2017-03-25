@@ -2,15 +2,15 @@ package test
 
 import (
 	"fmt"
-	"github.com/sinmahod/yklili/util"
+	"github.com/sinmahod/yklili/fileutil"
 	"regexp"
 	"strings"
 	"testing"
 )
 
 func Test_AnalysisGoTag(t *testing.T) {
-	str := util.FileToString(`E:\github\go\gostudy\src\beegostudy\views\platform\user\test.html`)
-	t.Fatal(util.AnalysisGoTag(str))
+	str := fileutil.FileToString(`E:\github\go\gostudy\src\beegostudy\views\platform\user\test.html`)
+	t.Fatal(fileutil.AnalysisGoTag(str))
 }
 
 func Test_String(t *testing.T) {
