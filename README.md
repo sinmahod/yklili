@@ -8,7 +8,7 @@
 
 [Demo](https://blog.yklili.com)
 
-配置数据库（仅支持mysql）`github.com/sinmahod/conf/app.conf`
+配置数据库（仅支持mysql）`github.com/sinmahod/yklili/conf/app.conf`
 ```
 #应用名称
 appname = YKlili
