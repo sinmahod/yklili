@@ -37,4 +37,4 @@ Redis.Password = qweqwe
 Redis.DBNum = 0
 ```
 
-######<font color=blue>代码中调用了结巴分词的Go语言版本，包含部分C++代码编译时需要gcc</font>
+>###### 代码中调用了结巴分词的Go语言版本，包含部分C++代码编译时需要gcc
