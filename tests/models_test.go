@@ -55,7 +55,7 @@ func Test_RunSyncdb(t *testing.T) {
 	/**************自动建表***********/
 	orm.RegisterDriver("mysql", orm.DRMySQL)
 
-	orm.RegisterDataBase("default", "mysql", "root:qweqwe@tcp(60.205.164.3:3306)/beestudy?charset=utf8")
+	orm.RegisterDataBase("default", "mysql", "root:qweqwe@tcp(localhost:3306)/beestudy?charset=utf8")
 	//数据库别名
 	name := "default"
 
