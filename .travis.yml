@@ -1,1 +1,15 @@
 language: go
+
+go:
+  - 1.7.x
+  - master
+install:
+  - go get github.com/go-sql-driver/mysql
+  - go get github.com/astaxie/beego
+  - go get github.com/blevesearch/bleve
+  - go get github.com/yanyiwu/gojieba
+  - go get github.com/shirou/gopsutil
+  - go get github.com/tealeg/xlsx
+  - go get github.com/PuerkitoBio/goquery
+script:
+  - go test -v ./...
