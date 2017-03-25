@@ -183,7 +183,11 @@ func ImportWords(wordfile, uname string, prog *progress.ProgressTask) error {
 
 	tran := new(transaction.Transaction)
 
-	str := fileutil.FileToString(wordfile)
+	str, err := fileutil.FileToString(wordfile)
+
+	if err != nil {
+		return err
+	}
 
 	words := strings.Split(str, "\n")
 

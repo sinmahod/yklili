@@ -94,14 +94,14 @@ func Exist(fileName string) bool {
 }
 
 // 读取文件内容
-func FileToString(filePath string) string {
+func FileToString(filePath string) (string, error) {
 	fi, err := os.Open(filePath)
 	if err != nil {
-		panic(err)
+		return "", err
 	}
 	defer fi.Close()
 	fd, err := ioutil.ReadAll(fi)
-	return string(fd)
+	return string(fd), nil
 }
 
 // 读取XML到结构

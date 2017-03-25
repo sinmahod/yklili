@@ -1,10 +1,9 @@
-package test
+package models
 
 import (
 	"fmt"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/sinmahod/yklili/models"
 	"github.com/sinmahod/yklili/util/numberutil"
 	"github.com/sinmahod/yklili/util/pwdutil"
 	"github.com/sinmahod/yklili/util/stringutil"
@@ -17,7 +16,7 @@ func init() {
 }
 
 func Test_MenuString(t *testing.T) {
-	m := new(models.S_Menu)
+	m := new(S_Menu)
 	m.Id = 1
 	o := orm.NewOrm()
 	o.Read(m, "Id")
@@ -25,7 +24,7 @@ func Test_MenuString(t *testing.T) {
 }
 
 func Test_UserString(t *testing.T) {
-	u := new(models.S_User)
+	u := new(S_User)
 	u.Id = 1
 	o := orm.NewOrm()
 	o.Read(u, "Id")
@@ -33,7 +32,7 @@ func Test_UserString(t *testing.T) {
 }
 
 func Test_AddArticle(t *testing.T) {
-	// a := new(models.S_Article)
+	// a := new(S_Article)
 	// a.Id = 3
 	// o := orm.NewOrm()
 	// a.Title = "Test"
@@ -45,10 +44,10 @@ func Test_AddArticle(t *testing.T) {
 
 func Test_LeftPad(t *testing.T) {
 	s := stringutil.LeftPad("aa", 'c', 8)
-	t.Fatal(s)
-	t.Fatal(numberutil.RandInt(1))
+	t.Log(s)
+	t.Log(numberutil.RandInt(1))
 	fmt.Println(pwdutil.GeneratePWD("qweqwe"))
-	t.Fatal("qweqwe")
+	t.Log("qweqwe")
 }
 
 func Test_RunSyncdb(t *testing.T) {
@@ -68,8 +67,8 @@ func Test_RunSyncdb(t *testing.T) {
 	// 遇到错误立即返回
 	err := orm.RunSyncdb(name, force, verbose)
 	if err != nil {
-		fmt.Println(err)
+		t.Error(err)
 	}
 
-	t.Fatal("Success")
+	t.Log("Success")
 }
