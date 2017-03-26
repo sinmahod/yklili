@@ -9,7 +9,7 @@
 [Demo](https://blog.yklili.com)
 
 配置数据库（仅支持mysql）`github.com/sinmahod/yklili/conf/app.conf`
-```
+```Ini
 #应用名称
 appname = YKlili
 #端口号
@@ -35,6 +35,21 @@ Redis.IP = 127.0.0.1
 Redis.Port = 6379
 Redis.Password = qweqwe
 Redis.DBNum = 0
+```
+
+初始化表结构[参考](/models/models_test.go)
+```Golang
+    orm.RegisterDriver("mysql", orm.DRMySQL)
+
+    orm.RegisterDataBase("default", "mysql", "root:qweqwe@tcp(localhost:3306)/beestudy?charset=utf8")
+
+    name := "default"
+
+    force := false
+
+    verbose := true
+
+    orm.RunSyncdb(name, force, verbose)
 ```
 
 >###### 代码中调用了结巴分词的Go语言版本，包含部分C++代码编译时需要gcc
