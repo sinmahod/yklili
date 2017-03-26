@@ -6,7 +6,7 @@
 <form id="form1">
 
 <input type="hidden" id="Id" name="Id" value="{{.Article.Id}}" />
-<input type="hidden" id="PackageId" name="PacakgeId" value="{{if .Article.PackageId}}{{.Article.PackageId}}{{else}}{{.Request.PackageId}}{{end}}" />
+<input type="hidden" id="PackageId" name="PackageId" value="{{if .Article.PackageId}}{{.Article.PackageId}}{{else}}{{.Request.PackageId}}{{end}}" />
 <div class="btn-group" style="float: left;">
 <button type="button" class="btn btn-inverse" id="back-btn">
     <i class="fa fa-angle-left"></i>
