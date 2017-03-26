@@ -50,7 +50,7 @@ func GetMaxId(noname string) int {
 	v := 0
 	if v, _ = getNoValue(noname, "ID"); v == 0 {
 		v++
-		no := S_MaxNo{NoName: noname, NoType: "ID", NoValue: 2, NoLength: 32}
+		no := S_MaxNo{NoName: noname, NoType: "ID", NoValue: 1, NoLength: 32}
 		o.Insert(&no)
 	} else {
 		v++
