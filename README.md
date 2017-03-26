@@ -41,7 +41,7 @@ Redis.DBNum = 0
 ```Golang
     orm.RegisterDriver("mysql", orm.DRMySQL)
 
-    orm.RegisterDataBase("default", "mysql", "root:qweqwe@tcp(localhost:3306)/beestudy?charset=utf8")
+    orm.RegisterDataBase("default", "mysql", "USERNAME:PASSWORD@tcp(localhost:3306)/DATABASE?charset=utf8")
 
     name := "default"
 
