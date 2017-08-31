@@ -215,7 +215,7 @@ func ReadXLSXToDT(filename string) ([][]string, error) {
 		for _, row := range sheet.Rows {
 			dr := make([]string, 0)
 			for _, cell := range row.Cells {
-				text, _ := cell.String()
+				text := cell.String()
 				dr = append(dr, text)
 			}
 			dt = append(dt, dr)
@@ -238,7 +238,7 @@ func readxlsx(filename string, nameMap map[string]string, ele *reflect.Value) er
 			if line == 0 {
 				exist := false
 				for i, cell := range row.Cells {
-					text, _ := cell.String()
+					text := cell.String()
 					if name, ok := nameMap[text]; ok {
 						exist = true
 						delete(nameMap, text)
@@ -250,7 +250,7 @@ func readxlsx(filename string, nameMap map[string]string, ele *reflect.Value) er
 				}
 			} else {
 				for i, cell := range row.Cells {
-					text, _ := cell.String()
+					text := cell.String()
 					if name, ok := nameMap[strconv.Itoa(i)]; ok {
 						//填充结构体value
 						setField(v, name, text)
