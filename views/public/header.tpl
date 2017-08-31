@@ -13,7 +13,7 @@
                     <a href="index.html" class="navbar-brand">
                         <small>
                             <i class="fa fa-leaf"></i>
-                            基础平台
+                            {{config "String" "appname" ""}}
                         </small>
                     </a>
                 </div>

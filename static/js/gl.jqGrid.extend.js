@@ -244,6 +244,8 @@ DataGrid.getSelectRowIds = function(tableid){
 	return  rowIds;
 }
 
+
+
 /**
 *   得到当前选中行数据，返回KV对象
 *   @Param  tableid  table的ID
@@ -276,6 +278,12 @@ DataGrid.setParams = function(tableid , key , value){
 *    @Return 无
 */
 DataGrid.loadData = function(tableid){
+
+	if (DataGrid.PageIndex in DataGrid.Params){
+		$('#'+tableid).jqGrid("setGridParam", {page : DataGrid.Params[DataGrid.PageIndex]});
+		delete DataGrid.Params[DataGrid.PageIndex];
+	}
+
     $('#'+tableid).jqGrid("setGridParam", { postData: DataGrid.Params }).trigger('reloadGrid'); 
     /** 使用完毕后清空 **/
     DataGrid.Params = {};

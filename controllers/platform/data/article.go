@@ -119,13 +119,17 @@ func (c *ArticleController) Del() {
 		tran := new(orm.Transaction)
 		article := new(models.S_Article)
 		article.SetId(id)
-		article.SetStatus(models.DELETE)
-		tran.Add(article, orm.UPDATE)
-		if err := tran.Commit(); err != nil {
-			beego.Error(err)
-			c.fail("操作失败，操作数据库时出现错误")
+		if err := article.Fill(); err == nil {
+			article.SetStatus(models.DELETE)
+			tran.Add(article, orm.UPDATE)
+			if err = tran.Commit(); err != nil {
+				beego.Error(err)
+				c.fail("操作失败，操作数据库时出现错误")
+			} else {
+				c.success("操作成功")
+			}
 		} else {
-			c.success("操作成功")
+			c.fail("操作失败，操作数据库时出现错误")
 		}
 	} else {
 		c.fail("操作失败，传递参数为空")

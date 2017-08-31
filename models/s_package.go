@@ -99,7 +99,7 @@ func (c *S_Package) IsNull() bool {
 	o := orm.NewOrm()
 	var cnt int64
 	o.Raw("SELECT COUNT(1) FROM s_article WHERE packageid = ?", c.Id).QueryRow(&cnt)
-	return cnt > 0
+	return !(cnt > 0)
 }
 
 //查询数据库

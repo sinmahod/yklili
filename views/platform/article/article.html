@@ -23,6 +23,10 @@
         <span class="bigger-115 no-text-shadow">新建文件夹</span>
     </button>
 
+     <button class="btn btn-sm btn-success" id="deldir-btn">
+        <span class="bigger-115 no-text-shadow">删除文件夹</span>
+    </button>
+
     <button class="btn btn-sm btn-primary hide" id="add-btn">
         <i class="ace-icon fa fa-plus bigger-125"></i>
         <span class="bigger-115 no-text-shadow">新建文章</span>
@@ -135,6 +139,22 @@
             bf.addButton("确认",save,null,13);
             bf.show();
         });
+
+        $('#deldir-btn').on(ace.click_event, function () {
+            BootFrame.confirm("确认删除此文件夹?",function(){
+                var ids = DataGrid.getSelectRowIds("datatable");
+                SendData.Post("/data/package/Del",{"Ids":ids.join(",")},function(response){
+                    if ( response.STATUS==1){
+                        BootFrame.alert(response.MESSAGE,function(){
+                            DataGrid.loadData('datatable');
+                        });
+                    }else{
+                        BootFrame.alert(response.MESSAGE,function(){
+                        },"操作失败",true);
+                    }
+                });
+            });
+        });
     }); 
 
     function save(bf, but){
@@ -165,18 +185,21 @@
         DataGrid.setTitle("datatable","文章管理");
         $('#add-btn').hide();
         $('#adddir-btn').show();
+        $('#deldir-btn').show();
         isarticle = false;
     }
 
     function goArticles(rowid,title){
         DataGrid.setParams("datatable","type","article");
         DataGrid.setParams("datatable","PackageId",rowid);
+        DataGrid.setParams("datatable","page",1);
         DataGrid.loadData("datatable");
         DataGrid.setTitle("datatable",'<span class="jqgrid-title-span" onclick="backDir()"><i class="fa fa-reply"></i>  '+title+'</span>')  
         packageid = rowid;
         $('#add-btn').removeClass('hide');
         $('#add-btn').show();
         $('#adddir-btn').hide();
+        $('#deldir-btn').hide();
         type = "article";
     }
 
