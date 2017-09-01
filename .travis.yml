@@ -3,6 +3,10 @@ language: go
 go:
   - 1.9.x
   - master
+before_install:
+  - git clone git://github.com/golang/sys.git
+  - mkdir -p $GOPATH/src/golang.org/x/
+  - mv sys $GOPATH/src/golang.org/x/
 install:
   - go get github.com/go-sql-driver/mysql
   - go get github.com/astaxie/beego
@@ -13,6 +17,5 @@ install:
   - go get github.com/PuerkitoBio/goquery
   - go get github.com/garyburd/redigo/redis
   - go get github.com/huichen/wukong
-  - go get -d github.com/golang/sys
 script:
   - go test -v ./...
