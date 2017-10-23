@@ -1,10 +1,10 @@
 package conf
 
 import (
+	"runtime"
+
 	"github.com/astaxie/beego"
 	"github.com/sinmahod/yklili/models"
-	"runtime"
-	"strconv"
 )
 
 var configItem map[string]string
@@ -26,29 +26,34 @@ func Reload() {
 	for _, c := range models.GetConfigs() {
 		configItem[c.GetK()] = c.GetV()
 	}
-	if siteid := beego.AppConfig.String("siteid"); siteid != "" {
-		id, err := strconv.Atoi(siteid)
-		site, err := models.GetSite(id)
-		if err == nil {
-			configItem["Banner"] = site.GetBanner()
-			configItem["Name"] = site.GetName()
-			configItem["Subtitle"] = site.GetSubtitle()
-			configItem["Host"] = site.GetHost()
-			configItem["BackgroundColor"] = site.GetBackgroundColor()
-			configItem["Copyright"] = site.GetCopyright()
-			configItem["Desc"] = site.GetDesc()
-			configItem["ArticleColor"] = site.GetArticleColor()
-			return
-		}
+
+	// 设置默认的资源上传目录
+	if _, ok := configItem[UploadPath]; !ok {
+		configItem[UploadPath] = beego.AppPath + "/upload/"
 	}
-	configItem["Banner"] = "/static/front/images/banner.jpg"
-	configItem["Name"] = "请前往后台设置站点"
-	configItem["Subtitle"] = "请前往后台设置站点"
-	configItem["Host"] = "/"
-	configItem["BackgroundColor"] = "#2c2c2c"
-	configItem["Desc"] = "请前往后台设置站点"
-	configItem["Copyright"] = "&copy; 2017 All rights  Reserved"
-	configItem["ArticleColor"] = "#fff"
+
+	site, err := models.GetSite()
+	if err == nil {
+		configItem["Banner"] = site.GetBanner()
+		configItem["Name"] = site.GetName()
+		configItem["Subtitle"] = site.GetSubtitle()
+		configItem["Host"] = site.GetHost()
+		configItem["BackgroundColor"] = site.GetBackgroundColor()
+		configItem["Copyright"] = site.GetCopyright()
+		configItem["Desc"] = site.GetDesc()
+		configItem["ArticleColor"] = site.GetArticleColor()
+		return
+	} else {
+		configItem["Banner"] = "/static/front/images/banner.jpg"
+		configItem["Name"] = "请前往后台设置站点"
+		configItem["Subtitle"] = "请前往后台设置站点"
+		configItem["Host"] = "/"
+		configItem["BackgroundColor"] = "#2c2c2c"
+		configItem["Desc"] = "请前往后台设置站点"
+		configItem["Copyright"] = "&copy; 2017 All rights  Reserved"
+		configItem["ArticleColor"] = "#fff"
+	}
+
 }
 
 func GetCurrentFilePath() string {
@@ -82,6 +87,10 @@ const (
 	//文件上传路径
 	UploadPath = "UploadPath"
 )
+
+func GetDefaultImage() string {
+	return beego.AppPath + "/static/images/notfound.gif"
+}
 
 // 获取配置
 func GetValue(k string) string {

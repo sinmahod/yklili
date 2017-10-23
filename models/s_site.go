@@ -186,13 +186,12 @@ func GetSitePage(size, index int, ordercolumn, orderby string, data map[string]i
 	return nil, err
 }
 
-func GetSite(id int) (*S_Site, error) {
-	site := S_Site{Id: id}
-	err := site.Fill()
-	if err != nil {
-		return &site, fmt.Errorf("站点Id[%s]不存在", id)
+func GetSite() (*S_Site, error) {
+	site := GetSites()
+	if len(site) == 0 {
+		return nil, fmt.Errorf("站点不存在")
 	}
-	return &site, nil
+	return site[0], nil
 }
 
 //得到所有配置

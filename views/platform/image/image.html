@@ -4,13 +4,13 @@
                                 <span class="bigger-115 no-text-shadow">上传图片</span>
                             </button>
                          </div><!-- /.page-header -->
-                        
+
                         <div class="bottom-border"></div>
 
                         <div class="row">
                             <div style="position: relative;">
                                     <ul class="ace-thumbnails clearfix" id="list1" list="true" dataurl="/data/image/List" page="true" size="18" style="margin: 0 auto;position: relative;max-width:1557px;">
-                                        
+
                                     </ul>
 
                                 </div><!-- PAGE CONTENT ENDS -->
@@ -36,7 +36,7 @@
             DataList({
                 list: "list1",
                 pagebar: "pagebar",
-                html: "<li><a href=\"/data/image/Img?sn=${Sign}\" style=\"width: 165px;height: 165px;overflow: hidden\" data-rel=\"colorbox\"><img class=\"lazy\" data-original=\"/data/image/Img?sn=${Sign}\" style=\"min-width: 180px;max-width: 270px;min-height: 180px;max-height: 270px;\" /></a><div class=\"tools tools-bottom\"><a href=\"#\"><i class=\"ace-icon fa fa-link\"></i></a><a href=\"#\"><i class=\"ace-icon fa fa-pencil\"></i></a><a href=\"#\"><i class=\"ace-icon fa fa-times red\"></i></a></div></li>",
+                html: "<li><a href=\"/image/${FilePath}${FileNewName}\" style=\"width: 165px;height: 165px;overflow: hidden\" data-rel=\"colorbox\"><img class=\"lazy\" src=\"/image/${FilePath}${FileNewName}!165x165\" /></a><div class=\"tools tools-bottom\"><a href=\"#\"><i class=\"ace-icon fa fa-link\"></i></a><a href=\"#\"><i class=\"ace-icon fa fa-pencil\"></i></a><a href=\"#\"><i class=\"ace-icon fa fa-times red\"></i></a></div></li>",
                 size: parseInt(s),
                 fn: initColorBox
             });
@@ -44,7 +44,6 @@
 
          //初始化ColorBox
         function initColorBox(){
-            $("img.lazy").lazyload();
             var $overflow = '';
             var colorbox_params = {
                 rel: 'colorbox',
@@ -72,7 +71,7 @@
 
             $('.ace-thumbnails [data-rel="colorbox"]').colorbox(colorbox_params);
             $("#cboxLoadingGraphic").html("<i class='ace-icon fa fa-spinner orange fa-spin'></i>");
-            
+
             $(document).one('ajaxloadstart.page', function(e) {
                 $('#colorbox, #cboxOverlay').remove();
             });

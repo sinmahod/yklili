@@ -10,6 +10,7 @@ import (
 	_ "github.com/sinmahod/yklili/service/cache" //初始化缓存
 
 	"fmt"
+
 	"github.com/sinmahod/yklili/controllers/platform"
 	"github.com/sinmahod/yklili/controllers/platform/data"
 	"github.com/sinmahod/yklili/controllers/template"

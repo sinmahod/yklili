@@ -18,15 +18,9 @@ func (c *UploadController) Upload() {
 	if files, ok := c.FileMap["fileupload"]; ok {
 		for _, file := range files {
 
-			filepath := "/upload/"
-
-			filepath += dateutil.GetYMDPathString()
+			filepath := dateutil.GetYMDPathString()
 
 			uploadpath := conf.GetValue(conf.UploadPath)
-
-			if uploadpath == "" {
-				uploadpath = beego.AppPath
-			}
 
 			//检查目录是否存在，不存在则创建
 			if !fileutil.IsDir(uploadpath + filepath) {

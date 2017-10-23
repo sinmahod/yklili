@@ -5,7 +5,6 @@ import (
 	"github.com/sinmahod/yklili/models"
 	"github.com/sinmahod/yklili/models/orm"
 	"github.com/sinmahod/yklili/util/numberutil"
-	"strconv"
 	"strings"
 
 	"github.com/astaxie/beego"
@@ -27,17 +26,11 @@ func (c *SiteController) List() {
 
 //修改/新建初始化
 func (c *SiteController) InitPage() {
-	idStr := c.GetString("Id")
-
-	if idStr != "" {
-		id, _ := strconv.Atoi(idStr)
-
-		site, err := models.GetSite(id)
-		if err != nil {
-			beego.Error(err)
-		} else {
-			c.Data["json"] = site
-		}
+	site, err := models.GetSite()
+	if err != nil {
+		beego.Error(err)
+	} else {
+		c.Data["json"] = site
 	}
 
 	c.ServeJSON()

@@ -18,5 +18,8 @@ func init() {
 		beego.Router(fmt.Sprintf("/%s", name), controller, "*:Page")
 		beego.Router(fmt.Sprintf("/%s/:method", name), controller, "*:Get")
 	}
+
+	beego.Router("/image/*", &front.ImageController{}, "*:Get")
+
 	beego.Router("/", &front.IndexController{})
 }

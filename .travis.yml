@@ -17,5 +17,6 @@ install:
   - go get github.com/PuerkitoBio/goquery
   - go get github.com/garyburd/redigo/redis
   - go get github.com/huichen/wukong
+  - go get github.com/disintegration/imaging
 script:
   - go test -v ./...

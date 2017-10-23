@@ -3,11 +3,11 @@ package models
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/sinmahod/yklili/util/modelutil"
-	"github.com/sinmahod/yklili/util/stringutil"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/sinmahod/yklili/util/modelutil"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
@@ -35,7 +35,6 @@ type S_Attachment struct {
 	FileSize    int64     `orm:"column(filesize)"`
 	AddTime     time.Time `orm:"auto_now_add;type(datetime);column(addtime)"`
 	AddUser     string    `orm:"column(adduser);size(64)"`
-	Sign        string    `orm:"-"`
 }
 
 //自定义表名
@@ -143,10 +142,6 @@ func GetAttchmentsPage(size, index int, ordercolumn, orderby string, data map[st
 		qt = qt.Filter("FileName__icontains", data["FileName"])
 	}
 	_, err := qt.OrderBy(ordercolumn).Limit(size, (index-1)*size).All(&atta)
-
-	for i, _ := range atta {
-		atta[i].Sign = stringutil.Encode(stringutil.Encrypt(atta[i].FilePath + atta[i].FileNewName))
-	}
 
 	if err == nil {
 		cnt, err := qt.Count()

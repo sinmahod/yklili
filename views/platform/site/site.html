@@ -67,7 +67,7 @@ textarea:hover {
                     </span>
                 </div>
             </div>
-            
+
             <div class="profile-info-row">
                 <div class="profile-info-name">站点副标题：</div>
                 <div class="profile-info-value">
@@ -114,7 +114,7 @@ textarea:hover {
                 <div class="profile-info-name">首页Banner：</div>
                 <div class="profile-info-value">
                     <div id="logoimage" class="wu-example">
-                        <img id="SiteBanner" src="" lazy-src="${SiteBanner}" style="max-height: 250px;" onerror="this.src='/static/front/images/banner.jpg'" class="img-responsive lazy">
+                        <img id="SiteBanner" src="" lazy-src="${SiteBanner}!500x250"  onerror="this.src='/static/front/images/banner.jpg'" class="img-responsive lazy">
                     </div>
                 </div>
             </div>
@@ -139,7 +139,7 @@ textarea:hover {
                         if (r['a']==1){
                             rgb = ev.color.toHex();
                         }
-                        
+
                         $('#BackgroundColor').val(rgb);
                         $(this).css("background-color", rgb);
                     });
@@ -149,7 +149,7 @@ textarea:hover {
                         if (r['a']==1){
                             rgb = ev.color.toHex();
                         }
-                        
+
                         $('#ArticleColor').val(rgb);
                         $(this).css("background-color", rgb);
                     });
@@ -198,4 +198,4 @@ textarea:hover {
                 });
             });
         });
-</script>       
+</script>
