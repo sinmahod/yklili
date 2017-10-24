@@ -3,11 +3,6 @@ package bleve
 import (
 	"errors"
 	"fmt"
-	"github.com/astaxie/beego"
-	"github.com/blevesearch/bleve"
-	"github.com/blevesearch/bleve/mapping"
-	"github.com/blevesearch/bleve/numeric"
-	_ "github.com/yanyiwu/gojieba/bleve"
 	"log"
 	"os"
 	"path"
@@ -16,6 +11,12 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/astaxie/beego"
+	"github.com/blevesearch/bleve"
+	"github.com/blevesearch/bleve/mapping"
+	"github.com/blevesearch/bleve/numeric"
+	_ "github.com/yanyiwu/gojieba/bleve"
 )
 
 const (

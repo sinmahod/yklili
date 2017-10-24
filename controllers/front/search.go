@@ -1,10 +1,11 @@
 package front
 
 import (
-	"github.com/sinmahod/yklili/models"
-	"github.com/sinmahod/yklili/service/bleve"
 	"html/template"
 	"strings"
+
+	"github.com/sinmahod/yklili/models"
+	"github.com/sinmahod/yklili/service/bleve"
 )
 
 type SearchController struct {
@@ -29,7 +30,7 @@ func (c *SearchController) Search() {
 			p++
 		}
 
-		cnt, err := bleve.And(q).Search(size, p, &as)
+		cnt, err := bleve.Or(q, "Content", "Title").Search(size, p, &as)
 		if err != nil {
 			panic(err)
 		} else {

@@ -6,7 +6,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 --*/
 body{
 	padding:0;
-	font-family: 'Lato', sans-serif;	
+	font-family: 'Lato', sans-serif;
     background-color: #2c2c2c;
 	background-size:100% 100%;
 	padding: 0;
@@ -27,13 +27,15 @@ input[type="button"],input[type="submit"]{
 }
 .mark, mark {
     padding: 0;
+		background: inherit;
+		color: #23e426;
 }
 .logotext {
 	font-family: fantasy;
 	color: #fff;
 }
 h1,h2,h3,h4,h5,h6{
-	margin:0;	   
+	margin:0;
 }
 h1 {
 	font-size: 5rem;
@@ -205,7 +207,7 @@ span.menu{
 	    font-size: 1.8rem;
 	    line-height: 1.5em;
 	}
-	
+
 }
 @media only screen and (max-width: 500px) {
     .header {
@@ -477,7 +479,7 @@ img.ribbon {
 	font-size: 1em;
 	font-weight: 600;
 	line-height: 1.4em;
-	margin-bottom:1.5em; 
+	margin-bottom:1.5em;
 	text-transform:uppercase;
 	letter-spacing:1px;
 	position:relative;
@@ -671,10 +673,10 @@ i.date1 {
 	background-position:-30px -15px;
 }
 .social-icons ul li a.twitter {
-	background-position:-30px -15px;	
+	background-position:-30px -15px;
 }
 .social-icons ul li a.googlepluse {
-	background-position:-45px 0px;	
+	background-position:-45px 0px;
 }
 .post-by h6 {
 	color:#999999;
@@ -764,12 +766,12 @@ i.date1 {
 	font-size: 1.4em;
 	font-family: 'Playfair Display', serif;
 	line-height:2em;
-	font-weight:500;	
+	font-weight:500;
 }
 .last-article h3 {
 	color: #333333;
 	font-size: 1.6em;
-	font-weight:700;	
+	font-weight:700;
 	margin:1.5em 0;
 }
 ul.categories {
@@ -920,7 +922,7 @@ ul.share li {
     border-radius: 3px;
     background-color: initial !important;
     border: 0px !important;
-}   
+}
 .nocurrent a{
     cursor:pointer;
     color: #fff !important;
@@ -931,7 +933,7 @@ ul.share li {
     min-width: 14px;
     margin: 0 5px 0 0;
     border-radius: 3px;
-    background: #555 !important; 
+    background: #555 !important;
 }
 .nocurrent a:hover {
     background: #444 !important;
@@ -968,7 +970,7 @@ ul.share li {
 	}
 	.futurestory h3 {
 		width: 80%;
-	}	
+	}
 	.video h4 {
 		font-size: 1.35em;
 	}
@@ -1078,7 +1080,7 @@ ul.share li {
 	.logo img {
 		width:70%;
 	}
-	.header {		
+	.header {
 		min-height: 410px;
 	}
 	.news {
@@ -1193,11 +1195,11 @@ ul.share li {
 	}
 	.video {
 		padding: 2em 1em 1em 1em;
-		min-height: 359px;		
+		min-height: 359px;
 	}
 	.middle-banner h3 {
 		font-size: 2em;
-	}	
+	}
 	.middle-banner {
 		min-height: 250px;
 	}
@@ -1298,7 +1300,7 @@ ul.share li {
 	}
 	.last-banner {
 		min-height: 187px;
-	}	
+	}
 	.last-article {
 		padding: 1.5em 1em;
 	}c
