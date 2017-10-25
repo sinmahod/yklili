@@ -36,7 +36,7 @@
             DataList({
                 list: "list1",
                 pagebar: "pagebar",
-                html: "<li><a href=\"/image/${FilePath}${FileNewName}\" style=\"width: 165px;height: 165px;overflow: hidden\" data-rel=\"colorbox\"><img class=\"lazy\" src=\"/image/${FilePath}${FileNewName}!165x165\" /></a><div class=\"tools tools-bottom\"><a href=\"#\"><i class=\"ace-icon fa fa-link\"></i></a><a href=\"#\"><i class=\"ace-icon fa fa-pencil\"></i></a><a href=\"#\"><i class=\"ace-icon fa fa-times red\"></i></a></div></li>",
+                html: "<li><a href=\"/image/${FilePath}${FileNewName}\" style=\"width: 165px;height: 165px;overflow: hidden\" data-rel=\"colorbox\"><img class=\"lazy\" src=\"/image/${FilePath}${FileNewName}!165x165\" /></a><div class=\"tools tools-bottom\"><a href=\"javascript:;\" onclick=\"viewUrl('{{"Host" | SiteConfig}}/image/${FilePath}${FileNewName}')\" ><i class=\"ace-icon fa fa-link\"></i></a><a href=\"javascript:;\" onclick=\"editImage(${Id})\"><i class=\"ace-icon fa fa-pencil\"></i></a><a href=\"javascript:;\" onclick=\"deleteImage(${Id})\"><i class=\"ace-icon fa fa-times red\"></i></a></div></li>",
                 size: parseInt(s),
                 fn: initColorBox
             });
@@ -77,6 +77,33 @@
             });
         }
 
+        function viewUrl(url){
+            BootFrame.alert('<textarea class="viewUrl" readonly="readonly" onclick="copyUrl(this)">' + url + '</textarea>',null,"点击链接地址复制到剪贴板",false,60,600);
+        }
+
+        function copyUrl(e){
+          e.select(); //选择对象
+          tag=document.execCommand("Copy"); //执行浏览器复制命令
+          if(tag){
+            BootFrame.gritter('复制内容成功');
+          }else{
+            BootFrame.gritter('复制内容失败，请手动复制');
+          }
+        }
+
+        function deleteImage(id){
+            BootFrame.confirm("图片删除后所有引用及缩略图都会一并删除，您确认删除？",function(){
+                var data = {Id: id};
+                SendData.Post("/data/image/Del",data,function(response){
+                    if (response.STATUS==1){
+                        BootFrame.gritter(response.MESSAGE);
+                          DataList.loadData("list1");
+                    }else{
+                        BootFrame.alert(response.MESSAGE,null,"操作失败",true);
+                    }
+                });
+            });
+        }
 
         function uploadImage(){
             var bf = BootFrame.uploader();

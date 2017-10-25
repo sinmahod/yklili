@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en" class="no-js">
     <head>
         <meta charset="utf-8">
@@ -7,9 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="">
         <meta name="author" content="">
-
-         <link rel="stylesheet" href="static/font-awesome/4.5.0/css/font-awesome.min.css" />
-
+        <link rel="stylesheet" href="static/font-awesome/4.5.0/css/font-awesome.min.css" />
         <!-- CSS -->
         <link rel="stylesheet" href="/static/assets/css/reset.css">
         <link rel="stylesheet" href="/static/assets/css/supersized.css">
@@ -21,53 +18,26 @@
         {{str2html "<![endif]-->"}}
     </head>
     <body>
-
         <div class="page-container">
-
-
             <h1><i class="ace-icon fa fa-leaf" style="color:#78efe1;padding-top: 20px;"></i> 欢迎登录</h1>
-
             <div id="message">&nbsp;</div>
-
             <form id="loginform">
-                
                 <input type="text" name="username" id="username" class="username" placeholder="请输入用户名">
-
                 <input type="password" name="password" id="password" class="password" placeholder="请输入密码">
-
                 <button type="button" id="login">登&nbsp;录</button>
-
                 <div id="error" class="error"><span>+</span></div>
-
             </form>
-
-            <div class="connect">
-
-                <p>Or connect with:</p>
-
-                <p>
-
-                    <a class="facebook" href=""></a>
-
-                    <a class="twitter" href=""></a>
-
-                </p>
-
-            </div>
-
+            <div class="connect">&nbsp;</div>
         </div>
-
         <!-- Javascript -->
         <!--[if !IE]> -->
         <script src="static/js/jquery-2.1.4.min.js"></script>
         <!-- <![endif]-->
-
         <!--[if IE]>
         <script src="static/js/jquery-1.11.3.min.js"></script>
         <![endif]-->
 
         <script src="/static/assets/js/supersized.3.2.7.min.js"></script>
-
         <script type="text/javascript">
             jQuery(function($){
                 $.supersized({
@@ -96,8 +66,6 @@
                 });
 
                 //Debug模式下默认初始用户密码
-                $("#username").val('admin');
-                $("#password").val('admin');
                 $("#username").focus();
 
                 //焦点在输入框时回车键执行事件

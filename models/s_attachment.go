@@ -105,6 +105,17 @@ func (m *S_Attachment) String() string {
 }
 
 //相关函数
+//根据ID查找附件
+func GetArrachment(id int) (*S_Attachment, error) {
+	m := S_Attachment{Id: id}
+	err := m.Fill()
+	if err != nil {
+		beego.Error("附件Id不存在")
+		return &m, err
+	}
+	return &m, nil
+}
+
 //新创建一个附件
 func AddAttachment(filename, filenewname, filepath, filetype string, filesize int64, adduser string) *S_Attachment {
 	m := new(S_Attachment)

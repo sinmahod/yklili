@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
+	"path/filepath"
 )
 
 // 文件末尾追加
@@ -148,4 +149,22 @@ func XMLStructToFile(filePath string, result interface{}) error {
 	xmlOutPutData := append(headerBytes, xmlOutPut...)
 	//写入文件
 	return ioutil.WriteFile(filePath, xmlOutPutData, os.ModeAppend)
+}
+
+func GetFilelist(path string) []string {
+	var files []string
+	err := filepath.Walk(path, func(path string, f os.FileInfo, err error) error {
+		if f == nil {
+			return err
+		}
+		if f.IsDir() {
+			return nil
+		}
+		files = append(files, path)
+		return nil
+	})
+	if err != nil {
+		return nil
+	}
+	return files
 }

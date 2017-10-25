@@ -3,10 +3,11 @@ package models
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/sinmahod/yklili/util/modelutil"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/sinmahod/yklili/util/modelutil"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
@@ -98,7 +99,7 @@ func (c *S_Package) SetValue(data map[string]interface{}) error {
 func (c *S_Package) IsNull() bool {
 	o := orm.NewOrm()
 	var cnt int64
-	o.Raw("SELECT COUNT(1) FROM s_article WHERE packageid = ?", c.Id).QueryRow(&cnt)
+	o.Raw("SELECT COUNT(1) FROM s_article WHERE packageid = ? AND status != ?", c.Id, DELETE).QueryRow(&cnt)
 	return !(cnt > 0)
 }
 

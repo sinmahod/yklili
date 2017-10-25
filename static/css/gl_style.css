@@ -192,7 +192,7 @@ input[type=text]:hover,select:hover{
     z-index: 9999;
 }
 .gritter-radius {
-    border-radius:10px;  
+    border-radius:10px;
 }
 
 /* 进度条 */
@@ -238,7 +238,7 @@ input[type=text]:hover,select:hover{
 
 /*  延迟加载图片默认颜色 */
 .lazy {
-    background-color: #daeefb;    
+    background-color: #daeefb;
 }
 
 /* 分页条 */
@@ -726,4 +726,14 @@ input[type=text]:hover,select:hover{
 }
 .search-text {
     width:100%;
+}
+.viewUrl{
+  width: 100%;
+  height: 30px;
+  resize: none;
+  padding: 4px;
+}
+.viewUrl:hover{
+    background-color:#337ab7;
+    color:#fff;
 }
