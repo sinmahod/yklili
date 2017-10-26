@@ -3,14 +3,15 @@ package models
 import (
 	"encoding/json"
 	"fmt"
+	"strconv"
+	"strings"
+	"time"
+
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	"github.com/sinmahod/yklili/service/bleve"
 	"github.com/sinmahod/yklili/service/progress"
 	"github.com/sinmahod/yklili/util/modelutil"
-	"strconv"
-	"strings"
-	"time"
 )
 
 /**
@@ -195,7 +196,7 @@ func GetArticlesPage(size, index int, ordercolumn, orderby string, data map[stri
 
 		for _, a := range as {
 			if a.Status == DRAFT {
-				a.Title = "* " + a.Title
+				a.Title = "<span style='color:red;'>【待发布】" + a.Title + "</span>"
 			}
 		}
 

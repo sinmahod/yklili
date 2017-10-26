@@ -27,22 +27,13 @@ import (
 *   default(D)  默认值D（需要对应类型）
 **/
 type S_Package struct {
-	Id         int       `orm:"pk;column(id)"`
-	Title      string    `orm:"column(title);size(64)"`
-	AddTime    time.Time `orm:"auto_now_add;type(datetime);column(addtime)"`
-	AddUser    string    `orm:"column(adduser)"`
-	ModifyTime time.Time `orm:"null;type(datetime);column(modifytime)"`
-	ModifyUser string    `orm:"null;column(modifyuser);size(64)"`
-}
-
-type FrontPackage struct {
-	Id           int       `orm:"column(id)"`
-	Title        string    `orm:"column(title)"`
-	AddTime      time.Time `orm:"column(addtime)"`
+	Id           int       `orm:"pk;column(id)"`
+	Title        string    `orm:"column(title);size(64)"`
+	AddTime      time.Time `orm:"auto_now_add;type(datetime);column(addtime)"`
 	AddUser      string    `orm:"column(adduser)"`
-	ModifyTime   time.Time `orm:"column(modifytime)"`
-	ModifyUser   string    `orm:"column(modifyuser)"`
-	ArticleCount int64     `orm:"column(articlecount)"`
+	ModifyTime   time.Time `orm:"null;type(datetime);column(modifytime)"`
+	ModifyUser   string    `orm:"null;column(modifyuser);size(64)"`
+	ArticleCount int64     `orm:"-"`
 }
 
 //自定义表名
@@ -199,11 +190,11 @@ func GetFrontPackages(size, index int, ordercolumn, orderby string, data map[str
 		ordercolumn = "-" + ordercolumn
 	}
 
-	var as []*FrontPackage
+	var as []*S_Package
 
 	o := orm.NewOrm()
 
-	cnt, err := o.Raw("SELECT a.*,COUNT(b.packageid) articlecount FROM s_package a LEFT JOIN s_article b ON a.id = b.packageid GROUP BY a.id").QueryRows(&as)
+	cnt, err := o.Raw("SELECT a.*,COUNT(b.packageid) articlecount FROM s_package a LEFT JOIN s_article b ON a.id = b.packageid AND b.status=? GROUP BY a.id", PUBLISH).QueryRows(&as)
 
 	if err != nil {
 		return nil, err
